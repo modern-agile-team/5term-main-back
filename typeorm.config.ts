@@ -7,7 +7,7 @@ export const typeORMConfig: TypeOrmModuleOptions = {
   type: dbConfig.type,
   host: dbConfig.host,
   port: dbConfig.port,
-  username: dbConfig.user,
+  username: dbConfig.username,
   password: dbConfig.password,
   database: dbConfig.database,
   entities: [__dirname + '/**/*.entity.{js,ts}'],
