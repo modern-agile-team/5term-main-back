@@ -7,4 +7,7 @@ export class User extends CommonEntity {
   @IsNotEmpty()
   @Column()
   login_type: number;
+
+  @Column()
+  user_id: string;
 }

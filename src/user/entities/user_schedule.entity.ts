@@ -1,4 +1,5 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Schedule } from '../type/schedule.enum';
 
 @Entity()
 export class UserScheldule extends BaseEntity {
@@ -9,5 +10,5 @@ export class UserScheldule extends BaseEntity {
   user_id: number;
 
   @Column()
-  schedule: string;
+  schedule: Schedule;
 }
