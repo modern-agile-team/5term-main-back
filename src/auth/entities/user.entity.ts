@@ -1,12 +1,9 @@
 import { IsNotEmpty } from 'class-validator';
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { CommonEntity } from 'src/common/entities/common.entity';
+import { Column, Entity } from 'typeorm';
 
 @Entity()
-export class User extends BaseEntity {
-  @IsNotEmpty()
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class User extends CommonEntity {
   @IsNotEmpty()
   @Column()
   login_type: number;
