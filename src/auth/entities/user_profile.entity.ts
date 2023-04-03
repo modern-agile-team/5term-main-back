@@ -1,13 +1,13 @@
-import { IsNotEmpty } from 'class-validator';
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class User extends BaseEntity {
-  @IsNotEmpty()
+export class UserProfile extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @IsNotEmpty()
   @Column()
-  login_type: number;
+  user_no: number;
+
+  @Column()
+  nickname: string;
 }
