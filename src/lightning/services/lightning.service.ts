@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { LightningInfoEntity } from '../entities/lightning-info.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { LightningBoardEntity } from '../entities/lightning-boards.entity';
 
 @Injectable()
 export class LightningService {
@@ -12,11 +13,11 @@ export class LightningService {
   ) {}
 
   async createPost(createLightningDto: CreateLightningDto) {
-    const { meeting_date } = createLightningDto;
-    const user = await this.ligntningRepository.findOne({ meeting_date });
-    if (user) {
-      throw new UnauthorizedException('해당하는 이메일은 이미 존재합니다.');
-    }
+    // const { meeting_date } = createLightningDto;
+    // // const meeting = await this.ligntningRepository.find({});
+    // if (meeting_date) {
+    //   throw new UnauthorizedException('해당하는 이메일은 이미 존재합니다.');
+    // }
 
     await this.ligntningRepository.save({
       ...createLightningDto,

@@ -14,8 +14,8 @@ export class LightningInfoEntity extends CommonEntity {
 
   @IsDate()
   @IsNotEmpty({ message: '만남 날짜를 입력해주세요' })
-  @Column({ type: 'date', nullable: false })
-  meeting_date: Date;
+  @Column({ name: 'meeting_date', type: 'date', nullable: false })
+  meetingDate: Date;
 
   @ManyToMany(() => User, (user: User) => user.id)
   users: User[];
