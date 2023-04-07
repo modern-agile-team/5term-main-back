@@ -1,16 +1,13 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Study extends BaseEntity {
+export class RecruitboardIMG extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  active: boolean;
+  imgUrl: string;
 
   @Column()
-  created_date: Date;
-
-  @Column()
-  end_date: Date;
+  imgKey: string;
 }
