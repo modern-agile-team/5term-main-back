@@ -1,11 +1,7 @@
-import { ConfigService } from '@nestjs/config';
 import { Repository } from 'typeorm';
 // import { CreateLightningInfoDto } from './../dtos/lightning-info.dto';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import {
-  LightningBoardEntity,
-  LightningInfoEntity,
-} from '../entities/lightning-info.entity';
+import { LightningInfoEntity } from '../entities/lightning-info.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()

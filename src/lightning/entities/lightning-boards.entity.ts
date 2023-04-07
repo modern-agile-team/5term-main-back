@@ -1,5 +1,12 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/user/entities/user.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({
   name: 'lightning_recruitment_boards',
@@ -7,11 +14,6 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 export class LightningBoardEntity {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @IsNumber()
-  @IsNotEmpty()
-  @Column({ type: 'int', nullable: false })
-  writer_id: number;
 
   @IsString()
   @IsNotEmpty({ message: '제목을 입력해주세요' })
@@ -22,4 +24,15 @@ export class LightningBoardEntity {
   @IsNotEmpty({ message: '내용을 입력해주세요' })
   @Column({ type: 'text', nullable: true })
   contents: string;
+
+  @ManyToOne(() => User, (author: User) => author.lightningBoard, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn([
+    {
+      name: 'author' /* db에 저장되는 필드 이름 */,
+      referencedColumnName: 'id' /* USER의 id */,
+    },
+  ])
+  author: User;
 }
