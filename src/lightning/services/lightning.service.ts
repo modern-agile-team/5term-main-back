@@ -15,13 +15,13 @@ export class LightningService {
   async createPost(createLightningDto: CreateLightningDto) {
     // const { meeting_date } = createLightningDto;
     // // const meeting = await this.ligntningRepository.find({});
-    // if (meeting_date) {
+    // if (meeting_date) {\
     //   throw new UnauthorizedException('해당하는 이메일은 이미 존재합니다.');
     // }
 
-    await this.ligntningRepository.save({
-      ...createLightningDto,
-    });
+    // await this.ligntningRepository.save({
+    //   ...createLightningDto,
+    // });
 
     return { success: true };
   }

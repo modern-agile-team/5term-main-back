@@ -8,11 +8,12 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 
 @Module({
-<<<<<<< HEAD
-  imports: [TypeOrmModule.forRoot(typeORMConfig), LightningModule],
-=======
-  imports: [TypeOrmModule.forRoot(typeORMConfig), AuthModule, UserModule],
->>>>>>> a0af053b884f56d6203545e065d558759af03484
+  imports: [
+    TypeOrmModule.forRoot(typeORMConfig),
+    AuthModule,
+    UserModule,
+    LightningModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

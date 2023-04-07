@@ -31,6 +31,7 @@ export class User extends CommonEntity {
       referencedColumnName: 'id',
     },
   })
+  lightninginfo: LightningInfoEntity;
   @OneToMany(
     () => LightningBoardEntity,
     (lightningBoard: LightningBoardEntity) => lightningBoard.author,
