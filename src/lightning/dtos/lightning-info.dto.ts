@@ -1,5 +1,5 @@
 class CreateLightningDto {
-  writer_id: number;
+  author: number;
   title: string;
   contents: string;
   meeting_date: Date;
