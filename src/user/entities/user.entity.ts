@@ -2,7 +2,9 @@ import { IsNotEmpty } from 'class-validator';
 import { AuthPasswordLogin } from 'src/auth/entities/auth_password_login.entity';
 import { AuthSocialLogin } from 'src/auth/entities/auth_social_login.entity';
 import { CommonEntity } from 'src/common/entities/common.entity';
-import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
+import { LightningBoardEntity } from 'src/lightning/entities/lightning-boards.entity';
+import { LightningInfoEntity } from 'src/lightning/entities/lightning-info.entity';
+import { Column, Entity, OneToMany, OneToOne,JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import { UserProfile } from './user_profile.entity';
 import { UserScheldule } from './user_schedule.entity';
 
@@ -12,6 +14,36 @@ export class User extends CommonEntity {
   @Column({ name: 'login_type' })
   loginType: number;
 
+  @Column()
+  user_id: string;
+
+  @ManyToMany(
+    () => LightningInfoEntity,
+    (lightningInfo: LightningInfoEntity) => lightningInfo.id,
+    {
+      cascade: true,
+    },
+  )
+  @JoinTable({
+    name: 'lightning_members',
+    joinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'lightning_id',
+      referencedColumnName: 'id',
+    },
+  })
+  @OneToMany(
+    () => LightningBoardEntity,
+    (lightningBoard: LightningBoardEntity) => lightningBoard.author,
+    {
+      cascade: true,
+    },
+  )
+  lightningBoard: LightningBoardEntity[];
+  
   @Column({ name: 'user_id' })
   userId: string;
 
