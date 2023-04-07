@@ -1,16 +1,16 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { CommonEntity } from 'src/common/entities/common.entity';
+import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { User } from './user.entity';
 
 @Entity()
-export class User_image extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+export class UserImage extends CommonEntity {
+  @Column({ name: 'img_url' })
+  imgUrl: string;
 
-  @Column()
-  user_id: number;
+  @Column({ name: 'img_key' })
+  imgKey: string;
 
-  @Column()
-  img_url: string;
-
-  @Column()
-  img_key: string;
+  @OneToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 }
