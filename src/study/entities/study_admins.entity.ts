@@ -13,11 +13,11 @@ export class StudyAdmins extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToMany((type) => Study)
+  @ManyToMany(() => Study)
   @JoinColumn({ name: 'study_id' })
-  study: Study;
+  studys: Study[];
 
-  @ManyToMany((type) => User)
+  @ManyToMany(() => User)
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  userss: User[];
 }

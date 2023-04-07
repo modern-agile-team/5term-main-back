@@ -1,9 +1,18 @@
 import { User } from 'src/user/entities/user.entity';
-import { BaseEntity, Entity, JoinColumn, ManyToMany } from 'typeorm';
+import {
+  BaseEntity,
+  Entity,
+  JoinColumn,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Study } from './study.entity';
 
 @Entity()
 export class StudyMembers extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+
   @ManyToMany(() => User)
   @JoinColumn({ name: 'user_id' })
   user: User;
