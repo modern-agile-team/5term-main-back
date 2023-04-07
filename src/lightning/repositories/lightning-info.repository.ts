@@ -1,7 +1,7 @@
 import {
   LightningBoardEntity,
   LightningInfoEntity,
-} from '../entities/lightning.entity';
+} from '../entities/lightning-info.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { ConfigService } from 'aws-sdk';
 

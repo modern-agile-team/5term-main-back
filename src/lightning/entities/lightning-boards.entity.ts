@@ -1,27 +1,5 @@
-import {
-  IsBoolean,
-  IsNotEmpty,
-  IsDate,
-  IsNumber,
-  IsString,
-} from 'class-validator';
-import { CommonEntity } from 'src/common/entities/common.entity';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-
-@Entity({
-  name: 'lightning_info',
-})
-export class LightningInfoEntity extends CommonEntity {
-  @IsBoolean()
-  @IsNotEmpty({ message: '활성여부를 입력해주세요' })
-  @Column({ type: 'boolean', nullable: false })
-  active: boolean;
-
-  @IsDate()
-  @IsNotEmpty({ message: '만남 날짜를 입력해주세요' })
-  @Column({ type: 'date', nullable: false })
-  meeting_date: Date;
-}
 
 @Entity({
   name: 'lightning_recruitment_boards',
