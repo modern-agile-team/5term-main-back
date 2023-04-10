@@ -1,6 +1,6 @@
-export class CreateLightningDto {
+export class Lightning {
   author: number;
   title: string;
   contents: string;
-  meetingDate: Date;
+  meeting_date: Date;
 }

@@ -8,7 +8,6 @@ import { Column, Entity, ManyToMany } from 'typeorm';
 })
 export class LightningInfoEntity extends CommonEntity {
   @IsNumber()
-  @IsNotEmpty({ message: '활성여부를 입력해주세요' })
   @Column({ type: 'int', nullable: false, default: 1 })
   active: number;
 
