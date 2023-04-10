@@ -1,4 +1,3 @@
-import { IsNotEmpty } from 'class-validator';
 import { AuthPasswordLogin } from 'src/auth/entities/auth_password_login.entity';
 import { AuthSocialLogin } from 'src/auth/entities/auth_social_login.entity';
 import { CommonEntity } from 'src/common/entities/common.entity';
@@ -12,7 +11,6 @@ import {
   ManyToMany,
   OneToMany,
 } from 'typeorm';
-import { UserProfile } from './user_profile.entity';
 import { UserScheldule } from './user_schedule.entity';
 
 @Entity()
