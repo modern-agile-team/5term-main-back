@@ -24,9 +24,9 @@ export class UserProfile extends BaseEntity {
   email: string;
 
   @Column()
-  bio: string;
+  bio?: string;
 
-  @OneToOne(() => User, (user) => user.userProfile)
+  @OneToOne(() => User)
   @JoinColumn({ name: 'user_id' })
   user: User;
 
