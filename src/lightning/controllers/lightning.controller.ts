@@ -13,7 +13,7 @@ export class LightningController {
   constructor(private readonly lightningService: LightningService) {}
 
   @Post()
-  async createLightningInfo(@Body() createLightningDto: CreateLightningDto) {
-    return await this.lightningService.createLightningInfo(createLightningDto);
+  async createLightning(@Body() createLightningDto: CreateLightningDto) {
+    return await this.lightningService.createLightning(createLightningDto);
   }
 }

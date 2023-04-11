@@ -1,3 +1,4 @@
+import { LightningBoardRepository } from './../repositories/lightning_recruitment_boards.repository';
 import { LightningInfoRepository } from './../repositories/lightning-info.repository';
 import { Injectable } from '@nestjs/common';
 import { CreateLightningDto } from '../dtos/lightning-info.dto';
@@ -6,11 +7,17 @@ import { CreateLightningDto } from '../dtos/lightning-info.dto';
 export class LightningService {
   constructor(
     private readonly lightningInfoRepository: LightningInfoRepository,
+    private readonly lightningBoardRepository: LightningBoardRepository,
   ) {}
 
-  async createLightningInfo(createLightningDto: CreateLightningDto) {
+  async createLightning(createLightningDto: CreateLightningDto) {
     const { meetingDate } = createLightningDto;
-
-    await this.lightningInfoRepository.createLightning(meetingDate);
+    await this.lightningInfoRepository.createLightningInfo(meetingDate);
+    const { title, contents, author } = createLightningDto;
+    await this.lightningBoardRepository.createLightningBoard(
+      title,
+      contents,
+      author,
+    );
   }
 }
