@@ -1,15 +1,21 @@
-import { LightningInfoEntity } from '../entities/lightning-info.entity';
+import { LightningInfoEntity } from './../entities/lightning-info.entity';
+import { EntityRepository, InsertResult, Repository } from 'typeorm';
 
-import { EntityRepository, Repository } from 'typeorm';
-import { ConfigService } from 'aws-sdk';
-import { LightningBoardEntity } from '../entities/lightning-boards.entity';
+@EntityRepository(LightningInfoEntity)
+export class LightningInfoRepository extends Repository<LightningInfoEntity> {
+  async createLightningInfo(meetingDate: Date): Promise<InsertResult> {
+    try {
+      const { raw }: InsertResult = await this.createQueryBuilder(
+        'lightning_info',
+      )
+        .insert()
+        .into(LightningInfoEntity)
+        .values({ meetingDate })
+        .execute();
 
-@EntityRepository(LightningBoardEntity)
-export class lightningInfo {
-  constructor(
-    private readonly ligntningRepository: Repository<LightningInfoEntity>,
-    private readonly configService: ConfigService,
-  ) {}
-
-  async;
+      return raw;
+    } catch (error) {
+      throw new Error();
+    }
+  }
 }

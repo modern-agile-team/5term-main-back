@@ -1,6 +1,8 @@
-class CreateLightningDto {
-  author: number;
+import { User } from 'src/user/entities/user.entity';
+
+export class CreateLightningDto {
+  author: User;
   title: string;
   contents: string;
-  meeting_date: Date;
+  meetingDate: Date;
 }

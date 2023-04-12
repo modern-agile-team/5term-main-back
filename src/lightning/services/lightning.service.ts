@@ -1,28 +1,26 @@
-import { Repository } from 'typeorm';
-// import { CreateLightningInfoDto } from './../dtos/lightning-info.dto';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { LightningInfoEntity } from '../entities/lightning-info.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { LightningBoardEntity } from '../entities/lightning-boards.entity';
+import { LightningBoardRepository } from './../repositories/lightning_recruitment_boards.repository';
+import { LightningInfoRepository } from './../repositories/lightning-info.repository';
+import { Injectable } from '@nestjs/common';
+import { CreateLightningDto } from '../dtos/lightning-info.dto';
 
 @Injectable()
 export class LightningService {
   constructor(
-    @InjectRepository(LightningInfoEntity)
-    private readonly ligntningRepository: Repository<LightningInfoEntity>, // private readonly configService: ConfigService,
+    private readonly lightningInfoRepository: LightningInfoRepository,
+    private readonly lightningBoardRepository: LightningBoardRepository,
   ) {}
 
-  async createPost(createLightningDto: CreateLightningDto) {
-    // const { meeting_date } = createLightningDto;
-    // // const meeting = await this.ligntningRepository.find({});
-    // if (meeting_date) {\
-    //   throw new UnauthorizedException('해당하는 이메일은 이미 존재합니다.');
-    // }
-
-    // await this.ligntningRepository.save({
-    //   ...createLightningDto,
-    // });
-
-    return { success: true };
+  async createLightning(createLightningDto: CreateLightningDto) {
+    const { meetingDate } = createLightningDto;
+    const result = await this.lightningInfoRepository.createLightningInfo(
+      meetingDate,
+    );
+    const { title, contents, author } = createLightningDto;
+    await this.lightningBoardRepository.createLightningBoard(
+      title,
+      contents,
+      author,
+    );
+    return result;
   }
 }

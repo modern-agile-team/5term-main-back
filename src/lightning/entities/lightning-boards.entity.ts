@@ -7,6 +7,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { LightningInfoEntity } from './lightning-info.entity';
 
 @Entity({
   name: 'lightning_recruitment_boards',
@@ -30,9 +31,24 @@ export class LightningBoardEntity {
   })
   @JoinColumn([
     {
-      name: 'author' /* db에 저장되는 필드 이름 */,
-      referencedColumnName: 'id' /* USER의 id */,
+      name: 'author',
+      referencedColumnName: 'id',
     },
   ])
   author: User;
+
+  @ManyToOne(
+    () => LightningInfoEntity,
+    (lightningNo: LightningInfoEntity) => lightningNo.lightningInfo,
+    {
+      onDelete: 'CASCADE',
+    },
+  )
+  @JoinColumn([
+    {
+      name: 'lightning_no',
+      referencedColumnName: 'id',
+    },
+  ])
+  lightningNo: LightningInfoEntity;
 }
