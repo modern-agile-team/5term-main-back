@@ -21,8 +21,8 @@ export class User extends CommonEntity {
   @Column({ name: 'login_type' })
   loginType: number;
 
-  @Column()
-  user_id: string;
+  @Column({ name: 'user_id' })
+  userId: string;
 
   @ManyToMany(
     () => LightningInfoEntity,
@@ -51,9 +51,6 @@ export class User extends CommonEntity {
     },
   )
   lightningBoard: LightningBoardEntity[];
-
-  @Column({ name: 'user_id' })
-  userId: string;
 
   @OneToOne(() => AuthSocialLogin, (authSocialLogin) => authSocialLogin.user)
   authSocialLogin: AuthSocialLogin;

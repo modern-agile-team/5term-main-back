@@ -7,6 +7,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { LightningInfoEntity } from './lightning-info.entity';
 
 @Entity({
   name: 'lightning_recruitment_boards',
@@ -35,4 +36,19 @@ export class LightningBoardEntity {
     },
   ])
   author: User;
+
+  @ManyToOne(
+    () => LightningInfoEntity,
+    (lightningNo: LightningInfoEntity) => lightningNo.lightningInfo,
+    {
+      onDelete: 'CASCADE',
+    },
+  )
+  @JoinColumn([
+    {
+      name: 'lightning_no',
+      referencedColumnName: 'id',
+    },
+  ])
+  lightningNo: LightningInfoEntity;
 }

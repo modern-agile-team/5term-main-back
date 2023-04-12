@@ -12,12 +12,15 @@ export class LightningService {
 
   async createLightning(createLightningDto: CreateLightningDto) {
     const { meetingDate } = createLightningDto;
-    await this.lightningInfoRepository.createLightningInfo(meetingDate);
+    const result = await this.lightningInfoRepository.createLightningInfo(
+      meetingDate,
+    );
     const { title, contents, author } = createLightningDto;
     await this.lightningBoardRepository.createLightningBoard(
       title,
       contents,
       author,
     );
+    return result;
   }
 }
