@@ -26,9 +26,9 @@ export class LightningService {
   }
 
   async deleteLightningBoard(deleteLigtningDto: DeleteLightningDto) {
-    const { id } = deleteLigtningDto;
+    const { boardNo } = deleteLigtningDto;
     const response = await this.lightningBoardRepository.deleteLightningBoard(
-      id,
+      boardNo,
     );
     return response;
   }

@@ -1,3 +1,3 @@
 export class DeleteLightningDto {
-  id: number;
+  boardNo: number;
 }

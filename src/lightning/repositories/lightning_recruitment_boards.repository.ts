@@ -17,4 +17,16 @@ export class LightningBoardRepository extends Repository<LightningBoardEntity> {
         .execute();
     } catch (error) {}
   }
+
+  async deleteLightningBoard(diaryNo: number): Promise<void> {
+    try {
+      await this.createQueryBuilder('lightning_recruitment_boards')
+        .delete()
+        .from(LightningBoardEntity)
+        .where('id = :diaryNo', { diaryNo })
+        .execute();
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
