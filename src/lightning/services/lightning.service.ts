@@ -1,7 +1,8 @@
+import { DeleteLightningDto } from './../dtos/delete-lightning-board.dto';
 import { LightningBoardRepository } from './../repositories/lightning_recruitment_boards.repository';
 import { LightningInfoRepository } from './../repositories/lightning-info.repository';
 import { Injectable } from '@nestjs/common';
-import { CreateLightningDto } from '../dtos/lightning-info.dto';
+import { CreateLightningDto } from '../dtos/create-lightning.dto';
 
 @Injectable()
 export class LightningService {
@@ -22,5 +23,13 @@ export class LightningService {
       author,
     );
     return result;
+  }
+
+  async deleteLightningBoard(deleteLigtningDto: DeleteLightningDto) {
+    const { id } = deleteLigtningDto;
+    const response = await this.lightningBoardRepository.deleteLightningBoard(
+      id,
+    );
+    return response;
   }
 }
