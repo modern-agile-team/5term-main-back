@@ -16,4 +16,10 @@ export class UserRepository extends Repository<User> {
       })
       .execute();
   }
+
+  async idDuplicationCheck(id: string) {
+    return await this.createQueryBuilder('user')
+      .where('user.user_id = :userId', { userId: id })
+      .getOne();
+  }
 }

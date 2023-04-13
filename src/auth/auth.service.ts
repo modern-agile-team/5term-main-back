@@ -6,6 +6,7 @@ import { AuthPasswordLoginRepository } from './repositories/authPasswordLogin.re
 import { UserRepository } from './../user/repositories/user.repository';
 import { User } from 'src/user/entities/user.entity';
 import { UserProfileRepository } from 'src/user/repositories/userProfile.repository';
+import { DuplicationCheckDto } from './dto/duplicationCheck.dto';
 
 @Injectable()
 export class AuthService {
@@ -30,5 +31,22 @@ export class AuthService {
       authCredentialDto,
       user,
     );
+  }
+
+  async idDuplicationCheck(duplicationCheckDto: DuplicationCheckDto) {
+    const { id } = duplicationCheckDto;
+    const result = await this.userRepository.idDuplicationCheck(id);
+
+    return result ? false : true;
+  }
+
+  async nicknameDuplicationCheck(duplicationCheckDto: DuplicationCheckDto) {
+    const { nickname } = duplicationCheckDto;
+    const result = await this.userProfileRepository.nicknameDuplicationCheck(
+      nickname,
+    );
+    console.log(result);
+
+    return result ? false : true;
   }
 }

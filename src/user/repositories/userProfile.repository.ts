@@ -2,6 +2,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { UserProfile } from '../entities/user_profile.entity';
 import { AuthCredentialDto } from './../../auth/dto/auth-credential.dto';
 import { User } from '../entities/user.entity';
+import { DuplicationCheckDto } from 'src/auth/dto/duplicationCheck.dto';
 
 @EntityRepository(UserProfile)
 export class UserProfileRepository extends Repository<UserProfile> {
@@ -12,5 +13,11 @@ export class UserProfileRepository extends Repository<UserProfile> {
       .into(UserProfile)
       .values({ nickname, phone, email, bio: '', user })
       .execute();
+  }
+
+  async nicknameDuplicationCheck(nickname: string) {
+    return await this.createQueryBuilder('userProfile')
+      .where('userProfile.nickname = :nickname', { nickname: nickname })
+      .getOne();
   }
 }
