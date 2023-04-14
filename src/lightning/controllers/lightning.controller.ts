@@ -1,6 +1,6 @@
 import { UpdateLightningBoardDto } from '../dtos/update-lightning-board.dto';
 import { LightningService } from './../services/lightning.service';
-import { Body, Controller, ParseIntPipe } from '@nestjs/common';
+import { Body, Controller, ParseIntPipe, Get } from '@nestjs/common';
 import { Post, Delete } from '@nestjs/common';
 import { CreateLightningDto } from '../dtos/create-lightning-board.dto';
 import {
@@ -37,5 +37,10 @@ export class LightningController {
       boardNo,
       updateLightningboardDto,
     );
+  }
+
+  @Get(':boardNo')
+  async getLightningBoard(@Param('boardNo', ParseIntPipe) boardNo: number) {
+    return await this.lightningService.getLightningBoard(boardNo);
   }
 }

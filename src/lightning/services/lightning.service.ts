@@ -45,4 +45,11 @@ export class LightningService {
     );
     return response;
   }
+
+  async getLightningBoard(boardNo: number) {
+    const response = await this.lightningBoardRepository.getLightningBoard(
+      boardNo,
+    );
+    return response;
+  }
 }

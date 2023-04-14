@@ -41,4 +41,19 @@ export class LightningBoardRepository extends Repository<LightningBoardEntity> {
         .execute();
     } catch (error) {}
   }
+
+  async getLightningBoard(
+    boardNo: number,
+  ): Promise<LightningBoardEntity | null> {
+    try {
+      const result = await this.createQueryBuilder(
+        'lightning_recruitment_boards',
+      )
+        .where('id = :boardNo', { boardNo })
+        .getOne();
+      return result || null;
+    } catch (error) {
+      throw new Error('Failed to get lightning board.');
+    }
+  }
 }
