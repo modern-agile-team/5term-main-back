@@ -1,11 +1,16 @@
+import { UpdateLightningBoardDto } from '../dtos/update-lightning-board.dto';
 import { LightningService } from './../services/lightning.service';
-import { Body, Controller } from '@nestjs/common';
+import { Body, Controller, ParseIntPipe } from '@nestjs/common';
 import { Post, Delete } from '@nestjs/common';
-import { CreateLightningDto } from '../dtos/create-lightning.dto';
-import { Param, UseFilters, UseInterceptors } from '@nestjs/common/decorators';
+import { CreateLightningDto } from '../dtos/create-lightning-board.dto';
+import {
+  Param,
+  Patch,
+  UseFilters,
+  UseInterceptors,
+} from '@nestjs/common/decorators';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
-import { DeleteLightningDto } from '../dtos/delete-lightning-board.dto';
 
 @Controller('lightnings')
 @UseInterceptors(SuccessInterceptor)
@@ -19,11 +24,18 @@ export class LightningController {
   }
 
   @Delete(':boardNo')
-  async deleteLightningBoard(
-    @Param() deleteLightningBoardDto: DeleteLightningDto,
+  async deleteLightningBoard(@Param('boardNo', ParseIntPipe) boardNo: number) {
+    return await this.lightningService.deleteLightningBoard(boardNo);
+  }
+
+  @Patch(':boardNo')
+  async updateLightningBoard(
+    @Param('boardNo', ParseIntPipe) boardNo: number,
+    @Body() updateLightningboardDto: UpdateLightningBoardDto,
   ) {
-    return await this.lightningService.deleteLightningBoard(
-      deleteLightningBoardDto,
+    return await this.lightningService.updateLightningBoard(
+      boardNo,
+      updateLightningboardDto,
     );
   }
 }

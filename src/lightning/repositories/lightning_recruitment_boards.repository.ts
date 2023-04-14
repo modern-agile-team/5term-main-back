@@ -18,15 +18,27 @@ export class LightningBoardRepository extends Repository<LightningBoardEntity> {
     } catch (error) {}
   }
 
-  async deleteLightningBoard(diaryNo: number): Promise<void> {
+  async deleteLightningBoard(boardNo: number): Promise<void> {
     try {
       await this.createQueryBuilder('lightning_recruitment_boards')
         .delete()
         .from(LightningBoardEntity)
-        .where('id = :diaryNo', { diaryNo })
+        .where('id = :boardNo', { boardNo })
         .execute();
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
+  }
+
+  async updateLightningBoard(
+    boardNo: number,
+    title: string,
+    contents: string,
+  ): Promise<void> {
+    try {
+      await this.createQueryBuilder('lightning_recruitment_boards')
+        .update(LightningBoardEntity)
+        .set({ title, contents })
+        .where('id = :boardNo', { boardNo })
+        .execute();
+    } catch (error) {}
   }
 }
