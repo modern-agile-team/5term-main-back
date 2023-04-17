@@ -15,7 +15,9 @@ export class LightningBoardRepository extends Repository<LightningBoardEntity> {
         .into(LightningBoardEntity)
         .values({ title, contents, author })
         .execute();
-    } catch (error) {}
+    } catch (error) {
+      throw new Error('Failed to create lightning board.');
+    }
   }
 
   async deleteLightningBoard(boardNo: number): Promise<void> {
@@ -25,7 +27,9 @@ export class LightningBoardRepository extends Repository<LightningBoardEntity> {
         .from(LightningBoardEntity)
         .where('id = :boardNo', { boardNo })
         .execute();
-    } catch (error) {}
+    } catch (error) {
+      throw new Error('Failed to delete lightning board.');
+    }
   }
 
   async updateLightningBoard(
@@ -39,7 +43,9 @@ export class LightningBoardRepository extends Repository<LightningBoardEntity> {
         .set({ title, contents })
         .where('id = :boardNo', { boardNo })
         .execute();
-    } catch (error) {}
+    } catch (error) {
+      throw new Error('Failed to update lightning board.');
+    }
   }
 
   async getLightningBoard(
