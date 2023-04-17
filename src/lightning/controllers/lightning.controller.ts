@@ -2,7 +2,7 @@ import { UpdateLightningBoardDto } from '../dtos/update-lightning-board.dto';
 import { LightningService } from './../services/lightning.service';
 import { Body, Controller, ParseIntPipe, Get } from '@nestjs/common';
 import { Post, Delete } from '@nestjs/common';
-import { CreateLightningDto } from '../dtos/create-lightning-board.dto';
+import { CreateLightningBoardDto } from '../dtos/create-lightning-board.dto';
 import {
   Param,
   Patch,
@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common/decorators';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
+import { CreateLightningInfoDto } from '../dtos/create-lightning-info.dto';
 
 @Controller('lightnings')
 @UseInterceptors(SuccessInterceptor)
@@ -18,17 +19,23 @@ import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter
 export class LightningController {
   constructor(private readonly lightningService: LightningService) {}
 
-  @Post()
-  async createLightning(@Body() createLightningDto: CreateLightningDto) {
-    return await this.lightningService.createLightning(createLightningDto);
+  @Post('/boards/:lightningNo')
+  async createLightningBoard(
+    @Param('lightningNo', ParseIntPipe) lightningNo: number,
+    @Body() createLightningBoardDto: CreateLightningBoardDto,
+  ) {
+    return await this.lightningService.createLightningBoard(
+      lightningNo,
+      createLightningBoardDto,
+    );
   }
 
-  @Delete(':boardNo')
+  @Delete('/boards/:boardNo')
   async deleteLightningBoard(@Param('boardNo', ParseIntPipe) boardNo: number) {
     return await this.lightningService.deleteLightningBoard(boardNo);
   }
 
-  @Patch(':boardNo')
+  @Patch('/boards/:boardNo')
   async updateLightningBoard(
     @Param('boardNo', ParseIntPipe) boardNo: number,
     @Body() updateLightningboardDto: UpdateLightningBoardDto,
@@ -39,8 +46,17 @@ export class LightningController {
     );
   }
 
-  @Get(':boardNo')
+  @Get('/boards/:boardNo')
   async getLightningBoard(@Param('boardNo', ParseIntPipe) boardNo: number) {
     return await this.lightningService.getLightningBoard(boardNo);
+  }
+
+  @Post()
+  async createLightningInfo(
+    @Body() createLightninginfoDto: CreateLightningInfoDto,
+  ) {
+    return await this.lightningService.createLightningInfo(
+      createLightninginfoDto,
+    );
   }
 }

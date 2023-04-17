@@ -8,14 +8,12 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { LightningInfoEntity } from './lightning-info.entity';
+import { CommonEntity } from 'src/common/entities/common.entity';
 
 @Entity({
   name: 'lightning_recruitment_boards',
 })
-export class LightningBoardEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class LightningBoardEntity extends CommonEntity {
   @IsString()
   @IsNotEmpty({ message: '제목을 입력해주세요' })
   @Column({ type: 'varchar', nullable: false })
@@ -50,5 +48,5 @@ export class LightningBoardEntity {
       referencedColumnName: 'id',
     },
   ])
-  lightningNo: LightningInfoEntity;
+  lightningNo: number;
 }

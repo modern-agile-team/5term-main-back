@@ -5,15 +5,21 @@ import { User } from 'src/user/entities/user.entity';
 @EntityRepository(LightningBoardEntity)
 export class LightningBoardRepository extends Repository<LightningBoardEntity> {
   async createLightningBoard(
+    lightningNo: number,
     title: string,
     contents: string,
     author: User,
   ): Promise<void> {
     try {
+      const lightningBoard = new LightningBoardEntity();
+      lightningBoard.title = title;
+      lightningBoard.contents = contents;
+      lightningBoard.author = author;
+      lightningBoard.lightningNo = lightningNo;
       await this.createQueryBuilder('lightning_recruitment_boards')
         .insert()
         .into(LightningBoardEntity)
-        .values({ title, contents, author })
+        .values(lightningBoard)
         .execute();
     } catch (error) {
       throw new Error('Failed to create lightning board.');

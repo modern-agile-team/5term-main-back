@@ -1,14 +1,7 @@
 import { IsNotEmpty, IsDate, IsNumber } from 'class-validator';
 import { CommonEntity } from 'src/common/entities/common.entity';
 import { User } from 'src/user/entities/user.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToMany,
-  OneToMany,
-  OneToOne,
-} from 'typeorm';
+import { Column, Entity, ManyToMany, OneToMany } from 'typeorm';
 import { LightningBoardEntity } from './lightning-boards.entity';
 
 @Entity({
@@ -34,5 +27,5 @@ export class LightningInfoEntity extends CommonEntity {
       cascade: true, // 사용자를 통해 블로그가 추가, 수정, 삭제되고 사용자가 저장되면 추가된 블로그도 저장된다.
     },
   )
-  lightningInfo: LightningBoardEntity;
+  lightningInfo: LightningBoardEntity[];
 }

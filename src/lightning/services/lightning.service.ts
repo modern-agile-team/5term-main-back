@@ -3,7 +3,8 @@ import { UpdateLightningBoardDto } from '../dtos/update-lightning-board.dto';
 import { LightningBoardRepository } from './../repositories/lightning_recruitment_boards.repository';
 import { LightningInfoRepository } from './../repositories/lightning-info.repository';
 import { Injectable } from '@nestjs/common';
-import { CreateLightningDto } from '../dtos/create-lightning-board.dto';
+import { CreateLightningBoardDto } from '../dtos/create-lightning-board.dto';
+import { CreateLightningInfoDto } from '../dtos/create-lightning-info.dto';
 
 @Injectable()
 export class LightningService {
@@ -12,18 +13,18 @@ export class LightningService {
     private readonly lightningBoardRepository: LightningBoardRepository,
   ) {}
 
-  async createLightning(createLightningDto: CreateLightningDto) {
-    const { meetingDate } = createLightningDto;
-    const result = await this.lightningInfoRepository.createLightningInfo(
-      meetingDate,
-    );
-    const { title, contents, author } = createLightningDto;
-    await this.lightningBoardRepository.createLightningBoard(
+  async createLightningBoard(
+    lightningNo,
+    createLightningBoardDto: CreateLightningBoardDto,
+  ) {
+    const { title, contents, author } = createLightningBoardDto;
+    const response = await this.lightningBoardRepository.createLightningBoard(
+      lightningNo,
       title,
       contents,
       author,
     );
-    return result;
+    return response;
   }
 
   async deleteLightningBoard(boardNo: number) {
@@ -49,6 +50,14 @@ export class LightningService {
   async getLightningBoard(boardNo: number) {
     const response = await this.lightningBoardRepository.getLightningBoard(
       boardNo,
+    );
+    return response;
+  }
+
+  async createLightningInfo(createLightningInfoDto: CreateLightningInfoDto) {
+    const { meetingDate } = createLightningInfoDto;
+    const response = await this.lightningInfoRepository.createLightningInfo(
+      meetingDate,
     );
     return response;
   }
