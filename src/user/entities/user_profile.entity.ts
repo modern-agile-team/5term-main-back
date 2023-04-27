@@ -1,11 +1,18 @@
-import { CommonEntity } from 'src/common/entities/common.entity';
-import { Column, Entity } from 'typeorm';
-import { Sex } from '../type/user_profile.enum';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { User } from './user.entity';
+import { UserImage } from './user_image.entity';
 
 @Entity()
-export class UserProfile extends CommonEntity {
-  @Column()
-  user_id: number;
+export class UserProfile extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column()
   nickname: string;
@@ -17,11 +24,13 @@ export class UserProfile extends CommonEntity {
   email: string;
 
   @Column()
-  birthday: number;
+  bio?: string;
 
-  @Column()
-  sex: Sex;
+  @OneToOne(() => User, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
-  @Column()
-  bio: string;
+  @OneToOne(() => UserImage)
+  @JoinColumn({ name: 'user_img' })
+  userImage: UserImage;
 }

@@ -1,5 +1,13 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Schedule } from '../type/schedule.enum';
+import { User } from './user.entity';
 
 @Entity()
 export class UserScheldule extends BaseEntity {
@@ -7,8 +15,9 @@ export class UserScheldule extends BaseEntity {
   id: number;
 
   @Column()
-  user_id: number;
-
-  @Column()
   schedule: Schedule;
+
+  @ManyToOne(() => User, (user) => user.userScheldule)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 }
