@@ -5,9 +5,7 @@ import { EntityRepository, InsertResult, Repository } from 'typeorm';
 export class LightningInfoRepository extends Repository<LightningInfoEntity> {
   async createLightningInfo(meetingDate: Date): Promise<InsertResult> {
     try {
-      const { raw }: InsertResult = await this.createQueryBuilder(
-        'lightning_info',
-      )
+      const { raw }: InsertResult = await this.createQueryBuilder()
         .insert()
         .into(LightningInfoEntity)
         .values({ meetingDate })

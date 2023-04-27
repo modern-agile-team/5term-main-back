@@ -3,6 +3,7 @@ import { CommonEntity } from 'src/common/entities/common.entity';
 import { User } from 'src/user/entities/user.entity';
 import { Column, Entity, ManyToMany, OneToMany } from 'typeorm';
 import { LightningBoardEntity } from './lightning-boards.entity';
+import { LightningToUser } from './lightning-to-user.entity';
 
 @Entity({
   name: 'lightning_info',
@@ -17,9 +18,6 @@ export class LightningInfoEntity extends CommonEntity {
   @Column({ name: 'meeting_date', type: 'date', nullable: false })
   meetingDate: Date;
 
-  @ManyToMany(() => User, (user: User) => user.id)
-  users: User[];
-
   @OneToMany(
     () => LightningBoardEntity,
     (board: LightningBoardEntity) => board.lightningNo,
@@ -28,4 +26,10 @@ export class LightningInfoEntity extends CommonEntity {
     },
   )
   lightningInfo: LightningBoardEntity[];
+
+  @OneToMany(
+    () => LightningToUser,
+    (lightningToUser) => lightningToUser.lightningInfo,
+  )
+  lightningToUser: LightningToUser[];
 }
