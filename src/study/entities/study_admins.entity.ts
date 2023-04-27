@@ -8,7 +8,9 @@ import {
 import { Study } from './study.entity';
 import { User } from 'src/user/entities/user.entity';
 
-@Entity()
+@Entity({
+  name: 'study_admins',
+})
 export class StudyAdmins extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -19,5 +21,5 @@ export class StudyAdmins extends BaseEntity {
 
   @ManyToMany(() => User)
   @JoinColumn({ name: 'user_id' })
-  userss: User[];
+  users: User[];
 }

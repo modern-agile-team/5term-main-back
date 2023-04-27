@@ -3,7 +3,9 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { Study } from './study.entity';
 import { User } from 'src/user/entities/user.entity';
 
-@Entity()
+@Entity({
+  name: 'study_board',
+})
 export class StudyBoard extends CommonEntity {
   @ManyToOne((type) => Study)
   @JoinColumn({ name: 'study_id' })

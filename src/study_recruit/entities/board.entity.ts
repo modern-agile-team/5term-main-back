@@ -1,9 +1,18 @@
 import { CommonEntity } from 'src/common/entities/common.entity';
 import { Study } from 'src/study/entities/study.entity';
 import { User } from 'src/user/entities/user.entity';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
-@Entity()
+@Entity({
+  name: 'recruit_board',
+})
 export class RecruitBoard extends CommonEntity {
   @ManyToOne((type) => Study)
   @JoinColumn({ name: 'study_id' })

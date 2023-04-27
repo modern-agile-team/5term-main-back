@@ -2,7 +2,9 @@ import { CommonEntity } from 'src/common/entities/common.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { Study } from './study.entity';
 
-@Entity()
+@Entity({
+  name: 'study_calandar',
+})
 export class StudyCalendar extends CommonEntity {
   @ManyToOne(() => Study)
   @JoinColumn({ name: 'study_id' })
