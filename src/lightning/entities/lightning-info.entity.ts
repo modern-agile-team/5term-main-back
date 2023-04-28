@@ -1,9 +1,8 @@
 import { IsNotEmpty, IsDate, IsNumber } from 'class-validator';
 import { CommonEntity } from 'src/common/entities/common.entity';
-import { User } from 'src/user/entities/user.entity';
 import { Column, Entity, ManyToMany, OneToMany } from 'typeorm';
 import { LightningBoardEntity } from './lightning-boards.entity';
-import { LightningToUser } from './lightning-to-user.entity';
+import { LightningToUserEntity } from './lightning-to-user.entity';
 
 @Entity({
   name: 'lightning_info',
@@ -28,8 +27,8 @@ export class LightningInfoEntity extends CommonEntity {
   lightningInfo: LightningBoardEntity[];
 
   @OneToMany(
-    () => LightningToUser,
+    () => LightningToUserEntity,
     (lightningToUser) => lightningToUser.lightningInfo,
   )
-  lightningToUser: LightningToUser[];
+  lightningToUser: LightningToUserEntity[];
 }

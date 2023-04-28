@@ -51,12 +51,14 @@ export class LightningController {
     return await this.lightningService.getLightningBoard(boardNo);
   }
 
-  @Post()
+  @Post('/:userNo')
   async createLightningInfo(
+    @Param('userNo', ParseIntPipe) userNo: number,
     @Body() createLightninginfoDto: CreateLightningInfoDto,
   ) {
     return await this.lightningService.createLightningInfo(
       createLightninginfoDto,
+      userNo,
     );
   }
 }

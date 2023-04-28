@@ -54,11 +54,17 @@ export class LightningService {
     return response;
   }
 
-  async createLightningInfo(createLightningInfoDto: CreateLightningInfoDto) {
+  async createLightningInfo(
+    createLightningInfoDto: CreateLightningInfoDto,
+    userNo: number,
+  ) {
     const { meetingDate } = createLightningInfoDto;
-    const response = await this.lightningInfoRepository.createLightningInfo(
+    const lightningNo = await this.lightningInfoRepository.createLightningInfo(
       meetingDate,
     );
-    return response;
+    await this.lightningInfoRepository.createLightningToUser(
+      userNo,
+      lightningNo,
+    );
   }
 }

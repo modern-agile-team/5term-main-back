@@ -10,32 +10,24 @@ export class LightningBoardRepository extends Repository<LightningBoardEntity> {
     contents: string,
     author: User,
   ): Promise<void> {
-    try {
-      const lightningBoard = new LightningBoardEntity();
-      lightningBoard.title = title;
-      lightningBoard.contents = contents;
-      lightningBoard.author = author;
-      lightningBoard.lightningNo = lightningNo;
-      await this.createQueryBuilder('lightning_recruitment_boards')
-        .insert()
-        .into(LightningBoardEntity)
-        .values(lightningBoard)
-        .execute();
-    } catch (error) {
-      throw new Error('Failed to create lightning board.');
-    }
+    const lightningBoard = new LightningBoardEntity();
+    lightningBoard.title = title;
+    lightningBoard.contents = contents;
+    lightningBoard.author = author;
+    lightningBoard.lightningNo = lightningNo;
+    await this.createQueryBuilder('lightning_recruitment_boards')
+      .insert()
+      .into(LightningBoardEntity)
+      .values(lightningBoard)
+      .execute();
   }
 
   async deleteLightningBoard(boardNo: number): Promise<void> {
-    try {
-      await this.createQueryBuilder('lightning_recruitment_boards')
-        .delete()
-        .from(LightningBoardEntity)
-        .where('id = :boardNo', { boardNo })
-        .execute();
-    } catch (error) {
-      throw new Error('Failed to delete lightning board.');
-    }
+    await this.createQueryBuilder('lightning_recruitment_boards')
+      .delete()
+      .from(LightningBoardEntity)
+      .where('id = :boardNo', { boardNo })
+      .execute();
   }
 
   async updateLightningBoard(
@@ -43,29 +35,19 @@ export class LightningBoardRepository extends Repository<LightningBoardEntity> {
     title: string,
     contents: string,
   ): Promise<void> {
-    try {
-      await this.createQueryBuilder('lightning_recruitment_boards')
-        .update(LightningBoardEntity)
-        .set({ title, contents })
-        .where('id = :boardNo', { boardNo })
-        .execute();
-    } catch (error) {
-      throw new Error('Failed to update lightning board.');
-    }
+    await this.createQueryBuilder('lightning_recruitment_boards')
+      .update(LightningBoardEntity)
+      .set({ title, contents })
+      .where('id = :boardNo', { boardNo })
+      .execute();
   }
 
   async getLightningBoard(
     boardNo: number,
   ): Promise<LightningBoardEntity | null> {
-    try {
-      const result = await this.createQueryBuilder(
-        'lightning_recruitment_boards',
-      )
-        .where('id = :boardNo', { boardNo })
-        .getOne();
-      return result || null;
-    } catch (error) {
-      throw new Error('Failed to get lightning board.');
-    }
+    const result = await this.createQueryBuilder('lightning_recruitment_boards')
+      .where('id = :boardNo', { boardNo })
+      .getOne();
+    return result;
   }
 }

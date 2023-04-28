@@ -6,7 +6,7 @@ import { User } from 'src/user/entities/user.entity';
 @Entity({
   name: 'lightning_to_user',
 })
-export class LightningToUser extends CommonEntity {
+export class LightningToUserEntity extends CommonEntity {
   @ManyToOne(
     () => LightningInfoEntity,
     (lightningInfo) => lightningInfo.lightningToUser,
@@ -29,6 +29,6 @@ export class LightningToUser extends CommonEntity {
   isAccept: number;
 
   //관리자 = 1 구성원 = 0
-  @Column({ name: 'is_admin', type: 'int', nullable: false })
+  @Column({ name: 'is_admin', type: 'int', nullable: false, default: 0 })
   isAdmin: number;
 }
