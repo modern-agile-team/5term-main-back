@@ -35,15 +35,13 @@ export class AuthService {
     );
   }
 
-  async idDuplicationCheck(duplicationCheckDto: DuplicationCheckDto) {
-    const { id } = duplicationCheckDto;
+  async idDuplicationCheck(id: DuplicationCheckDto) {
     const result = await this.userRepository.idDuplicationCheck(id);
 
     return result ? false : true;
   }
 
-  async nicknameDuplicationCheck(duplicationCheckDto: DuplicationCheckDto) {
-    const { nickname } = duplicationCheckDto;
+  async nicknameDuplicationCheck(nickname: DuplicationCheckDto) {
     const result = await this.userProfileRepository.nicknameDuplicationCheck(
       nickname,
     );
