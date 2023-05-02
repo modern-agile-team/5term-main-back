@@ -5,15 +5,12 @@ import {
   HttpCode,
   BadRequestException,
   Get,
-  Res,
-  Query,
   Param,
 } from '@nestjs/common';
 import { AuthService, KakaoLogin } from './auth.service';
 import { AuthCredentialDto } from './dto/auth-credential.dto';
 import { DuplicationCheckDto } from './dto/duplicationCheck.dto';
-import { ApiBody, ApiOperation, ApiParam } from '@nestjs/swagger';
-import { log } from 'console';
+import { ApiBody, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -29,16 +26,25 @@ export class AuthController {
     return this.authService.singUp(authCredentialDto);
   }
 
+  @Get('/id-duplication-ckecking/:id')
   @ApiOperation({ summary: 'id중복체크', description: 'id를 중복체크한다.' })
+  @ApiResponse({
+    status: 200,
+    description: 'id 중복 없음',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'id 중복',
+  })
   @ApiParam({
     name: 'id',
+    type: 'string',
+    description: 'id입력',
     example: 'id123',
     required: true,
   })
-  @Get('/id-duplication-ckecking/:id')
   @HttpCode(200)
   async idDuplicationChekc(@Param('id') id: DuplicationCheckDto) {
-    console.log('확인');
     const result = await this.authService.idDuplicationCheck(id);
 
     if (!result) {
@@ -46,16 +52,26 @@ export class AuthController {
     }
   }
 
+  @Get('/nickname-duplication-ckecking/:nickname')
   @ApiOperation({
     summary: '닉네임 중복체크',
     description: '닉네임 중복체크한다.',
   })
   @ApiParam({
     name: 'nickname',
+    type: 'string',
+    description: '닉네임 입력',
     example: '닉네임',
     required: true,
   })
-  @Get('/nickname-duplication-ckecking/:nickname')
+  @ApiResponse({
+    status: 200,
+    description: '닉네임 중복 없음',
+  })
+  @ApiResponse({
+    status: 400,
+    description: '닉네임 중복',
+  })
   @HttpCode(200)
   async nicknameDuplicationChekc(
     @Param('nickname') nickname: DuplicationCheckDto,

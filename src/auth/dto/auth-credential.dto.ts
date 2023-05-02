@@ -7,8 +7,8 @@ export class AuthCredentialDto {
   @MaxLength(20)
   @ApiProperty({
     name: 'id',
-    description: 'id123',
-    example: '아이디',
+    description: '아이디',
+    example: 'id123',
   })
   @Matches(/^[a-zA-Z0-9]*$/, {
     message: '아이디 규격을 확인하세요',
