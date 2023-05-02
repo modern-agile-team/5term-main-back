@@ -12,7 +12,7 @@ import {
 import { AuthService, KakaoLogin } from './auth.service';
 import { AuthCredentialDto } from './dto/auth-credential.dto';
 import { DuplicationCheckDto } from './dto/duplicationCheck.dto';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiParam } from '@nestjs/swagger';
 import { log } from 'console';
 
 @Controller('auth')
@@ -22,6 +22,7 @@ export class AuthController {
     private readonly kakaologin: KakaoLogin,
   ) {}
   @ApiOperation({ summary: '회원가입', description: '회원가입' })
+  @ApiBody({ type: AuthCredentialDto })
   @Post('/signup')
   @HttpCode(200)
   singUp(@Body() authCredentialDto: AuthCredentialDto) {
@@ -29,6 +30,11 @@ export class AuthController {
   }
 
   @ApiOperation({ summary: 'id중복체크', description: 'id를 중복체크한다.' })
+  @ApiParam({
+    name: 'id',
+    example: 'id123',
+    required: true,
+  })
   @Get('/id-duplication-ckecking/:id')
   @HttpCode(200)
   async idDuplicationChekc(@Param('id') id: DuplicationCheckDto) {
@@ -43,6 +49,11 @@ export class AuthController {
   @ApiOperation({
     summary: '닉네임 중복체크',
     description: '닉네임 중복체크한다.',
+  })
+  @ApiParam({
+    name: 'nickname',
+    example: '닉네임',
+    required: true,
   })
   @Get('/nickname-duplication-ckecking/:nickname')
   @HttpCode(200)
