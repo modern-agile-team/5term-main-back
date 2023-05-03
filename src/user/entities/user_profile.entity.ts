@@ -15,6 +15,9 @@ export class UserProfile extends BaseEntity {
   id: number;
 
   @Column()
+  name: string;
+
+  @Column()
   nickname: string;
 
   @Column()

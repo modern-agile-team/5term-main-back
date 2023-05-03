@@ -1,25 +1,32 @@
+import { User } from 'src/user/entities/user.entity';
 import {
   BaseEntity,
   Entity,
   JoinColumn,
-  ManyToMany,
+  ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Study } from './study.entity';
-import { User } from 'src/user/entities/user.entity';
 
 @Entity({
   name: 'study_admins',
 })
 export class StudyAdmins extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
 
-  @ManyToMany(() => Study)
+  @OneToOne(() => Study, (study) => study.id, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'study_id' })
-  studys: Study[];
+  study: Study;
 
-  @ManyToMany(() => User)
+  @ManyToOne(() => User, (user) => user.id, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'user_id' })
-  users: User[];
+  user: User;
 }

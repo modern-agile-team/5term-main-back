@@ -1,12 +1,12 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { StudyService } from './study.service';
+import { StudyService } from '../service/study.service';
 
 @Controller('studies')
 export class StudyController {
   constructor(private studysService: StudyService) {}
 
   @Post('')
-  createStudy(user = { id: 28 }, @Body() body) {
+  createStudy(user = { userId: 41 }, @Body() body) {
     return this.studysService.createStudy(user, body);
   }
 }
