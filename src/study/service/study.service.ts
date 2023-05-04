@@ -43,8 +43,8 @@ export class StudyService {
     const memberInfo = await this.studyMembersRepository
       .createQueryBuilder()
       .insert()
-      .values([{ study: studyId, user: userInfo }]);
-
+      .values([{ study: studyId, user: userInfo }])
+      .execute();
     return { studyInfo, adminInfo, memberInfo };
   }
 

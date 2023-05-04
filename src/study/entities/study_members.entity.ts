@@ -3,7 +3,8 @@ import {
   BaseEntity,
   Entity,
   JoinColumn,
-  ManyToMany,
+  ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Study } from './study.entity';
@@ -12,14 +13,20 @@ import { Study } from './study.entity';
   name: 'study_members',
 })
 export class StudyMembers extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
 
-  @ManyToMany(() => User)
-  @JoinColumn({ name: 'user_id' })
-  user: User;
-
-  @ManyToMany(() => Study)
+  @OneToOne(() => Study, (study) => study.id, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'study_id' })
   study: Study;
+
+  @ManyToOne(() => User, (user) => user.id, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 }
