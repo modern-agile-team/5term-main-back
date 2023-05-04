@@ -7,15 +7,15 @@ import { DuplicationCheckDto } from 'src/auth/dto/duplicationCheck.dto';
 @EntityRepository(UserProfile)
 export class UserProfileRepository extends Repository<UserProfile> {
   async createUserProfile(authCredentialDto: AuthCredentialDto, user: User) {
-    const { nickname, phone, email } = authCredentialDto;
+    const { nickname, phone, email, name } = authCredentialDto;
     return await this.createQueryBuilder('UserProfile')
       .insert()
       .into(UserProfile)
-      .values({ nickname, phone, email, bio: '', user })
+      .values({ nickname, phone, email, bio: '', user, name })
       .execute();
   }
 
-  async nicknameDuplicationCheck(nickname: string) {
+  async nicknameDuplicationCheck(nickname: DuplicationCheckDto) {
     return await this.createQueryBuilder('userProfile')
       .where('userProfile.nickname = :nickname', { nickname: nickname })
       .getOne();

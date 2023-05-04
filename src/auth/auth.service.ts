@@ -7,6 +7,7 @@ import { UserRepository } from './../user/repositories/user.repository';
 import { User } from 'src/user/entities/user.entity';
 import { UserProfileRepository } from 'src/user/repositories/userProfile.repository';
 import { DuplicationCheckDto } from './dto/duplicationCheck.dto';
+import axios from 'axios';
 
 @Injectable()
 export class AuthService {
@@ -20,6 +21,7 @@ export class AuthService {
     @InjectRepository(UserProfileRepository)
     private userProfileRepository: UserProfileRepository,
   ) {}
+
   async singUp(authCredentialDto: AuthCredentialDto) {
     const user: User = (
       await this.userRepository.createUser(authCredentialDto, 0)
@@ -33,20 +35,25 @@ export class AuthService {
     );
   }
 
-  async idDuplicationCheck(duplicationCheckDto: DuplicationCheckDto) {
-    const { id } = duplicationCheckDto;
+  async idDuplicationCheck(id: DuplicationCheckDto) {
     const result = await this.userRepository.idDuplicationCheck(id);
 
     return result ? false : true;
   }
 
-  async nicknameDuplicationCheck(duplicationCheckDto: DuplicationCheckDto) {
-    const { nickname } = duplicationCheckDto;
+  async nicknameDuplicationCheck(nickname: DuplicationCheckDto) {
     const result = await this.userProfileRepository.nicknameDuplicationCheck(
       nickname,
     );
-    console.log(result);
 
     return result ? false : true;
+  }
+}
+
+@Injectable()
+export class KakaoLogin {
+  async login(url: string) {
+    const response = await axios.post(url);
+    return response;
   }
 }
