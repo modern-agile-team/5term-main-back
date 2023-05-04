@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { AuthCredentialDto } from './dto/auth-credential.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthSocialLoginRepository } from './repositories/authSocialLogin.repository';
@@ -65,43 +69,48 @@ export class AuthService {
     const accessKey = smsConfig.accessKeyId;
     const serviceId = smsConfig.serviceId;
     const secretKey = smsConfig.secretKey;
-    const content = `[web 발송] \n 인증번호는 ${certificationNumber} 입니다.`;
+    const content = `인증번호는 ${certificationNumber} 입니다.`;
 
     const hmac = crypto.createHmac('sha256', secretKey);
 
     const url1 = `https://sens.apigw.ntruss.com/sms/v2/services/${serviceId}/messages`;
     const url2 = `/sms/v2/services/${serviceId}/messages`;
 
-    hmac.update(method);
-    hmac.update(space);
-    hmac.update(url2);
-    hmac.update(newLine);
-    hmac.update(timestamp.toString());
-    hmac.update(newLine);
-    hmac.update(accessKey);
+    messages.push(method);
+    messages.push(space);
+    messages.push(url2);
+    messages.push(newLine);
+    messages.push(timestamp);
+    messages.push(newLine);
+    messages.push(accessKey);
 
-    messages.push();
+    const signiture = hmac.update(messages.join('')).digest('base64');
 
     const headers = {
       'Content-Type': 'application/json; charset=utf-8',
       'x-ncp-apigw-timestamp': timestamp,
       'x-ncp-iam-access-key': accessKey,
-      'x-ncp-apigw-signature-v2': secretKey,
+      'x-ncp-apigw-signature-v2': signiture,
     };
 
     const data = {
       type: 'SMS',
       countryCode: '82',
       from: fromPhoneNumber,
+      content,
       messages: [
         {
-          to: `${toPhoneNumber}`,
-          content,
+          to: `${toPhoneNumber.toString()}`,
         },
       ],
     };
 
-    const res = await axios.post(url1, data, { headers });
-    console.log(res.data);
+    const result = (await axios.post(url1, data, { headers })).data;
+
+    if (result.statusCode != 202) {
+      throw new InternalServerErrorException('문자전송 실패');
+    }
+
+    return certificationNumber;
   }
 }

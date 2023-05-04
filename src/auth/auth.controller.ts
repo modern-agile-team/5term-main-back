@@ -84,5 +84,7 @@ export class AuthController {
   @Get('/sms-certification/:phoneNumber')
   async smsCertification(@Param('phoneNumber') phoneNumber: number) {
     const result = await this.authService.smsCertification(phoneNumber);
+
+    return { result };
   }
 }
