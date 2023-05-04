@@ -81,6 +81,17 @@ export class AuthController {
     }
   }
 
+  @ApiOperation({
+    summary: 'sms인증 api',
+    description: 'sms인증을 위해 인증번호를 보낸다.',
+  })
+  @ApiParam({
+    name: 'phoneNumber',
+    type: 'number',
+    description: '인증을 진행할 전화번호',
+    example: '01012345678',
+    required: true,
+  })
   @Get('/sms-certification/:phoneNumber')
   async smsCertification(@Param('phoneNumber') phoneNumber: number) {
     const result = await this.authService.smsCertification(phoneNumber);
