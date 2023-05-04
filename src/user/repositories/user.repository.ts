@@ -23,4 +23,11 @@ export class UserRepository extends Repository<User> {
       .where('user.user_id = :userId', { userId: id })
       .getOne();
   }
+
+  async getUserId(user) {
+    return await this.createQueryBuilder('user')
+      .select(['user.id'])
+      .where('user.id = :userId', { userId: user.userId })
+      .getOne();
+  }
 }

@@ -20,33 +20,24 @@ export class StudyService {
 
   async createStudy(user, body) {
     //스터디 생성
-    const studyInfo = await this.studyRepository
-      .createQueryBuilder()
-      .insert()
-      .values([{ end_date: body.endDate, active: body.active }])
-      .execute();
+    const studyInfo = await this.studyRepository.createStudy(body);
+
     const studyId = studyInfo.identifiers[0].id;
-    const userInfo = await this.userRepository
-      .createQueryBuilder('user')
-      .select(['user.id'])
-      .where('user.id = :userId', { userId: user.userId })
-      .getOne();
+
+    const userId = await this.userRepository.getUserId(user);
 
     //스터디 생성자 관리자권한 부여
-    const adminInfo = await this.studyAdminsRepository
-      .createQueryBuilder()
-      .insert()
-      .values([{ study: studyId, user: userInfo }])
-      .execute();
+    const adminInfo = await this.studyAdminsRepository.giveAdmin(
+      userId,
+      studyId,
+    );
 
     //생성된 스터디에 멤버로 참여
-    const memberInfo = await this.studyMembersRepository
-      .createQueryBuilder()
-      .insert()
-      .values([{ study: studyId, user: userInfo }])
-      .execute();
+    const memberInfo = await this.studyMembersRepository.joinStudy(
+      userId,
+      studyId,
+    );
+
     return { studyInfo, adminInfo, memberInfo };
   }
-
-  // async joinStudy() {}
 }
