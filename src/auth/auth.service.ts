@@ -8,6 +8,8 @@ import { User } from 'src/user/entities/user.entity';
 import { UserProfileRepository } from 'src/user/repositories/userProfile.repository';
 import { DuplicationCheckDto } from './dto/duplicationCheck.dto';
 import axios from 'axios';
+import * as config from 'config';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class AuthService {
@@ -48,12 +50,58 @@ export class AuthService {
 
     return result ? false : true;
   }
-}
 
-@Injectable()
-export class KakaoLogin {
-  async login(url: string) {
-    const response = await axios.post(url);
-    return response;
+  async smsCertification(toPhoneNumber: number) {
+    const smsConfig = config.get('sms');
+
+    const certificationNumber = Math.floor(Math.random() * 1000000);
+
+    const messages = [];
+    const timestamp = new Date().getTime();
+    const method = 'POST';
+    const space = ' ';
+    const newLine = '\n';
+    const fromPhoneNumber = smsConfig.myPhoneNumber;
+    const accessKey = smsConfig.accessKeyId;
+    const serviceId = smsConfig.serviceId;
+    const secretKey = smsConfig.secretKey;
+    const content = `[web 발송] \n 인증번호는 ${certificationNumber} 입니다.`;
+
+    const hmac = crypto.createHmac('sha256', secretKey);
+
+    const url1 = `https://sens.apigw.ntruss.com/sms/v2/services/${serviceId}/messages`;
+    const url2 = `/sms/v2/services/${serviceId}/messages`;
+
+    hmac.update(method);
+    hmac.update(space);
+    hmac.update(url2);
+    hmac.update(newLine);
+    hmac.update(timestamp.toString());
+    hmac.update(newLine);
+    hmac.update(accessKey);
+
+    messages.push();
+
+    const headers = {
+      'Content-Type': 'application/json; charset=utf-8',
+      'x-ncp-apigw-timestamp': timestamp,
+      'x-ncp-iam-access-key': accessKey,
+      'x-ncp-apigw-signature-v2': secretKey,
+    };
+
+    const data = {
+      type: 'SMS',
+      countryCode: '82',
+      from: fromPhoneNumber,
+      messages: [
+        {
+          to: `${toPhoneNumber}`,
+          content,
+        },
+      ],
+    };
+
+    const res = await axios.post(url1, data, { headers });
+    console.log(res.data);
   }
 }

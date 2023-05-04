@@ -7,17 +7,15 @@ import {
   Get,
   Param,
 } from '@nestjs/common';
-import { AuthService, KakaoLogin } from './auth.service';
+import { AuthService } from './auth.service';
 import { AuthCredentialDto } from './dto/auth-credential.dto';
 import { DuplicationCheckDto } from './dto/duplicationCheck.dto';
 import { ApiBody, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { SmsCertificationDto } from './dto/smsCertification.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private authService: AuthService,
-    private readonly kakaologin: KakaoLogin,
-  ) {}
+  constructor(private authService: AuthService) {}
   @ApiOperation({ summary: '회원가입', description: '회원가입' })
   @ApiBody({ type: AuthCredentialDto })
   @Post('/signup')
@@ -81,5 +79,10 @@ export class AuthController {
     if (!result) {
       throw new BadRequestException('닉네임 중복');
     }
+  }
+
+  @Get('/sms-certification/:phoneNumber')
+  async smsCertification(@Param('phoneNumber') phoneNumber: number) {
+    const result = await this.authService.smsCertification(phoneNumber);
   }
 }

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AuthService, KakaoLogin } from './auth.service';
+import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthSocialLoginRepository } from './repositories/authSocialLogin.repository';
@@ -16,7 +16,7 @@ import { UserProfileRepository } from 'src/user/repositories/userProfile.reposit
       UserProfileRepository,
     ]),
   ],
-  providers: [AuthService, KakaoLogin],
+  providers: [AuthService],
   controllers: [AuthController],
 })
 export class AuthModule {}

@@ -41,6 +41,8 @@
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.2",
     "config": "^3.3.9",
+    "crypto": "^1.0.1",
+    "crypto-js": "^4.1.1",
     "dotenv": "^16.0.3",
     "fastify-swagger": "^5.2.0",
     "pg": "^8.10.0",
