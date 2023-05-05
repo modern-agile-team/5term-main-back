@@ -14,6 +14,7 @@ import { DuplicationCheckDto } from './dto/duplicationCheck.dto';
 import axios from 'axios';
 import * as config from 'config';
 import * as crypto from 'crypto';
+import { error } from 'console';
 
 @Injectable()
 export class AuthService {
@@ -55,7 +56,20 @@ export class AuthService {
     return result ? false : true;
   }
 
+  async phoneDuplicationCheck(phoneNumber: number) {
+    const result = await this.userProfileRepository.phoneDuplicationCheck(
+      phoneNumber,
+    );
+    console.log(result);
+
+    return result ? true : false;
+  }
+
   async smsCertification(toPhoneNumber: number) {
+    if (await this.phoneDuplicationCheck(toPhoneNumber)) {
+      throw new BadRequestException('중복 전화번호');
+    }
+
     const smsConfig = config.get('sms');
 
     const certificationNumber = Math.floor(Math.random() * 1000000);

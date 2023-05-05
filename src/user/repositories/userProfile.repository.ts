@@ -20,4 +20,14 @@ export class UserProfileRepository extends Repository<UserProfile> {
       .where('userProfile.nickname = :nickname', { nickname: nickname })
       .getOne();
   }
+
+  async phoneDuplicationCheck(phoneNumber: number) {
+    const phone = phoneNumber
+      .toString()
+      .replace(/(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/, '$1-$2-$3');
+
+    return await this.createQueryBuilder('userProfile')
+      .where('userProfile.phone = :phone', { phone: phone })
+      .getOne();
+  }
 }
