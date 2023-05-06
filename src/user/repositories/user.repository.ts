@@ -18,7 +18,9 @@ export class UserRepository extends Repository<User> {
       .execute();
   }
 
-  async idDuplicationCheck(id: DuplicationCheckDto) {
+  async idDuplicationCheck(duplicationCheckDto: DuplicationCheckDto) {
+    const { id } = duplicationCheckDto;
+
     return await this.createQueryBuilder('user')
       .where('user.user_id = :userId', { userId: id })
       .getOne();

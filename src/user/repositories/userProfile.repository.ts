@@ -15,7 +15,9 @@ export class UserProfileRepository extends Repository<UserProfile> {
       .execute();
   }
 
-  async nicknameDuplicationCheck(nickname: DuplicationCheckDto) {
+  async nicknameDuplicationCheck(duplicationCheckDto: DuplicationCheckDto) {
+    const { nickname } = duplicationCheckDto;
+
     return await this.createQueryBuilder('userProfile')
       .where('userProfile.nickname = :nickname', { nickname: nickname })
       .getOne();

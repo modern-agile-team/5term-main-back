@@ -42,10 +42,13 @@ export class AuthController {
     required: true,
   })
   @HttpCode(200)
-  async idDuplicationChekc(@Param('id') id: DuplicationCheckDto) {
-    const result = await this.authService.idDuplicationCheck(id);
+  async idDuplicationChekc(@Param('id') id: string) {
+    const duplicationCheckDto: DuplicationCheckDto = { id };
+    const result = await this.authService.idDuplicationCheck(
+      duplicationCheckDto,
+    );
 
-    if (!result) {
+    if (result) {
       throw new BadRequestException('아이디 중복');
     }
   }
@@ -71,12 +74,13 @@ export class AuthController {
     description: '닉네임 중복',
   })
   @HttpCode(200)
-  async nicknameDuplicationChekc(
-    @Param('nickname') nickname: DuplicationCheckDto,
-  ) {
-    const result = await this.authService.nicknameDuplicationCheck(nickname);
+  async nicknameDuplicationChekc(@Param('nickname') nickname: string) {
+    const duplicationCheckDto: DuplicationCheckDto = { nickname };
+    const result = await this.authService.nicknameDuplicationCheck(
+      duplicationCheckDto,
+    );
 
-    if (!result) {
+    if (result) {
       throw new BadRequestException('닉네임 중복');
     }
   }

@@ -30,6 +30,22 @@ export class AuthService {
   ) {}
 
   async singUp(authCredentialDto: AuthCredentialDto) {
+    const duplicationCheckDto: DuplicationCheckDto = authCredentialDto;
+
+    const idDuplicationCheckingResult = await this.idDuplicationCheck(
+      duplicationCheckDto,
+    );
+    const nicknameDuplicationCheckingResult =
+      await this.nicknameDuplicationCheck(duplicationCheckDto);
+
+    if (idDuplicationCheckingResult) {
+      throw new BadRequestException('아이디 중복');
+    }
+
+    if (nicknameDuplicationCheckingResult) {
+      throw new BadRequestException('닉네임 중복');
+    }
+
     const user: User = (
       await this.userRepository.createUser(authCredentialDto, 0)
     ).raw[0];
@@ -42,25 +58,26 @@ export class AuthService {
     );
   }
 
-  async idDuplicationCheck(id: DuplicationCheckDto) {
-    const result = await this.userRepository.idDuplicationCheck(id);
-
-    return result ? false : true;
-  }
-
-  async nicknameDuplicationCheck(nickname: DuplicationCheckDto) {
-    const result = await this.userProfileRepository.nicknameDuplicationCheck(
-      nickname,
+  async idDuplicationCheck(duplicationCheckDto: DuplicationCheckDto) {
+    const result = await this.userRepository.idDuplicationCheck(
+      duplicationCheckDto,
     );
 
-    return result ? false : true;
+    return result;
+  }
+
+  async nicknameDuplicationCheck(duplicationCheckDto: DuplicationCheckDto) {
+    const result = await this.userProfileRepository.nicknameDuplicationCheck(
+      duplicationCheckDto,
+    );
+
+    return result;
   }
 
   async phoneDuplicationCheck(phoneNumber: number) {
     const result = await this.userProfileRepository.phoneDuplicationCheck(
       phoneNumber,
     );
-    console.log(result);
 
     return result ? true : false;
   }
