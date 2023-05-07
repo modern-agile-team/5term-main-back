@@ -100,6 +100,6 @@ export class AuthController {
   async smsCertification(@Param('phoneNumber') phoneNumber: number) {
     const result = await this.authService.smsCertification(phoneNumber);
 
-    return { result };
+    return { certificationNumber: result };
   }
 }
