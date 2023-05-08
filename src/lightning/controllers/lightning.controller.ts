@@ -61,12 +61,21 @@ export class LightningController {
   }
 
   @ApiOperation({
-    summary: '번개 모집글 조회',
+    summary: '번개 모집글 단일 조회',
   })
   @ApiParam({ name: 'boardNo', example: '1', required: true })
   @Get('/boards/:boardNo')
   async getLightningBoard(@Param('boardNo', ParseIntPipe) boardNo: number) {
     return await this.lightningService.getLightningBoard(boardNo);
+  }
+
+  @ApiOperation({
+    summary: '번개 모집글 전부 조회',
+  })
+  @ApiParam({ name: 'boardNo', example: '1', required: true })
+  @Get('/all-boards')
+  async getAllLightningBoard() {
+    return await this.lightningService.getAllLightningBoard();
   }
 
   @ApiOperation({

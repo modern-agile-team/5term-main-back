@@ -54,6 +54,11 @@ export class LightningService {
     return response;
   }
 
+  async getAllLightningBoard() {
+    const response = await this.lightningBoardRepository.getAllLightningBoard();
+    return response;
+  }
+
   async createLightningInfo(
     createLightningInfoDto: CreateLightningInfoDto,
     userNo: number,

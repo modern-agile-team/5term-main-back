@@ -42,12 +42,18 @@ export class LightningBoardRepository extends Repository<LightningBoardEntity> {
       .execute();
   }
 
-  async getLightningBoard(
-    boardNo: number,
-  ): Promise<LightningBoardEntity | null> {
+  async getLightningBoard(boardNo: number): Promise<LightningBoardEntity> {
     const result = await this.createQueryBuilder('lightning_recruitment_boards')
       .where('id = :boardNo', { boardNo })
       .getOne();
+    return result;
+  }
+
+  async getAllLightningBoard(): Promise<LightningBoardEntity[]> {
+    const result = await this.createQueryBuilder('lightning_recruitment_boards')
+      .select()
+      .from(LightningBoardEntity, 'lightningBoard')
+      .getMany();
     return result;
   }
 }
