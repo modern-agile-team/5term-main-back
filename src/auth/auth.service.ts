@@ -10,11 +10,14 @@ import { AuthPasswordLoginRepository } from './repositories/authPasswordLogin.re
 import { UserRepository } from './../user/repositories/user.repository';
 import { User } from 'src/user/entities/user.entity';
 import { UserProfileRepository } from 'src/user/repositories/userProfile.repository';
-import { DuplicationCheckDto } from './dto/duplicationCheck.dto';
+import {
+  IdDuplicationCheckDto,
+  NicknameDuplicationCheckDto,
+  PhoneDuplicationCheckDto,
+} from './dto/duplicationCheck.dto';
 import axios from 'axios';
 import * as config from 'config';
 import * as crypto from 'crypto';
-import { error } from 'console';
 
 @Injectable()
 export class AuthService {
@@ -30,13 +33,14 @@ export class AuthService {
   ) {}
 
   async singUp(authCredentialDto: AuthCredentialDto) {
-    const duplicationCheckDto: DuplicationCheckDto = authCredentialDto;
+    const id: IdDuplicationCheckDto = { id: authCredentialDto.id };
+    const nickname: NicknameDuplicationCheckDto = {
+      nickname: authCredentialDto.nickname,
+    };
 
-    const idDuplicationCheckingResult = await this.idDuplicationCheck(
-      duplicationCheckDto,
-    );
+    const idDuplicationCheckingResult = await this.idDuplicationCheck(id);
     const nicknameDuplicationCheckingResult =
-      await this.nicknameDuplicationCheck(duplicationCheckDto);
+      await this.nicknameDuplicationCheck(nickname);
 
     if (idDuplicationCheckingResult) {
       throw new BadRequestException('아이디 중복');
@@ -58,23 +62,21 @@ export class AuthService {
     );
   }
 
-  async idDuplicationCheck(duplicationCheckDto: DuplicationCheckDto) {
-    const result = await this.userRepository.idDuplicationCheck(
-      duplicationCheckDto,
-    );
+  async idDuplicationCheck(id: IdDuplicationCheckDto) {
+    const result = await this.userRepository.idDuplicationCheck(id);
 
     return result;
   }
 
-  async nicknameDuplicationCheck(duplicationCheckDto: DuplicationCheckDto) {
+  async nicknameDuplicationCheck(nickname: NicknameDuplicationCheckDto) {
     const result = await this.userProfileRepository.nicknameDuplicationCheck(
-      duplicationCheckDto,
+      nickname,
     );
 
     return result;
   }
 
-  async phoneDuplicationCheck(phoneNumber: number) {
+  async phoneDuplicationCheck(phoneNumber: PhoneDuplicationCheckDto) {
     const result = await this.userProfileRepository.phoneDuplicationCheck(
       phoneNumber,
     );
@@ -82,7 +84,8 @@ export class AuthService {
     return result ? true : false;
   }
 
-  async smsCertification(toPhoneNumber: number) {
+  async smsCertification(toPhoneNumber: PhoneDuplicationCheckDto) {
+    const { phoneNumber } = toPhoneNumber;
     if (await this.phoneDuplicationCheck(toPhoneNumber)) {
       throw new BadRequestException('중복 전화번호');
     }
@@ -131,7 +134,7 @@ export class AuthService {
       content,
       messages: [
         {
-          to: `${toPhoneNumber.toString()}`,
+          to: `${phoneNumber}`,
         },
       ],
     };

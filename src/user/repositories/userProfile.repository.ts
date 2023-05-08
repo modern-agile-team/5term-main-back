@@ -2,7 +2,10 @@ import { EntityRepository, Repository } from 'typeorm';
 import { UserProfile } from '../entities/user_profile.entity';
 import { AuthCredentialDto } from './../../auth/dto/auth-credential.dto';
 import { User } from '../entities/user.entity';
-import { DuplicationCheckDto } from 'src/auth/dto/duplicationCheck.dto';
+import {
+  NicknameDuplicationCheckDto,
+  PhoneDuplicationCheckDto,
+} from 'src/auth/dto/duplicationCheck.dto';
 
 @EntityRepository(UserProfile)
 export class UserProfileRepository extends Repository<UserProfile> {
@@ -15,21 +18,15 @@ export class UserProfileRepository extends Repository<UserProfile> {
       .execute();
   }
 
-  async nicknameDuplicationCheck(duplicationCheckDto: DuplicationCheckDto) {
-    const { nickname } = duplicationCheckDto;
-
+  async nicknameDuplicationCheck({ nickname }: NicknameDuplicationCheckDto) {
     return await this.createQueryBuilder('userProfile')
       .where('userProfile.nickname = :nickname', { nickname: nickname })
       .getOne();
   }
 
-  async phoneDuplicationCheck(phoneNumber: number) {
-    const phone = phoneNumber
-      .toString()
-      .replace(/(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/, '$1-$2-$3');
-
+  async phoneDuplicationCheck({ phoneNumber }: PhoneDuplicationCheckDto) {
     return await this.createQueryBuilder('userProfile')
-      .where('userProfile.phone = :phone', { phone: phone })
+      .where('userProfile.phone = :phone', { phone: phoneNumber })
       .getOne();
   }
 }
