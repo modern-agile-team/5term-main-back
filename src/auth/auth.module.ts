@@ -6,6 +6,11 @@ import { AuthSocialLoginRepository } from './repositories/authSocialLogin.reposi
 import { UserRepository } from 'src/user/repositories/user.repository';
 import { AuthPasswordLoginRepository } from './repositories/authPasswordLogin.repository';
 import { UserProfileRepository } from 'src/user/repositories/userProfile.repository';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import * as config from 'config';
+
+const jwtConfig = config.get('jwt');
 
 @Module({
   imports: [
@@ -15,6 +20,13 @@ import { UserProfileRepository } from 'src/user/repositories/userProfile.reposit
       AuthPasswordLoginRepository,
       UserProfileRepository,
     ]),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.register({
+      secret: jwtConfig.secretKey,
+      signOptions: {
+        expiresIn: jwtConfig.expiresIn,
+      },
+    }),
   ],
   providers: [AuthService],
   controllers: [AuthController],

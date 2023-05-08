@@ -2,6 +2,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { AuthCredentialDto } from './../../auth/dto/auth-credential.dto';
 import { IdDuplicationCheckDto } from 'src/auth/dto/duplicationCheck.dto';
+import { LoginDto } from 'src/auth/dto/login.dto';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
@@ -22,5 +23,15 @@ export class UserRepository extends Repository<User> {
     return await this.createQueryBuilder('user')
       .where('user.user_id = :userId', { userId: id })
       .getOne();
+  }
+
+  async login(id: string) {
+    return await this.createQueryBuilder('user')
+      .leftJoinAndSelect('user.authPasswordLogin', 'authPasswordLogin')
+      .select('user.id', 'id')
+      .addSelect('user.user_id', 'userId')
+      .addSelect('authPasswordLogin.password', 'password')
+      .where('user.user_id = :userId', { userId: id })
+      .getRawOne();
   }
 }

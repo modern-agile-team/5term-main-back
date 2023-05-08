@@ -12,8 +12,5 @@ export class LoginDto {
   @IsString()
   @MinLength(4)
   @MaxLength(20)
-  @Matches(/^.*(?=^.{4,20}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/, {
-    message: '비밀번호 규격을 확인하세요',
-  })
   password: string;
 }

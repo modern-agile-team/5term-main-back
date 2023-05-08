@@ -18,6 +18,9 @@ import {
 import axios from 'axios';
 import * as config from 'config';
 import * as crypto from 'crypto';
+import { LoginDto } from './dto/login.dto';
+import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -30,6 +33,7 @@ export class AuthService {
     private userRepository: UserRepository,
     @InjectRepository(UserProfileRepository)
     private userProfileRepository: UserProfileRepository,
+    private jwtService: JwtService,
   ) {}
 
   async singUp(authCredentialDto: AuthCredentialDto) {
@@ -146,5 +150,22 @@ export class AuthService {
     }
 
     return certificationNumber;
+  }
+
+  async login(loginDto: LoginDto) {
+    const { id, password } = loginDto;
+    const user = await this.userRepository.login(id);
+    if (!user) {
+      throw new BadRequestException('없는 아이디');
+    }
+    const isPasswordOk = await bcrypt.compare(password, user.password);
+
+    if (isPasswordOk) {
+      const payload = { userId: user.id };
+      const accessToken = await this.jwtService.sign(payload);
+      return { accessToken };
+    }
+
+    throw new BadRequestException('비밀번호가 틀렸습니다.');
   }
 }

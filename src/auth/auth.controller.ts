@@ -15,6 +15,7 @@ import {
   PhoneDuplicationCheckDto,
 } from './dto/duplicationCheck.dto';
 import { ApiBody, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { LoginDto } from './dto/login.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -79,5 +80,12 @@ export class AuthController {
     const result = await this.authService.smsCertification(phoneNumber);
 
     return { certificationNumber: result };
+  }
+
+  @Post('/login')
+  async login(@Body() loginDto: LoginDto) {
+    const result = await this.authService.login(loginDto);
+
+    return result;
   }
 }
