@@ -11,7 +11,9 @@ import {
   ManyToMany,
   OneToMany,
 } from 'typeorm';
+import { UserProfile } from './user_profile.entity';
 import { UserScheldule } from './user_schedule.entity';
+import { LightningToUserEntity } from 'src/lightning/entities/lightning-to-user.entity';
 
 @Entity()
 export class User extends CommonEntity {
@@ -21,25 +23,6 @@ export class User extends CommonEntity {
   @Column({ name: 'user_id' })
   userId: string;
 
-  @ManyToMany(
-    () => LightningInfoEntity,
-    (lightningInfo: LightningInfoEntity) => lightningInfo.id,
-    {
-      cascade: true,
-    },
-  )
-  @JoinTable({
-    name: 'lightning_members',
-    joinColumn: {
-      name: 'user_id',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'lightning_id',
-      referencedColumnName: 'id',
-    },
-  })
-  lightninginfo: LightningInfoEntity;
   @OneToMany(
     () => LightningBoardEntity,
     (lightningBoard: LightningBoardEntity) => lightningBoard.author,
@@ -48,6 +31,12 @@ export class User extends CommonEntity {
     },
   )
   lightningBoard: LightningBoardEntity[];
+
+  @OneToMany(
+    () => LightningToUserEntity,
+    (lightningToUser) => lightningToUser.user,
+  )
+  lightningToUser: LightningToUserEntity[];
 
   @OneToOne(() => AuthSocialLogin, (authSocialLogin) => authSocialLogin.user)
   authSocialLogin: AuthSocialLogin;

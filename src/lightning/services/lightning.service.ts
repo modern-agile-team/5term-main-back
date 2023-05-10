@@ -1,28 +1,93 @@
-import { Repository } from 'typeorm';
-// import { CreateLightningInfoDto } from './../dtos/lightning-info.dto';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { LightningInfoEntity } from '../entities/lightning-info.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { LightningBoardEntity } from '../entities/lightning-boards.entity';
+import { UpdateLightningBoardDto } from '../dtos/update-lightning-board.dto';
+import { LightningBoardRepository } from './../repositories/lightning_recruitment_boards.repository';
+import { LightningInfoRepository } from './../repositories/lightning-info.repository';
+import {
+  Injectable,
+  InternalServerErrorException,
+  BadRequestException,
+} from '@nestjs/common';
+import { CreateLightningBoardDto } from '../dtos/create-lightning-board.dto';
+import { CreateLightningInfoDto } from '../dtos/create-lightning-info.dto';
 
 @Injectable()
 export class LightningService {
   constructor(
-    @InjectRepository(LightningInfoEntity)
-    private readonly ligntningRepository: Repository<LightningInfoEntity>, // private readonly configService: ConfigService,
+    private readonly lightningInfoRepository: LightningInfoRepository,
+    private readonly lightningBoardRepository: LightningBoardRepository,
   ) {}
 
-  async createPost(createLightningDto: CreateLightningDto) {
-    // const { meeting_date } = createLightningDto;
-    // // const meeting = await this.ligntningRepository.find({});
-    // if (meeting_date) {\
-    //   throw new UnauthorizedException('해당하는 이메일은 이미 존재합니다.');
-    // }
+  async createLightningBoard(
+    lightningNo,
+    createLightningBoardDto: CreateLightningBoardDto,
+  ) {
+    const { title, contents, author } = createLightningBoardDto;
+    const response = await this.lightningBoardRepository.createLightningBoard(
+      lightningNo,
+      title,
+      contents,
+      author,
+    );
 
-    // await this.ligntningRepository.save({
-    //   ...createLightningDto,
-    // });
+    if (!response) {
+      throw new InternalServerErrorException('번개 모집글 생성 실패');
+    }
+  }
 
-    return { success: true };
+  async deleteLightningBoard(boardNo: number) {
+    const board = await this.lightningBoardRepository.getLightningBoard(
+      boardNo,
+    );
+    if (!board) {
+      throw new BadRequestException('존재하지 않는 모집글 입니다.');
+    }
+    const response = await this.lightningBoardRepository.deleteLightningBoard(
+      boardNo,
+    );
+    if (!response) {
+      throw new InternalServerErrorException('번개 모집글 삭제 실패');
+    }
+  }
+
+  async updateLightningBoard(
+    boardNo: number,
+    updateLightningBoardDto: UpdateLightningBoardDto,
+  ) {
+    const { title, contents } = updateLightningBoardDto;
+    const board = await this.lightningBoardRepository.getLightningBoard(
+      boardNo,
+    );
+    if (!board) {
+      throw new BadRequestException('존재하지 않는 모집글 입니다.');
+    }
+    const response = await this.lightningBoardRepository.updateLightningBoard(
+      boardNo,
+      title,
+      contents,
+    );
+    if (!response) {
+      throw new InternalServerErrorException('번개 모집글 수정 실패');
+    }
+  }
+
+  async getLightningBoard(boardNo: number) {
+    return await this.lightningBoardRepository.getLightningBoard(boardNo);
+  }
+
+  async getAllLightningBoard() {
+    return await this.lightningBoardRepository.getAllLightningBoard();
+  }
+
+  async createLightningInfo(
+    createLightningInfoDto: CreateLightningInfoDto,
+    userNo: number,
+  ) {
+    const { meetingDate } = createLightningInfoDto;
+    const lightningNo = await this.lightningInfoRepository.createLightningInfo(
+      meetingDate,
+    );
+    return await this.lightningInfoRepository.createLightningToUser(
+      userNo,
+      lightningNo,
+    );
   }
 }

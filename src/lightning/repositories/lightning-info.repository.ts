@@ -1,15 +1,32 @@
-import { LightningInfoEntity } from '../entities/lightning-info.entity';
+import { LightningToUserEntity } from '../entities/lightning-to-user.entity';
+import { LightningInfoEntity } from './../entities/lightning-info.entity';
+import { EntityRepository, InsertResult, Repository } from 'typeorm';
 
-import { EntityRepository, Repository } from 'typeorm';
-import { ConfigService } from 'aws-sdk';
-import { LightningBoardEntity } from '../entities/lightning-boards.entity';
+@EntityRepository(LightningInfoEntity)
+export class LightningInfoRepository extends Repository<LightningInfoEntity> {
+  async createLightningInfo(meetingDate: Date): Promise<number> {
+    const { raw }: InsertResult = await this.createQueryBuilder()
+      .insert()
+      .into(LightningInfoEntity)
+      .values({ meetingDate })
+      .execute();
 
-@EntityRepository(LightningBoardEntity)
-export class lightningInfo {
-  constructor(
-    private readonly ligntningRepository: Repository<LightningInfoEntity>,
-    private readonly configService: ConfigService,
-  ) {}
-
-  async;
+    return raw[0].id;
+  }
+  async createLightningToUser(
+    userNo: number,
+    lightningNo: number,
+  ): Promise<InsertResult> {
+    const { raw }: InsertResult = await this.createQueryBuilder()
+      .insert()
+      .into(LightningToUserEntity)
+      .values({
+        user: { id: userNo },
+        lightningInfo: { id: lightningNo },
+        isAccept: 1,
+        isAdmin: 1,
+      })
+      .execute();
+    return raw;
+  }
 }
