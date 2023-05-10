@@ -58,12 +58,17 @@ export class AuthService {
       await this.userRepository.createUser(authCredentialDto, 0)
     ).raw[0];
 
-    await this.userProfileRepository.createUserProfile(authCredentialDto, user);
+    const result = await this.userProfileRepository.createUserProfile(
+      authCredentialDto,
+      user,
+    );
 
     await this.authPasswordLoginRepository.createPasswordUser(
       authCredentialDto,
       user,
     );
+
+    console.log(result);
   }
 
   async idDuplicationCheck(id: IdDuplicationCheckDto) {
