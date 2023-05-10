@@ -4,7 +4,6 @@ import { Body, Controller, ParseIntPipe, Get } from '@nestjs/common';
 import { Post, Delete } from '@nestjs/common';
 import { CreateLightningBoardDto } from '../dtos/create-lightning-board.dto';
 import {
-  HttpCode,
   Param,
   Patch,
   UseFilters,
