@@ -1,7 +1,11 @@
 import { UpdateLightningBoardDto } from '../dtos/update-lightning-board.dto';
 import { LightningBoardRepository } from './../repositories/lightning_recruitment_boards.repository';
 import { LightningInfoRepository } from './../repositories/lightning-info.repository';
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  BadRequestException,
+} from '@nestjs/common';
 import { CreateLightningBoardDto } from '../dtos/create-lightning-board.dto';
 import { CreateLightningInfoDto } from '../dtos/create-lightning-info.dto';
 
@@ -17,16 +21,31 @@ export class LightningService {
     createLightningBoardDto: CreateLightningBoardDto,
   ) {
     const { title, contents, author } = createLightningBoardDto;
-    return await this.lightningBoardRepository.createLightningBoard(
+    const response = await this.lightningBoardRepository.createLightningBoard(
       lightningNo,
       title,
       contents,
       author,
     );
+
+    if (!response) {
+      throw new InternalServerErrorException('번개 모집글 생성 실패');
+    }
   }
 
   async deleteLightningBoard(boardNo: number) {
-    return await this.lightningBoardRepository.deleteLightningBoard(boardNo);
+    const board = await this.lightningBoardRepository.getLightningBoard(
+      boardNo,
+    );
+    if (!board) {
+      throw new BadRequestException('존재하지 않는 모집글 입니다.');
+    }
+    const response = await this.lightningBoardRepository.deleteLightningBoard(
+      boardNo,
+    );
+    if (!response) {
+      throw new InternalServerErrorException('번개 모집글 삭제 실패');
+    }
   }
 
   async updateLightningBoard(
@@ -34,11 +53,20 @@ export class LightningService {
     updateLightningBoardDto: UpdateLightningBoardDto,
   ) {
     const { title, contents } = updateLightningBoardDto;
-    return await this.lightningBoardRepository.updateLightningBoard(
+    const board = await this.lightningBoardRepository.getLightningBoard(
+      boardNo,
+    );
+    if (!board) {
+      throw new BadRequestException('존재하지 않는 모집글 입니다.');
+    }
+    const response = await this.lightningBoardRepository.updateLightningBoard(
       boardNo,
       title,
       contents,
     );
+    if (!response) {
+      throw new InternalServerErrorException('번개 모집글 수정 실패');
+    }
   }
 
   async getLightningBoard(boardNo: number) {

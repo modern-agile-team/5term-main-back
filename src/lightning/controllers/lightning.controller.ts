@@ -27,7 +27,6 @@ export class LightningController {
   })
   @ApiParam({ name: 'lightningNo', example: '1', required: true })
   @Post('/boards/:lightningNo')
-  @HttpCode(201)
   async createLightningBoard(
     @Param('lightningNo', ParseIntPipe)
     lightningNo: number,
@@ -37,7 +36,7 @@ export class LightningController {
       lightningNo,
       createLightningBoardDto,
     );
-    return { ...createLightningBoardDto };
+    return { msg: '번개 모집글 생성 성공' };
   }
 
   @ApiOperation({
@@ -46,7 +45,8 @@ export class LightningController {
   @ApiParam({ name: 'boardNo', example: '1', required: true })
   @Delete('/boards/:boardNo')
   async deleteLightningBoard(@Param('boardNo', ParseIntPipe) boardNo: number) {
-    return await this.lightningService.deleteLightningBoard(boardNo);
+    await this.lightningService.deleteLightningBoard(boardNo);
+    return { msg: '번개 모집글 삭제 성공' };
   }
 
   @ApiOperation({
@@ -58,10 +58,11 @@ export class LightningController {
     @Param('boardNo', ParseIntPipe) boardNo: number,
     @Body() updateLightningboardDto: UpdateLightningBoardDto,
   ) {
-    return await this.lightningService.updateLightningBoard(
+    await this.lightningService.updateLightningBoard(
       boardNo,
       updateLightningboardDto,
     );
+    return { msg: '번개 모집글 수정 성공' };
   }
 
   @ApiOperation({
@@ -70,7 +71,8 @@ export class LightningController {
   @ApiParam({ name: 'boardNo', example: '1', required: true })
   @Get('/boards/:boardNo')
   async getLightningBoard(@Param('boardNo', ParseIntPipe) boardNo: number) {
-    return await this.lightningService.getLightningBoard(boardNo);
+    const board = await this.lightningService.getLightningBoard(boardNo);
+    return { msg: '번개 모집글 단일 조회 성공', response: { board } };
   }
 
   @ApiOperation({
@@ -79,7 +81,8 @@ export class LightningController {
   @ApiParam({ name: 'boardNo', example: '1', required: true })
   @Get('/all-boards')
   async getAllLightningBoard() {
-    return await this.lightningService.getAllLightningBoard();
+    const allBoards = await this.lightningService.getAllLightningBoard();
+    return { msg: '번개 모집글 전부 조회 성공', response: { allBoards } };
   }
 
   @ApiOperation({

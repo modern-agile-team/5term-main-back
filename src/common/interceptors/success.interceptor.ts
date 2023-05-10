@@ -11,11 +11,12 @@ import { map, tap } from 'rxjs/operators';
 @Injectable()
 export class SuccessInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    const statusCode = context.getArgByIndex(1).statusCode;
+
     return next.handle().pipe(
-      map((data, STATUS_CODES) => ({
-        success: true,
+      map((data) => ({
+        statusCode,
         data,
-        statusCode: STATUS_CODES,
       })),
     );
   }

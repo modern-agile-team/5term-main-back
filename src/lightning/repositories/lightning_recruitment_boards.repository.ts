@@ -9,37 +9,46 @@ export class LightningBoardRepository extends Repository<LightningBoardEntity> {
     title: string,
     contents: string,
     author: User,
-  ): Promise<void> {
+  ): Promise<InsertResult> {
     const lightningBoard = new LightningBoardEntity();
     lightningBoard.title = title;
     lightningBoard.contents = contents;
     lightningBoard.author = author;
     lightningBoard.lightningNo = lightningNo;
-    await this.createQueryBuilder('lightning_recruitment_boards')
+    const { raw } = await this.createQueryBuilder(
+      'lightning_recruitment_boards',
+    )
       .insert()
       .into(LightningBoardEntity)
       .values(lightningBoard)
       .execute();
+    return raw;
   }
 
-  async deleteLightningBoard(boardNo: number): Promise<void> {
-    await this.createQueryBuilder('lightning_recruitment_boards')
+  async deleteLightningBoard(boardNo: number): Promise<number> {
+    const { affected } = await this.createQueryBuilder(
+      'lightning_recruitment_boards',
+    )
       .delete()
       .from(LightningBoardEntity)
       .where('id = :boardNo', { boardNo })
       .execute();
+    return affected;
   }
 
   async updateLightningBoard(
     boardNo: number,
     title: string,
     contents: string,
-  ): Promise<void> {
-    await this.createQueryBuilder('lightning_recruitment_boards')
+  ): Promise<number> {
+    const { affected } = await this.createQueryBuilder(
+      'lightning_recruitment_boards',
+    )
       .update(LightningBoardEntity)
       .set({ title, contents })
       .where('id = :boardNo', { boardNo })
       .execute();
+    return affected;
   }
 
   async getLightningBoard(boardNo: number): Promise<LightningBoardEntity> {
