@@ -7,6 +7,6 @@ export class CreateLightningInfoDto {
     required: true,
   })
   @IsDate()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: '만남 날짜를 입력해주세요' })
   meetingDate: Date;
 }

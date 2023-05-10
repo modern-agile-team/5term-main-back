@@ -4,6 +4,7 @@ import { Body, Controller, ParseIntPipe, Get } from '@nestjs/common';
 import { Post, Delete } from '@nestjs/common';
 import { CreateLightningBoardDto } from '../dtos/create-lightning-board.dto';
 import {
+  HttpCode,
   Param,
   Patch,
   UseFilters,
@@ -12,11 +13,12 @@ import {
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
 import { CreateLightningInfoDto } from '../dtos/create-lightning-info.dto';
-import { ApiOperation, ApiParam } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('lightning')
 @Controller('lightnings')
-@UseInterceptors(SuccessInterceptor)
 @UseFilters(HttpExceptionFilter)
+@UseInterceptors(SuccessInterceptor)
 export class LightningController {
   constructor(private readonly lightningService: LightningService) {}
 
@@ -24,16 +26,18 @@ export class LightningController {
     summary: '번개 모집글 작성',
   })
   @ApiParam({ name: 'lightningNo', example: '1', required: true })
-  @Post('/boards/:lightnigNo')
+  @Post('/boards/:lightningNo')
+  @HttpCode(201)
   async createLightningBoard(
     @Param('lightningNo', ParseIntPipe)
     lightningNo: number,
     @Body() createLightningBoardDto: CreateLightningBoardDto,
   ) {
-    return await this.lightningService.createLightningBoard(
+    await this.lightningService.createLightningBoard(
       lightningNo,
       createLightningBoardDto,
     );
+    return { ...createLightningBoardDto };
   }
 
   @ApiOperation({

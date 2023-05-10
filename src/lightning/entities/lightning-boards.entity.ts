@@ -1,12 +1,5 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { User } from 'src/user/entities/user.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { LightningInfoEntity } from './lightning-info.entity';
 import { CommonEntity } from 'src/common/entities/common.entity';
 
@@ -14,13 +7,9 @@ import { CommonEntity } from 'src/common/entities/common.entity';
   name: 'lightning_recruitment_boards',
 })
 export class LightningBoardEntity extends CommonEntity {
-  @IsString()
-  @IsNotEmpty({ message: '제목을 입력해주세요' })
   @Column({ type: 'varchar', nullable: false })
   title: string;
 
-  @IsString()
-  @IsNotEmpty({ message: '내용을 입력해주세요' })
   @Column({ type: 'text', nullable: true })
   contents: string;
 

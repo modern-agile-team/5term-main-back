@@ -1,6 +1,5 @@
-import { IsNotEmpty, IsDate, IsNumber } from 'class-validator';
 import { CommonEntity } from 'src/common/entities/common.entity';
-import { Column, Entity, ManyToMany, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { LightningBoardEntity } from './lightning-boards.entity';
 import { LightningToUserEntity } from './lightning-to-user.entity';
 
@@ -8,12 +7,9 @@ import { LightningToUserEntity } from './lightning-to-user.entity';
   name: 'lightning_info',
 })
 export class LightningInfoEntity extends CommonEntity {
-  @IsNumber()
   @Column({ type: 'int', nullable: false, default: 1 })
   active: number;
 
-  @IsDate()
-  @IsNotEmpty({ message: '만남 날짜를 입력해주세요' })
   @Column({ name: 'meeting_date', type: 'date', nullable: false })
   meetingDate: Date;
 

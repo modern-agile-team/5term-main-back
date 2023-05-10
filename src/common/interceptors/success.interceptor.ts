@@ -1,3 +1,4 @@
+import { STATUS_CODES } from 'http';
 import {
   Injectable,
   NestInterceptor,
@@ -11,9 +12,10 @@ import { map, tap } from 'rxjs/operators';
 export class SuccessInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
-      map((data) => ({
+      map((data, STATUS_CODES) => ({
         success: true,
         data,
+        statusCode: STATUS_CODES,
       })),
     );
   }

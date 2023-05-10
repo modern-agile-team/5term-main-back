@@ -1,4 +1,4 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, InsertResult, Repository } from 'typeorm';
 import { LightningBoardEntity } from '../entities/lightning-boards.entity';
 import { User } from 'src/user/entities/user.entity';
 
@@ -52,7 +52,6 @@ export class LightningBoardRepository extends Repository<LightningBoardEntity> {
   async getAllLightningBoard(): Promise<LightningBoardEntity[]> {
     const result = await this.createQueryBuilder('lightning_recruitment_boards')
       .select()
-      .from(LightningBoardEntity, 'lightningBoard')
       .getMany();
     return result;
   }

@@ -1,4 +1,3 @@
-import { UpdateLightningInfoDto } from './../dtos/update-lightning-info.dto';
 import { UpdateLightningBoardDto } from '../dtos/update-lightning-board.dto';
 import { LightningBoardRepository } from './../repositories/lightning_recruitment_boards.repository';
 import { LightningInfoRepository } from './../repositories/lightning-info.repository';
@@ -18,20 +17,16 @@ export class LightningService {
     createLightningBoardDto: CreateLightningBoardDto,
   ) {
     const { title, contents, author } = createLightningBoardDto;
-    const response = await this.lightningBoardRepository.createLightningBoard(
+    return await this.lightningBoardRepository.createLightningBoard(
       lightningNo,
       title,
       contents,
       author,
     );
-    return response;
   }
 
   async deleteLightningBoard(boardNo: number) {
-    const response = await this.lightningBoardRepository.deleteLightningBoard(
-      boardNo,
-    );
-    return response;
+    return await this.lightningBoardRepository.deleteLightningBoard(boardNo);
   }
 
   async updateLightningBoard(
@@ -39,24 +34,19 @@ export class LightningService {
     updateLightningBoardDto: UpdateLightningBoardDto,
   ) {
     const { title, contents } = updateLightningBoardDto;
-    const response = await this.lightningBoardRepository.updateLightningBoard(
+    return await this.lightningBoardRepository.updateLightningBoard(
       boardNo,
       title,
       contents,
     );
-    return response;
   }
 
   async getLightningBoard(boardNo: number) {
-    const response = await this.lightningBoardRepository.getLightningBoard(
-      boardNo,
-    );
-    return response;
+    return await this.lightningBoardRepository.getLightningBoard(boardNo);
   }
 
   async getAllLightningBoard() {
-    const response = await this.lightningBoardRepository.getAllLightningBoard();
-    return response;
+    return await this.lightningBoardRepository.getAllLightningBoard();
   }
 
   async createLightningInfo(
@@ -67,7 +57,7 @@ export class LightningService {
     const lightningNo = await this.lightningInfoRepository.createLightningInfo(
       meetingDate,
     );
-    await this.lightningInfoRepository.createLightningToUser(
+    return await this.lightningInfoRepository.createLightningToUser(
       userNo,
       lightningNo,
     );
