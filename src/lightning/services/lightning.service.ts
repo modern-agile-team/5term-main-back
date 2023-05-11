@@ -1,3 +1,4 @@
+import { UpdateLightningToUserDto } from './../dtos/update-lightning-to-user.dto';
 import { UpdateLightningBoardDto } from '../dtos/update-lightning-board.dto';
 import { LightningBoardRepository } from './../repositories/lightning_recruitment_boards.repository';
 import { LightningInfoRepository } from './../repositories/lightning-info.repository';
@@ -8,12 +9,15 @@ import {
 } from '@nestjs/common';
 import { CreateLightningBoardDto } from '../dtos/create-lightning-board.dto';
 import { CreateLightningInfoDto } from '../dtos/create-lightning-info.dto';
+import { UpdateLightningInfoDto } from '../dtos/update-lightning-info.dto';
+import { LightningToUserRepository } from '../repositories/lightning-to-user.repository';
 
 @Injectable()
 export class LightningService {
   constructor(
     private readonly lightningInfoRepository: LightningInfoRepository,
     private readonly lightningBoardRepository: LightningBoardRepository,
+    private readonly lightningToUserRepository: LightningToUserRepository,
   ) {}
 
   async createLightningBoard(
@@ -86,7 +90,7 @@ export class LightningService {
     const lightningNo = await this.lightningInfoRepository.createLightningInfo(
       meetingDate,
     );
-    return await this.lightningInfoRepository.createLightningToUser(
+    return await this.lightningToUserRepository.createLightningToUser(
       userNo,
       lightningNo,
     );
@@ -108,13 +112,13 @@ export class LightningService {
   }
 
   async deleteLightningToUser(relationNo: number) {
-    const relation = await this.lightningInfoRepository.getLightningInfo(
+    const relation = await this.lightningToUserRepository.getLightningToUser(
       relationNo,
     );
     if (!relation) {
       throw new BadRequestException('존재하지 않는 관계 입니다.');
     }
-    const response = await this.lightningInfoRepository.deleteLightningInfo(
+    const response = await this.lightningToUserRepository.deleteLightningToUser(
       relationNo,
     );
     if (!response) {
@@ -122,7 +126,10 @@ export class LightningService {
     }
   }
 
-  async updateLightningInfo(lightningNo: number, updatelightningDto) {
+  async updateLightningInfo(
+    lightningNo: number,
+    updatelightningDto: UpdateLightningInfoDto,
+  ) {
     const { meetingDate } = updatelightningDto;
     const lightning = await this.lightningInfoRepository.getLightningInfo(
       lightningNo,
@@ -136,6 +143,26 @@ export class LightningService {
     );
     if (!response) {
       throw new InternalServerErrorException('번개 모임 날짜 수정 실패');
+    }
+  }
+
+  async updateLightningToUser(
+    relationNo: number,
+    UpdateLightningToUserDto: UpdateLightningToUserDto,
+  ) {
+    const { isAdmin } = UpdateLightningToUserDto;
+    const relation = await this.lightningToUserRepository.getLightningToUser(
+      relationNo,
+    );
+    if (!relation) {
+      throw new BadRequestException('존재하지 않는 번개 입니다.');
+    }
+    const response = await this.lightningToUserRepository.updateLightningToUser(
+      relationNo,
+      isAdmin,
+    );
+    if (!response) {
+      throw new InternalServerErrorException('번개 모임 관리자 변경 실패');
     }
   }
 }

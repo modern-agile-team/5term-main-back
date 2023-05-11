@@ -1,0 +1,62 @@
+import { EntityRepository, InsertResult, Repository } from 'typeorm';
+import { LightningToUserEntity } from '../entities/lightning-to-user.entity';
+
+@EntityRepository(LightningToUserEntity)
+export class LightningToUserRepository extends Repository<LightningToUserEntity> {
+  async createLightningToUser(
+    userNo: number,
+    lightningNo: number,
+  ): Promise<InsertResult> {
+    const { raw }: InsertResult = await this.createQueryBuilder()
+      .insert()
+      .into(LightningToUserEntity)
+      .values({
+        user: { id: userNo },
+        lightningInfo: { id: lightningNo },
+        isAccept: 1,
+        isAdmin: 1,
+      })
+      .execute();
+    return raw;
+  }
+
+  async deleteLightningToUser(relationNo: number): Promise<number> {
+    const { affected } = await this.createQueryBuilder()
+      .delete()
+      .from(LightningToUserEntity)
+      .where('id = :relationNo', { relationNo })
+      .execute();
+    return affected;
+  }
+
+  async updateLightningToUser(
+    relationNo: number,
+    isAdmin: number,
+  ): Promise<number> {
+    const { affected } = await this.createQueryBuilder()
+      .update(LightningToUserEntity)
+      .set({ isAdmin })
+      .where('id = :relationNo', { relationNo })
+      .execute();
+    return affected;
+  }
+
+  async acceptLightningToUser(
+    relationNo: number,
+    isAccept: number,
+  ): Promise<number> {
+    const { affected } = await this.createQueryBuilder()
+      .update(LightningToUserEntity)
+      .set({ isAccept })
+      .where('id = :relationNo', { relationNo })
+      .execute();
+    return affected;
+  }
+
+  async getLightningToUser(relationNo: number): Promise<LightningToUserEntity> {
+    const result = await this.createQueryBuilder()
+      .where('id = :No', { relationNo })
+      .getOne();
+    return result;
+  }
+}

@@ -13,22 +13,6 @@ export class LightningInfoRepository extends Repository<LightningInfoEntity> {
 
     return raw[0].id;
   }
-  async createLightningToUser(
-    userNo: number,
-    lightningNo: number,
-  ): Promise<InsertResult> {
-    const { raw }: InsertResult = await this.createQueryBuilder()
-      .insert()
-      .into(LightningToUserEntity)
-      .values({
-        user: { id: userNo },
-        lightningInfo: { id: lightningNo },
-        isAccept: 1,
-        isAdmin: 1,
-      })
-      .execute();
-    return raw;
-  }
 
   async inviteLightningToUser(
     userNo: number,
@@ -56,15 +40,6 @@ export class LightningInfoRepository extends Repository<LightningInfoEntity> {
     return affected;
   }
 
-  async deleteLightningToUser(relationNo: number): Promise<number> {
-    const { affected } = await this.createQueryBuilder()
-      .delete()
-      .from(LightningToUserEntity)
-      .where('id = :relationNo', { relationNo })
-      .execute();
-    return affected;
-  }
-
   async updateLightningInfo(
     lightningNo: number,
     meetingDate: Date,
@@ -73,30 +48,6 @@ export class LightningInfoRepository extends Repository<LightningInfoEntity> {
       .update(LightningInfoEntity)
       .set({ meetingDate })
       .where('id = :lightningNo', { lightningNo })
-      .execute();
-    return affected;
-  }
-
-  async updateLightningToUser(
-    relationNo: number,
-    isAdmin: number,
-  ): Promise<number> {
-    const { affected } = await this.createQueryBuilder()
-      .update(LightningToUserEntity)
-      .set({ isAdmin })
-      .where('id = :relationNo', { relationNo })
-      .execute();
-    return affected;
-  }
-
-  async acceptLightningToUser(
-    relationNo: number,
-    isAccept: number,
-  ): Promise<number> {
-    const { affected } = await this.createQueryBuilder()
-      .update(LightningToUserEntity)
-      .set({ isAccept })
-      .where('id = :relationNo', { relationNo })
       .execute();
     return affected;
   }

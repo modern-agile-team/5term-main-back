@@ -14,6 +14,7 @@ import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter
 import { CreateLightningInfoDto } from '../dtos/create-lightning-info.dto';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { UpdateLightningInfoDto } from '../dtos/update-lightning-info.dto';
+import { UpdateLightningToUserDto } from '../dtos/update-lightning-to-user.dto';
 
 @ApiTags('lightning')
 @Controller('lightnings')
@@ -130,11 +131,24 @@ export class LightningController {
   @Patch('/:lightningNo')
   async updateLightningInfo(
     @Param('lightningNo', ParseIntPipe) lightningNo: number,
-    @Body() updateLightningDto: UpdateLightningInfoDto,
+    @Body() updateLightningInfoDto: UpdateLightningInfoDto,
   ) {
     await this.lightningService.updateLightningInfo(
       lightningNo,
-      updateLightningDto,
+      updateLightningInfoDto,
+    );
+  }
+
+  @ApiOperation({ summary: '번개 관리자 변경' })
+  @ApiParam({ name: 'relationNo', example: '1', required: true })
+  @Patch('/:relationNo')
+  async updateLightningToUser(
+    @Param('relationNo', ParseIntPipe) lightningNo: number,
+    @Body() updateLightningToUser: UpdateLightningToUserDto,
+  ) {
+    await this.lightningService.updateLightningToUser(
+      lightningNo,
+      updateLightningToUser,
     );
   }
 }
