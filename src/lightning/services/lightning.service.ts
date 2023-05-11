@@ -11,6 +11,7 @@ import { CreateLightningBoardDto } from '../dtos/create-lightning-board.dto';
 import { CreateLightningInfoDto } from '../dtos/create-lightning-info.dto';
 import { UpdateLightningInfoDto } from '../dtos/update-lightning-info.dto';
 import { LightningToUserRepository } from '../repositories/lightning-to-user.repository';
+import { RequestLightningDto } from '../dtos/request-lightning.dto';
 
 @Injectable()
 export class LightningService {
@@ -163,6 +164,26 @@ export class LightningService {
     );
     if (!response) {
       throw new InternalServerErrorException('번개 모임 관리자 변경 실패');
+    }
+  }
+  async requestLightning(
+    requestLightningDto: RequestLightningDto,
+    userNo: number,
+  ) {
+    const { lightningNo } = requestLightningDto;
+    const lightning = await this.lightningInfoRepository.getLightningInfo(
+      lightningNo,
+    );
+    if (!lightning) {
+      throw new BadRequestException('존재하지 않는 번개 입니다.');
+    }
+    const response =
+      await this.lightningToUserRepository.requestLightningToUser(
+        userNo,
+        lightningNo,
+      );
+    if (!response) {
+      throw new InternalServerErrorException('번개 모임 신청 실패');
     }
   }
 }

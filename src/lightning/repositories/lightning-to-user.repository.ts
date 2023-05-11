@@ -59,4 +59,21 @@ export class LightningToUserRepository extends Repository<LightningToUserEntity>
       .getOne();
     return result;
   }
+
+  async requestLightningToUser(
+    userNo: number,
+    lightningNo: number,
+  ): Promise<InsertResult> {
+    const { raw }: InsertResult = await this.createQueryBuilder()
+      .insert()
+      .into(LightningToUserEntity)
+      .values({
+        user: { id: userNo },
+        lightningInfo: { id: lightningNo },
+        isAccept: 0,
+        isAdmin: 0,
+      })
+      .execute();
+    return raw;
+  }
 }

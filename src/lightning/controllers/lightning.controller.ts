@@ -15,6 +15,7 @@ import { CreateLightningInfoDto } from '../dtos/create-lightning-info.dto';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { UpdateLightningInfoDto } from '../dtos/update-lightning-info.dto';
 import { UpdateLightningToUserDto } from '../dtos/update-lightning-to-user.dto';
+import { RequestLightningDto } from '../dtos/request-lightning.dto';
 
 @ApiTags('lightning')
 @Controller('lightnings')
@@ -150,5 +151,18 @@ export class LightningController {
       lightningNo,
       updateLightningToUser,
     );
+  }
+
+  @ApiOperation({
+    summary: '번개 모임 신청',
+  })
+  @ApiParam({ name: 'userNo', example: '1', required: true })
+  @Post('/:userNo')
+  async requestLightning(
+    @Param('userNo', ParseIntPipe) userNo: number,
+    @Body() requestLightningDto: RequestLightningDto,
+  ) {
+    await this.lightningService.requestLightning(requestLightningDto, userNo);
+    return { msg: '번개 모임 신청 성공' };
   }
 }

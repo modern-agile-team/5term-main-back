@@ -14,23 +14,6 @@ export class LightningInfoRepository extends Repository<LightningInfoEntity> {
     return raw[0].id;
   }
 
-  async inviteLightningToUser(
-    userNo: number,
-    lightningNo: number,
-  ): Promise<InsertResult> {
-    const { raw }: InsertResult = await this.createQueryBuilder()
-      .insert()
-      .into(LightningToUserEntity)
-      .values({
-        user: { id: userNo },
-        lightningInfo: { id: lightningNo },
-        isAccept: 0,
-        isAdmin: 0,
-      })
-      .execute();
-    return raw;
-  }
-
   async deleteLightningInfo(relationNo: number): Promise<number> {
     const { affected } = await this.createQueryBuilder()
       .delete()
