@@ -47,11 +47,11 @@ export class LightningInfoRepository extends Repository<LightningInfoEntity> {
     return raw;
   }
 
-  async deleteLightningInfo(boardNo: number): Promise<number> {
+  async deleteLightningInfo(relationNo: number): Promise<number> {
     const { affected } = await this.createQueryBuilder()
       .delete()
       .from(LightningInfoEntity)
-      .where('id = :boardNo', { boardNo })
+      .where('id = :relationNo', { relationNo })
       .execute();
     return affected;
   }

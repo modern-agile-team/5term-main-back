@@ -111,4 +111,16 @@ export class LightningController {
     await this.lightningService.deleteLightningInfo(lightningNo);
     return { msg: '번개 모임 삭제 성공' };
   }
+
+  @ApiOperation({
+    summary: '번개 모임 유저 관계 삭제',
+  })
+  @ApiParam({ name: 'relationNo', example: '1', required: true })
+  @Delete('/:relationNo')
+  async deleteLightningToUser(
+    @Param('relationNo', ParseIntPipe) relationNo: number,
+  ) {
+    await this.lightningService.deleteLightningToUser(relationNo);
+    return { msg: '번개 관계 삭제 성공' };
+  }
 }

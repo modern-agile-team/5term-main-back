@@ -95,14 +95,29 @@ export class LightningService {
     const lightning = await this.lightningInfoRepository.getLightningInfo(
       lightningNo,
     );
-    if (!board) {
-      throw new BadRequestException('존재하지 않는 모집글 입니다.');
+    if (!lightning) {
+      throw new BadRequestException('존재하지 않는 번개 입니다.');
     }
-    const response = await this.lightningBoardRepository.deleteLightningInfo(
+    const response = await this.lightningInfoRepository.deleteLightningInfo(
       lightningNo,
     );
     if (!response) {
-      throw new InternalServerErrorException('번개 모집글 삭제 실패');
+      throw new InternalServerErrorException('번개 모임 삭제 실패');
+    }
+  }
+
+  async deleteLightningToUser(relationNo: number) {
+    const relation = await this.lightningInfoRepository.getLightningInfo(
+      relationNo,
+    );
+    if (!relation) {
+      throw new BadRequestException('존재하지 않는 관계 입니다.');
+    }
+    const response = await this.lightningInfoRepository.deleteLightningInfo(
+      relationNo,
+    );
+    if (!response) {
+      throw new InternalServerErrorException('번개 탈퇴 실패');
     }
   }
 }
