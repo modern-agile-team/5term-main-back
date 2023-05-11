@@ -12,6 +12,7 @@ import { CreateLightningInfoDto } from '../dtos/create-lightning-info.dto';
 import { UpdateLightningInfoDto } from '../dtos/update-lightning-info.dto';
 import { LightningToUserRepository } from '../repositories/lightning-to-user.repository';
 import { RequestLightningDto } from '../dtos/request-lightning.dto';
+import { UpdateAcceptLightningDto } from '../dtos/update-accept-lightning.dto';
 
 @Injectable()
 export class LightningService {
@@ -158,7 +159,7 @@ export class LightningService {
     if (!relation) {
       throw new BadRequestException('존재하지 않는 번개 입니다.');
     }
-    const response = await this.lightningToUserRepository.updateLightningToUser(
+    const response = await this.lightningToUserRepository.updateLightningAdmin(
       relationNo,
       isAdmin,
     );
@@ -184,6 +185,29 @@ export class LightningService {
       );
     if (!response) {
       throw new InternalServerErrorException('번개 모임 신청 실패');
+    }
+  }
+
+  async updateAcceptLightning(
+    relationNo: number,
+    updateAcceptLightningDto: UpdateAcceptLightningDto,
+  ) {
+    const { isAccept } = updateAcceptLightningDto;
+    if (isAccept === 2) {
+      await this.lightningToUserRepository.deleteLightningToUser(relationNo);
+      throw '번개 신청이 거부 되었습니다.';
+    }
+    const relation =
+      this.lightningToUserRepository.getLightningToUser(relationNo);
+    if (!relation) {
+      throw new BadRequestException('존재하지 않는 신청입니다.');
+    }
+    const response = this.lightningToUserRepository.acceptLightningToUser(
+      relationNo,
+      isAccept,
+    );
+    if (!response) {
+      throw new InternalServerErrorException('신청 수락 실패');
     }
   }
 }

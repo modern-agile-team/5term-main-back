@@ -29,7 +29,7 @@ export class LightningToUserRepository extends Repository<LightningToUserEntity>
     return affected;
   }
 
-  async updateLightningToUser(
+  async updateLightningAdmin(
     relationNo: number,
     isAdmin: number,
   ): Promise<number> {

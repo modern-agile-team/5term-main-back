@@ -16,6 +16,7 @@ import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { UpdateLightningInfoDto } from '../dtos/update-lightning-info.dto';
 import { UpdateLightningToUserDto } from '../dtos/update-lightning-to-user.dto';
 import { RequestLightningDto } from '../dtos/request-lightning.dto';
+import { UpdateAcceptLightningDto } from '../dtos/update-accept-lightning.dto';
 
 @ApiTags('lightning')
 @Controller('lightnings')
@@ -151,6 +152,7 @@ export class LightningController {
       lightningNo,
       updateLightningToUser,
     );
+    return { msg: '번개 관리자 변경 성공' };
   }
 
   @ApiOperation({
@@ -163,6 +165,22 @@ export class LightningController {
     @Body() requestLightningDto: RequestLightningDto,
   ) {
     await this.lightningService.requestLightning(requestLightningDto, userNo);
+    return { msg: '번개 모임 신청 성공' };
+  }
+
+  @ApiOperation({
+    summary: '번개 모임 신청 수락 및 거부',
+  })
+  @ApiParam({ name: 'relationNo', example: '1', required: true })
+  @Patch('/:relationNo')
+  async acceptLightning(
+    @Param('relationNo', ParseIntPipe) relationNo: number,
+    @Body() updateAcceptLightningDto: UpdateAcceptLightningDto,
+  ) {
+    await this.lightningService.acceptLightning(
+      relationNo,
+      updateAcceptLightningDto,
+    );
     return { msg: '번개 모임 신청 성공' };
   }
 }
