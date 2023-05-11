@@ -90,4 +90,19 @@ export class LightningService {
       lightningNo,
     );
   }
+
+  async deleteLightningInfo(lightningNo: number) {
+    const lightning = await this.lightningInfoRepository.getLightningInfo(
+      lightningNo,
+    );
+    if (!board) {
+      throw new BadRequestException('존재하지 않는 모집글 입니다.');
+    }
+    const response = await this.lightningBoardRepository.deleteLightningInfo(
+      lightningNo,
+    );
+    if (!response) {
+      throw new InternalServerErrorException('번개 모집글 삭제 실패');
+    }
+  }
 }

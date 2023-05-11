@@ -87,14 +87,28 @@ export class LightningController {
   @ApiOperation({
     summary: '번개 모임 생성',
   })
+  @ApiParam({ name: 'userNo', example: '1', required: true })
   @Post('/:userNo')
   async createLightningInfo(
     @Param('userNo', ParseIntPipe) userNo: number,
     @Body() createLightninginfoDto: CreateLightningInfoDto,
   ) {
-    return await this.lightningService.createLightningInfo(
+    await this.lightningService.createLightningInfo(
       createLightninginfoDto,
       userNo,
     );
+    return { msg: '번개 모임 생성 성공' };
+  }
+
+  @ApiOperation({
+    summary: '번개 모임 삭제',
+  })
+  @ApiParam({ name: 'lightningNo', example: '1', required: true })
+  @Delete('/:lightningNo')
+  async deleteLightningInfo(
+    @Param('lightningNo', ParseIntPipe) lightningNo: number,
+  ) {
+    await this.lightningService.deleteLightningInfo(lightningNo);
+    return { msg: '번개 모임 삭제 성공' };
   }
 }
