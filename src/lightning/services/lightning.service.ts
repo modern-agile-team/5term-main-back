@@ -21,6 +21,7 @@ export class LightningService {
     createLightningBoardDto: CreateLightningBoardDto,
   ) {
     const { title, contents, author } = createLightningBoardDto;
+
     const response = await this.lightningBoardRepository.createLightningBoard(
       lightningNo,
       title,
@@ -118,6 +119,23 @@ export class LightningService {
     );
     if (!response) {
       throw new InternalServerErrorException('번개 탈퇴 실패');
+    }
+  }
+
+  async updateLightningInfo(lightningNo: number, updatelightningDto) {
+    const { meetingDate } = updatelightningDto;
+    const lightning = await this.lightningInfoRepository.getLightningInfo(
+      lightningNo,
+    );
+    if (!lightning) {
+      throw new BadRequestException('존재하지 않는 번개 입니다.');
+    }
+    const response = await this.lightningInfoRepository.updateLightningInfo(
+      lightningNo,
+      meetingDate,
+    );
+    if (!response) {
+      throw new InternalServerErrorException('번개 모임 날짜 수정 실패');
     }
   }
 }
