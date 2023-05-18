@@ -1,4 +1,4 @@
-class CreateLightningDto {
+export class Lightning {
   author: number;
   title: string;
   contents: string;

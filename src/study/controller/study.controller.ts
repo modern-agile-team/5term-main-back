@@ -12,7 +12,7 @@ export class StudyController {
     description:
       '생성하는 유저의 아이디를 받아 스터디를 생성하고 관리자 권한이 부여되고 멤버로 바로 들어가게 됩니다.',
   })
-  @Post('')
+  @Post('produce')
   createStudy(user = { userId: 41 }, @Body() body) {
     return this.studysService.createStudy(user, body);
   }
