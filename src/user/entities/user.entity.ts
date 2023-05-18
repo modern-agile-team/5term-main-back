@@ -29,6 +29,9 @@ export class User extends CommonEntity {
   @OneToMany(
     () => LightningToUserEntity,
     (lightningToUser) => lightningToUser.user,
+    {
+      cascade: true,
+    },
   )
   lightningToUser: LightningToUserEntity[];
 

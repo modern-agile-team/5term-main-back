@@ -23,7 +23,7 @@ export class LightningService {
   ) {}
 
   async createLightningBoard(
-    lightningNo,
+    lightningNo: number,
     createLightningBoardDto: CreateLightningBoardDto,
   ) {
     const { title, contents, author } = createLightningBoardDto;
@@ -209,5 +209,15 @@ export class LightningService {
     if (!response) {
       throw new InternalServerErrorException('신청 수락 실패');
     }
+  }
+
+  async getLightningByUser(userNo: number) {
+    const lightningNo = await this.lightningToUserRepository.getLightningByUser(
+      userNo,
+    );
+    if (!lightningNo) {
+      throw new InternalServerErrorException('번개 조회 실패');
+    }
+    return lightningNo;
   }
 }
