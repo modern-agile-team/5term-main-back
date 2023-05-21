@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthCredentialDto } from './dto/auth-credential.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -21,6 +22,7 @@ import * as crypto from 'crypto';
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { RedisService } from 'src/redis/redis.service';
 
 @Injectable()
 export class AuthService {
@@ -34,6 +36,7 @@ export class AuthService {
     @InjectRepository(UserProfileRepository)
     private userProfileRepository: UserProfileRepository,
     private jwtService: JwtService,
+    private redisService: RedisService,
   ) {}
 
   async singUp(authCredentialDto: AuthCredentialDto) {
@@ -157,6 +160,7 @@ export class AuthService {
 
   async login(loginDto: LoginDto) {
     const { id, password } = loginDto;
+    const jwtConfig = config.get('jwt');
     const user = await this.userRepository.login(id);
     if (!user) {
       throw new BadRequestException('없는 아이디');
@@ -164,11 +168,39 @@ export class AuthService {
     const isPasswordOk = await bcrypt.compare(password, user.password);
 
     if (isPasswordOk) {
-      const payload = { userId: user.id };
-      const accessToken = await this.jwtService.sign(payload);
-      return { accessToken };
+      const accessPayload = { userId: user.id, type: 'ACCESS' };
+      const refreshPayload = { userId: user.id, type: 'REFRESH' };
+      const accessToken = await this.jwtService.sign(accessPayload);
+      const refreshToken = await this.jwtService.sign(refreshPayload, {
+        secret: jwtConfig.secretKey,
+        expiresIn: jwtConfig.refreshExpiresIn,
+      });
+
+      await this.redisService.set(String(user.id), refreshToken, {
+        ttl: jwtConfig.refreshExpiresIn,
+      });
+
+      await this.redisService.get(String(user.id));
+
+      return { accessToken, refreshToken };
     }
 
     throw new BadRequestException('비밀번호가 틀렸습니다.');
+  }
+
+  async recreateToken(userId: number) {
+    const payload = { userId: userId, type: 'ACCESS' };
+    const isLogin = await this.redisService.get(String(userId));
+
+    if (!isLogin) {
+      throw new UnauthorizedException();
+    }
+    const accessToken = await this.jwtService.sign(payload);
+
+    return { accessToken };
+  }
+
+  async logout(userId: number) {
+    await this.redisService.del(String(userId));
   }
 }

@@ -6,6 +6,10 @@ import {
   BadRequestException,
   Get,
   Param,
+  Req,
+  UseGuards,
+  UnauthorizedException,
+  Delete,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthCredentialDto } from './dto/auth-credential.dto';
@@ -14,14 +18,9 @@ import {
   NicknameDuplicationCheckDto,
   PhoneDuplicationCheckDto,
 } from './dto/duplicationCheck.dto';
-import {
-  ApiBody,
-  ApiOperation,
-  ApiParam,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LoginDto } from './dto/login.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -37,14 +36,6 @@ export class AuthController {
 
   @Get('/id-duplication-ckecking/:id')
   @ApiOperation({ summary: 'id중복체크', description: 'id를 중복체크한다.' })
-  @ApiResponse({
-    status: 200,
-    description: 'id 중복 없음',
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'id 중복',
-  })
   @HttpCode(200)
   async idDuplicationChekc(@Param() id: IdDuplicationCheckDto) {
     const result = await this.authService.idDuplicationCheck(id);
@@ -52,20 +43,14 @@ export class AuthController {
     if (result) {
       throw new BadRequestException('아이디 중복');
     }
+
+    return { msg: '아이디 중복 없음' };
   }
 
   @Get('/nickname-duplication-ckecking/:nickname')
   @ApiOperation({
     summary: '닉네임 중복체크',
     description: '닉네임 중복체크한다.',
-  })
-  @ApiResponse({
-    status: 200,
-    description: '닉네임 중복 없음',
-  })
-  @ApiResponse({
-    status: 400,
-    description: '닉네임 중복',
   })
   @HttpCode(200)
   async nicknameDuplicationChekc(
@@ -76,6 +61,8 @@ export class AuthController {
     if (result) {
       throw new BadRequestException('닉네임 중복');
     }
+
+    return { mag: '닉네임 중복 없음' };
   }
 
   @ApiOperation({
@@ -91,8 +78,32 @@ export class AuthController {
 
   @Post('/login')
   async login(@Body() loginDto: LoginDto) {
-    const result = await this.authService.login(loginDto);
+    return await this.authService.login(loginDto);
+  }
 
-    return result;
+  @Get('/test')
+  @UseGuards(AuthGuard())
+  async Test(@Req() req) {
+    console.log('req : ', req.user);
+  }
+
+  @Get('/get-access-token')
+  @UseGuards(AuthGuard())
+  async recreatAccessToken(@Req() req) {
+    const payload = req.user;
+
+    if (payload.type !== 'REFRESH') {
+      throw new UnauthorizedException();
+    }
+
+    return await this.authService.recreateToken(payload.userId);
+  }
+
+  @Delete('/logout')
+  @UseGuards(AuthGuard())
+  async logout(@Req() req) {
+    await this.authService.logout(req.user.userId);
+
+    return { msg: '로그아웃 완료' };
   }
 }

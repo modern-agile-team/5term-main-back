@@ -34,4 +34,10 @@ export class UserRepository extends Repository<User> {
       .where('user.user_id = :userId', { userId: id })
       .getRawOne();
   }
+
+  async findUserByNo(userId: number) {
+    return await this.createQueryBuilder('user')
+      .where('user.id = :userId', { userId })
+      .getRawOne();
+  }
 }

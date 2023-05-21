@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { RedisModule } from './redis/redis.module';
 import typeORMConfig from 'typeorm.config';
 
 @Module({
@@ -13,6 +14,7 @@ import typeORMConfig from 'typeorm.config';
     AuthModule,
     UserModule,
     LightningModule,
+    RedisModule,
   ],
   controllers: [AppController],
   providers: [AppService],

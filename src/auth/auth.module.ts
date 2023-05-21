@@ -9,6 +9,8 @@ import { UserProfileRepository } from 'src/user/repositories/userProfile.reposit
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import * as config from 'config';
+import { JwtStrategy } from './repositories/jwt.strategy';
+import { RedisModule } from 'src/redis/redis.module';
 
 const jwtConfig = config.get('jwt');
 
@@ -27,8 +29,10 @@ const jwtConfig = config.get('jwt');
         expiresIn: jwtConfig.expiresIn,
       },
     }),
+    RedisModule,
   ],
-  providers: [AuthService],
+  providers: [AuthService, JwtStrategy],
   controllers: [AuthController],
+  exports: [JwtStrategy, PassportModule],
 })
 export class AuthModule {}
