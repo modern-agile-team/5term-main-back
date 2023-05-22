@@ -177,11 +177,14 @@ export class LightningController {
     @Param('relationNo', ParseIntPipe) relationNo: number,
     @Body() updateAcceptLightningDto: UpdateAcceptLightningDto,
   ) {
-    await this.lightningService.updateAcceptLightning(
+    const accept = await this.lightningService.updateAcceptLightning(
       relationNo,
       updateAcceptLightningDto,
     );
-    return { msg: '번개 모임 신청 성공' };
+    if (!accept) {
+      return { msg: '번개 모임 신청이 거부되었습니다.' };
+    }
+    return { msg: '번개 모임 신청 수락 성공' };
   }
 
   @ApiOperation({

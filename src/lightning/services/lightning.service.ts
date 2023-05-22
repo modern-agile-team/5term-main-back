@@ -195,7 +195,7 @@ export class LightningService {
     const { isAccept } = updateAcceptLightningDto;
     if (isAccept === 2) {
       await this.lightningToUserRepository.deleteLightningToUser(relationNo);
-      throw '번개 신청이 거부 되었습니다.';
+      return 0;
     }
     const relation =
       this.lightningToUserRepository.getLightningToUser(relationNo);
