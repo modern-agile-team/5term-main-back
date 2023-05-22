@@ -24,7 +24,7 @@ export class LightningToUserEntity extends CommonEntity {
   })
   user: User;
 
-  //수락 대기중 = 0 수락 = 1
+  //수락 대기중 = 0 수락 = 1 거절 = 2
   @Column({ name: 'is_accept', type: 'int', nullable: false, default: 0 })
   isAccept: number;
 
