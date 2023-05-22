@@ -216,7 +216,7 @@ export class LightningService {
       userNo,
     );
     if (!lightningNo) {
-      throw new InternalServerErrorException('번개 조회 실패');
+      throw new InternalServerErrorException('해당 유저 번개 모임 조회 실패');
     }
     return lightningNo;
   }
@@ -226,8 +226,28 @@ export class LightningService {
       lightningNo,
     );
     if (!userNo) {
-      throw new InternalServerErrorException('번개 조회 실패');
+      throw new InternalServerErrorException('번개 모임 멤버 조회 실패');
     }
     return userNo;
+  }
+
+  async getLightningInfo(lightningNo: number) {
+    const lightning = await this.lightningInfoRepository.getLightningInfo(
+      lightningNo,
+    );
+    if (!lightning) {
+      throw new InternalServerErrorException('번개 모임 단일 조회 실패');
+    }
+    return lightning;
+  }
+
+  async getLightningApplicant(lightningNo: number) {
+    const user = await this.lightningToUserRepository.getLightningApplicant(
+      lightningNo,
+    );
+    if (!user) {
+      throw new InternalServerErrorException('번개 신청자 조회 실패');
+    }
+    return user;
   }
 }

@@ -91,9 +91,24 @@ export class LightningToUserRepository extends Repository<LightningToUserEntity>
     lightningNo: number,
   ): Promise<LightningToUserEntity[]> {
     const result = await this.createQueryBuilder('lightning')
-      .select('lightning.user_no AS id')
+      .select('lightning.id AS relationNo,lightning.user_no AS userNo')
       .where(
         'lightning.lightning_no = :lightningNo AND lightning.is_accept = 1',
+        {
+          lightningNo,
+        },
+      )
+      .getRawMany();
+    return result;
+  }
+
+  async getLightningApplicant(
+    lightningNo: number,
+  ): Promise<LightningToUserEntity[]> {
+    const result = await this.createQueryBuilder('lightning')
+      .select('lightning.id AS relationNo,lightning.user_no AS userNo')
+      .where(
+        'lightning.lightning_no = :lightningNo AND lightning.is_accept = 0',
         {
           lightningNo,
         },

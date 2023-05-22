@@ -81,7 +81,6 @@ export class LightningController {
   @ApiOperation({
     summary: '번개 모집글 전부 조회',
   })
-  @ApiParam({ name: 'boardNo', example: '1', required: true })
   @Get('/all-boards')
   async getAllLightningBoard() {
     const allBoards = await this.lightningService.getAllLightningBoard();
@@ -139,6 +138,7 @@ export class LightningController {
       lightningNo,
       updateLightningInfoDto,
     );
+    return { msg: '번개 날짜 수정 성공' };
   }
 
   @ApiOperation({ summary: '번개 관리자 변경' })
@@ -198,11 +198,35 @@ export class LightningController {
     summary: '해당 번개 멤버 조회',
   })
   @ApiParam({ name: 'lightningNo', example: '1', required: true })
-  @Get('/lightning-members/:lightningNo')
+  @Get('/:lightningNo/lightning-members')
   async getUserByLightning(
     @Param('lightningNo', ParseIntPipe) lightningNo: number,
   ) {
     const user = await this.lightningService.getUserByLightning(lightningNo);
-    return { msg: '해당 유저 번개 모임 조회 성공', user };
+    return { msg: '해당 번개 멤버 조회 성공', user };
+  }
+
+  @ApiOperation({
+    summary: '번개 모임 단일 조회',
+  })
+  @ApiParam({ name: 'lightningNo', example: '1', required: true })
+  @Get('/:lightningNo')
+  async getLightningInfo(
+    @Param('lightningNo', ParseIntPipe) lightningNo: number,
+  ) {
+    const lightning = await this.lightningService.getLightningInfo(lightningNo);
+    return { msg: '번개 모임 단일 조회 성공', lightning };
+  }
+
+  @ApiOperation({
+    summary: '번개 모임 신청 목록 조회',
+  })
+  @ApiParam({ name: 'lightningNo', example: '1', required: true })
+  @Get('/:lightningNo/lightning-members/applicants')
+  async getLightningApplicant(
+    @Param('lightningNo', ParseIntPipe) lightningNo: number,
+  ) {
+    const user = await this.lightningService.getLightningApplicant(lightningNo);
+    return { msg: '해당 번개 신청자 조회 성공', user };
   }
 }
