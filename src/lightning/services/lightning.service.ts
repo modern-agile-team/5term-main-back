@@ -220,4 +220,14 @@ export class LightningService {
     }
     return lightningNo;
   }
+
+  async getUserByLightning(lightningNo: number) {
+    const userNo = await this.lightningToUserRepository.getUserByLightning(
+      lightningNo,
+    );
+    if (!userNo) {
+      throw new InternalServerErrorException('번개 조회 실패');
+    }
+    return userNo;
+  }
 }

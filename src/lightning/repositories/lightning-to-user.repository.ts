@@ -86,4 +86,19 @@ export class LightningToUserRepository extends Repository<LightningToUserEntity>
       .getRawMany();
     return result;
   }
+
+  async getUserByLightning(
+    lightningNo: number,
+  ): Promise<LightningToUserEntity[]> {
+    const result = await this.createQueryBuilder('lightning')
+      .select('lightning.user_no AS id')
+      .where(
+        'lightning.lightning_no = :lightningNo AND lightning.is_accept = 1',
+        {
+          lightningNo,
+        },
+      )
+      .getRawMany();
+    return result;
+  }
 }

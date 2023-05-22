@@ -188,9 +188,21 @@ export class LightningController {
     summary: '해당 유저 번개 모임 조회',
   })
   @ApiParam({ name: 'userNo', example: '1', required: true })
-  @Get('/users/:userNo')
+  @Get('/my-pages/:userNo')
   async getLightningByUser(@Param('userNo', ParseIntPipe) userNo: number) {
     const lightning = await this.lightningService.getLightningByUser(userNo);
     return { msg: '해당 유저 번개 모임 조회 성공', lightning };
+  }
+
+  @ApiOperation({
+    summary: '해당 번개 멤버 조회',
+  })
+  @ApiParam({ name: 'lightningNo', example: '1', required: true })
+  @Get('/lightning-members/:lightningNo')
+  async getUserByLightning(
+    @Param('lightningNo', ParseIntPipe) lightningNo: number,
+  ) {
+    const user = await this.lightningService.getUserByLightning(lightningNo);
+    return { msg: '해당 유저 번개 모임 조회 성공', user };
   }
 }
