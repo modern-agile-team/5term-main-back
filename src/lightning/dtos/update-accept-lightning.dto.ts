@@ -9,5 +9,5 @@ export class UpdateAcceptLightningDto {
   })
   @IsNumber()
   @IsNotEmpty()
-  isAccept: number;
+  isAccept: 1 | 2;
 }

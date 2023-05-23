@@ -192,23 +192,27 @@ export class LightningService {
     relationNo: number,
     updateAcceptLightningDto: UpdateAcceptLightningDto,
   ) {
+    // isAccept = 0 대기, isAccept = 1 수락, isAccept = 2 거절
     const { isAccept } = updateAcceptLightningDto;
     if (isAccept === 2) {
       await this.lightningToUserRepository.deleteLightningToUser(relationNo);
-      return 0;
+      return false;
     }
-    const relation =
-      this.lightningToUserRepository.getLightningToUser(relationNo);
+    const relation = await this.lightningToUserRepository.getLightningToUser(
+      relationNo,
+    );
+
     if (!relation) {
       throw new BadRequestException('존재하지 않는 신청입니다.');
     }
-    const response = this.lightningToUserRepository.acceptLightningToUser(
+    const response = await this.lightningToUserRepository.acceptLightningToUser(
       relationNo,
       isAccept,
     );
     if (!response) {
       throw new InternalServerErrorException('신청 수락 실패');
     }
+    return response;
   }
 
   async getLightningByUser(userNo: number) {
