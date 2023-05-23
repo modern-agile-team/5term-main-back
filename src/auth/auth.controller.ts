@@ -18,7 +18,7 @@ import {
   NicknameDuplicationCheckDto,
   PhoneDuplicationCheckDto,
 } from './dto/duplicationCheck.dto';
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LoginDto } from './dto/login.dto';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -81,13 +81,8 @@ export class AuthController {
     return await this.authService.login(loginDto);
   }
 
-  @Get('/test')
-  @UseGuards(AuthGuard())
-  async Test(@Req() req) {
-    console.log('req : ', req.user);
-  }
-
   @Get('/get-access-token')
+  @ApiBearerAuth('refresh-token')
   @UseGuards(AuthGuard())
   async recreatAccessToken(@Req() req) {
     const payload = req.user;
@@ -100,6 +95,7 @@ export class AuthController {
   }
 
   @Delete('/logout')
+  @ApiBearerAuth('refresh-token')
   @UseGuards(AuthGuard())
   async logout(@Req() req) {
     await this.authService.logout(req.user.userId);
