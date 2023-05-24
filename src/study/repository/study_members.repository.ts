@@ -1,4 +1,4 @@
-import { EntityRepository, Repository, InsertResult } from 'typeorm';
+import { EntityRepository, Repository } from 'typeorm';
 import { StudyToUserEntity } from '../entities/study_to_user.entity';
 
 @EntityRepository(StudyToUserEntity)
@@ -11,18 +11,12 @@ export class StudyMembersRepository extends Repository<StudyToUserEntity> {
       .execute();
   }
 
-  // async joinStudy(userId: number, studyId: number) {
-  //   return this.createQueryBuilder()
-  //     .insert()
-  //     .values({ user_id: userId, study_id: studyId })
-  //     .execute();
-  // }
-
   async exitStudy(userId: number, studyId: number) {
     return this.createQueryBuilder()
-      .delete()
-      .where('study_id = :studyId', { studyId: studyId })
-      .andWhere('user_id = :userId', { userId: userId })
+      .update()
+      .set({ isAccept: 2 })
+      .where('user_id = :userId', { userId })
+      .andWhere('study_id = :studyId', { studyId })
       .execute();
   }
 }

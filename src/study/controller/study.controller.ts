@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Post } from '@nestjs/common';
+import { Body, Controller, Patch, Post } from '@nestjs/common';
 import { StudyService } from '../service/study.service';
 import { ApiOperation } from '@nestjs/swagger';
 
@@ -30,9 +30,9 @@ export class StudyController {
   @ApiOperation({
     summary: '스터디 탈퇴기능',
     description:
-      '탈퇴하려는 유저의 아이디와 스터디의 아이디를 받아 멤버 테이블에서 해당 열을 삭제한다. ',
+      '탈퇴하려는 유저의 아이디와 스터디의 아이디를 받아 멤버 테이블에서 해당 열의 is_accept를 2로 변경한다. ',
   })
-  @Delete('participation')
+  @Patch('participation')
   exitStudy(user = { userId: 75 }, @Body() body) {
     return this.studysService.exitStudy(user, body);
   }
