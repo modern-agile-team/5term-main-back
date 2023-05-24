@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Post } from '@nestjs/common';
 import { StudyService } from '../service/study.service';
 import { ApiOperation } from '@nestjs/swagger';
 
@@ -10,7 +10,7 @@ export class StudyController {
   @ApiOperation({
     summary: '스터디 생성기능',
     description:
-      '생성하는 유저의 아이디를 받아 스터디를 생성하고 관리자 권한이 부여되고 멤버로 바로 들어가게 됩니다.',
+      '생성하는 유저의 아이디를 받아 스터디를 생성한 다음 관리자 권한이 부여하고 멤버로 바로 들어가게 된다.',
   })
   @Post('produce')
   createStudy(user = { userId: 75 }, @Body() body) {
@@ -25,5 +25,15 @@ export class StudyController {
   @Post('participation')
   joinStudy(user = { userId: 76 }, @Body() body) {
     return this.studysService.joinStudy(user, body);
+  }
+
+  @ApiOperation({
+    summary: '스터디 탈퇴기능',
+    description:
+      '탈퇴하려는 유저의 아이디와 스터디의 아이디를 받아 멤버 테이블에서 해당 열을 삭제한다. ',
+  })
+  @Delete('participation')
+  exitStudy(user = { userId: 75 }, @Body() body) {
+    return this.studysService.exitStudy(user, body);
   }
 }

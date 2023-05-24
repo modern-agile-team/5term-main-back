@@ -46,4 +46,12 @@ export class StudyService {
     );
     return memberInfo;
   }
+
+  async exitStudy(user, body) {
+    const memberInfo = await this.studyMembersRepository.exitStudy(
+      user.userId,
+      body.studyId,
+    );
+    return memberInfo;
+  }
 }
