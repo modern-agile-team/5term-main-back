@@ -24,20 +24,26 @@ export class StudyService {
 
     const studyId = studyInfo.identifiers[0].id;
 
-    const userId = await this.userRepository.getUserId(user);
-
     //스터디 생성자 관리자권한 부여
     const adminInfo = await this.studyAdminsRepository.giveAdmin(
-      userId,
+      user.userId,
       studyId,
     );
 
     //생성된 스터디에 멤버로 참여
     const memberInfo = await this.studyMembersRepository.joinStudy(
-      userId,
+      user.userId,
       studyId,
     );
 
     return { studyInfo, adminInfo, memberInfo };
+  }
+
+  async joinStudy(user, body) {
+    const memberInfo = await this.studyMembersRepository.joinStudy(
+      user.userId,
+      body.studyId,
+    );
+    return memberInfo;
   }
 }

@@ -1,12 +1,15 @@
-import { EntityRepository, Repository } from 'typeorm';
-import { StudyMembers } from '../entities/study_members.entity';
+import { EntityRepository, Repository, InsertResult } from 'typeorm';
+import { StudyToUserEntity } from '../entities/study_to_user.entity';
 
-@EntityRepository(StudyMembers)
-export class StudyMembersRepository extends Repository<StudyMembers> {
-  async joinStudy(userId, studyId) {
+@EntityRepository(StudyToUserEntity)
+export class StudyMembersRepository extends Repository<StudyToUserEntity> {
+  async joinStudy(userId: number, studyId: number): Promise<InsertResult> {
     return this.createQueryBuilder()
       .insert()
-      .values([{ study: studyId, user: userId }])
+      .values({
+        user_id: userId,
+        study_id: studyId,
+      } as Partial<StudyToUserEntity>)
       .execute();
   }
 }

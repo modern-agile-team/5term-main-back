@@ -6,6 +6,7 @@ import { Column, Entity, OneToOne, OneToMany } from 'typeorm';
 import { UserProfile } from './user_profile.entity';
 import { UserScheldule } from './user_schedule.entity';
 import { LightningToUserEntity } from 'src/lightning/entities/lightning-to-user.entity';
+import { StudyToUserEntity } from 'src/study/entities/study_to_user.entity';
 
 @Entity()
 export class User extends CommonEntity {
@@ -29,6 +30,9 @@ export class User extends CommonEntity {
     (lightningToUser) => lightningToUser.user,
   )
   lightningToUser: LightningToUserEntity[];
+
+  @OneToMany(() => StudyToUserEntity, (studyToUser) => studyToUser.user)
+  studyToUser: StudyToUserEntity[];
 
   @OneToOne(() => AuthSocialLogin, (authSocialLogin) => authSocialLogin.user)
   authSocialLogin: AuthSocialLogin;
