@@ -1,4 +1,4 @@
-import { Body, Controller, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { StudyService } from '../service/study.service';
 import { ApiOperation } from '@nestjs/swagger';
 
@@ -6,7 +6,15 @@ import { ApiOperation } from '@nestjs/swagger';
 export class StudyController {
   constructor(private studysService: StudyService) {}
 
-  // 스터디 생성
+  @ApiOperation({
+    summary: '스터디 멤버 조회',
+    description: '해당 스터디의 멤버들의 아이디를 가져온다',
+  })
+  @Get(':studyId')
+  getMembers(@Param('studyId') studyId: number) {
+    return this.studysService.getMembers(studyId);
+  }
+
   @ApiOperation({
     summary: '스터디 생성기능',
     description:
@@ -23,7 +31,7 @@ export class StudyController {
       '참여하는 유저의 아이디와 참여하려는 스터디의 아이디를 받아 멤버 테이블에 대기중 상태로 넣는다.',
   })
   @Post('participation')
-  joinStudy(user = { userId: 76 }, @Body() body) {
+  joinStudy(user = { userId: 77 }, @Body() body) {
     return this.studysService.joinStudy(user, body);
   }
 
