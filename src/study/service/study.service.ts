@@ -40,7 +40,7 @@ export class StudyService {
     );
 
     //생성된 스터디에 멤버로 참여
-    const memberInfo = await this.studyMembersRepository.joinStudy(
+    const memberInfo = await this.studyMembersRepository.joinStudyForAdmin(
       user.userId,
       studyId,
     );
