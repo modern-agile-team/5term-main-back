@@ -18,9 +18,10 @@ export class StudyMembersRepository extends Repository<StudyToUserEntity> {
   }
 
   async exitStudy(userId: number, studyId: number) {
+    const currentTime = new Date();
     return this.createQueryBuilder()
       .update()
-      .set({ isAccept: 2 })
+      .set({ isAccept: 2, deletedAt: currentTime })
       .where('user_id = :userId', { userId })
       .andWhere('study_id = :studyId', { studyId })
       .execute();

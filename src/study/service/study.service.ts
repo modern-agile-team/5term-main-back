@@ -48,6 +48,16 @@ export class StudyService {
     return { studyInfo, adminInfo, memberInfo };
   }
 
+  async deleteStudy(user, body) {
+    const adminInfo = await this.studyAdminsRepository.checkAdmin(
+      user.userId,
+      body.studyId,
+    );
+    if (adminInfo.success === true) {
+      return await this.studyRepository.deleteStudy(body.studyId);
+    }
+  }
+
   async joinStudy(user, body) {
     const memberInfo = await this.studyMembersRepository.joinStudy(
       user.userId,

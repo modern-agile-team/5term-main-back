@@ -26,6 +26,16 @@ export class StudyController {
   }
 
   @ApiOperation({
+    summary: '스터디 삭제기능',
+    description:
+      '삭제 하려는 유저가 관리자 권한이 있는지 확인하고 해당 스터디를 삭제한다. ',
+  })
+  @Patch('produce')
+  deleteStudy(user = { userId: 75 }, @Body() body) {
+    return this.studysService.deleteStudy(user, body);
+  }
+
+  @ApiOperation({
     summary: '스터디 참여기능',
     description:
       '참여하는 유저의 아이디와 참여하려는 스터디의 아이디를 받아 멤버 테이블에 대기중 상태로 넣는다.',

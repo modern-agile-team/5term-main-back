@@ -9,4 +9,13 @@ export class StudyRepository extends Repository<Study> {
       .values([{ end_date: body.endDate, active: body.active }])
       .execute();
   }
+
+  async deleteStudy(studyId) {
+    const currentTime = new Date();
+    return await this.createQueryBuilder()
+      .update()
+      .set({ active: false, deletedAt: currentTime })
+      .where('id = :studyId', { studyId })
+      .execute();
+  }
 }

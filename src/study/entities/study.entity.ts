@@ -1,6 +1,7 @@
 import { CommonEntity } from 'src/common/entities/common.entity';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
 import { StudyToUserEntity } from './study_to_user.entity';
+import { StudyAdmins } from './study_admins.entity';
 
 @Entity({
   name: 'study',
@@ -14,4 +15,7 @@ export class Study extends CommonEntity {
 
   @OneToMany(() => StudyToUserEntity, (studyToUser) => studyToUser.studyInfo)
   studyToUser: StudyToUserEntity[];
+
+  @OneToOne(() => StudyAdmins, (studyAdmin) => studyAdmin.study)
+  studyAdmin: StudyAdmins[];
 }
