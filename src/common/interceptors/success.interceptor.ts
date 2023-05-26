@@ -11,7 +11,6 @@ import { map } from 'rxjs/operators';
 export class SuccessInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const statusCode = context.getArgByIndex(1).statusCode;
-
     return next.handle().pipe(
       map((data) => ({
         statusCode,

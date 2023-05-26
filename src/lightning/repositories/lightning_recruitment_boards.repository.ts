@@ -22,6 +22,7 @@ export class LightningBoardRepository extends Repository<LightningBoardEntity> {
       .into(LightningBoardEntity)
       .values(lightningBoard)
       .execute();
+
     return raw;
   }
 
