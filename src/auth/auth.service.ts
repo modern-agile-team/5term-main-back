@@ -14,15 +14,14 @@ import { UserProfileRepository } from 'src/user/repositories/userProfile.reposit
 import {
   IdDuplicationCheckDto,
   NicknameDuplicationCheckDto,
-  PhoneDuplicationCheckDto,
 } from './dto/duplicationCheck.dto';
 import axios from 'axios';
 import * as config from 'config';
 import * as crypto from 'crypto';
-import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { RedisService } from 'src/redis/redis.service';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -86,7 +85,7 @@ export class AuthService {
     return result;
   }
 
-  async phoneDuplicationCheck(phoneNumber: PhoneDuplicationCheckDto) {
+  async phoneDuplicationCheck(phoneNumber: number) {
     const result = await this.userProfileRepository.phoneDuplicationCheck(
       phoneNumber,
     );
@@ -94,8 +93,8 @@ export class AuthService {
     return result ? true : false;
   }
 
-  async smsCertification(toPhoneNumber: PhoneDuplicationCheckDto) {
-    const { phoneNumber } = toPhoneNumber;
+  async smsCertification(toPhoneNumber: number) {
+    const phoneNumber = toPhoneNumber;
     if (await this.phoneDuplicationCheck(toPhoneNumber)) {
       throw new BadRequestException('중복 전화번호');
     }
@@ -179,8 +178,6 @@ export class AuthService {
       await this.redisService.set(String(user.id), refreshToken, {
         ttl: jwtConfig.refreshExpiresIn,
       });
-
-      await this.redisService.get(String(user.id));
 
       return { accessToken, refreshToken };
     }

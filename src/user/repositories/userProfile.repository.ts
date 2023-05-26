@@ -24,7 +24,7 @@ export class UserProfileRepository extends Repository<UserProfile> {
       .getOne();
   }
 
-  async phoneDuplicationCheck({ phoneNumber }: PhoneDuplicationCheckDto) {
+  async phoneDuplicationCheck(phoneNumber: number) {
     return await this.createQueryBuilder('userProfile')
       .where('userProfile.phone = :phone', { phone: phoneNumber })
       .getOne();

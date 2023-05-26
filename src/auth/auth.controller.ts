@@ -10,17 +10,19 @@ import {
   UseGuards,
   UnauthorizedException,
   Delete,
+  ParseIntPipe,
+  Res,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthCredentialDto } from './dto/auth-credential.dto';
 import {
   IdDuplicationCheckDto,
   NicknameDuplicationCheckDto,
-  PhoneDuplicationCheckDto,
 } from './dto/duplicationCheck.dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { LoginDto } from './dto/login.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { LoginDto } from './dto/login.dto';
+import { Response } from 'express';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -70,15 +72,32 @@ export class AuthController {
     description: 'sms인증을 위해 인증번호를 보낸다.',
   })
   @Get('/sms-certification/:phoneNumber')
-  async smsCertification(@Param() phoneNumber: PhoneDuplicationCheckDto) {
+  async smsCertification(
+    @Param('phoneNumber', ParseIntPipe) phoneNumber: number,
+  ) {
     const result = await this.authService.smsCertification(phoneNumber);
 
     return { certificationNumber: result };
   }
 
+  @ApiOperation({
+    summary: '로그인',
+    description: '로그인을 하면 access과 refresh토큰을 같이 발급해 준다.',
+  })
   @Post('/login')
-  async login(@Body() loginDto: LoginDto) {
-    return await this.authService.login(loginDto);
+  async login(@Body() loginDto: LoginDto, @Res() res: Response) {
+    const { accessToken, refreshToken } = await this.authService.login(
+      loginDto,
+    );
+    res.cookie('refresh_token', refreshToken, {
+      httpOnly: true,
+      domain: 'localhost',
+      maxAge: 7_200_000,
+    });
+
+    return res.send({
+      accessToken,
+    });
   }
 
   @Get('/get-access-token')
