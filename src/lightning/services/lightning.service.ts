@@ -1,13 +1,10 @@
 import { UpdateLightningToUserDto } from './../dtos/update-lightning-to-user.dto';
-import { UpdateLightningBoardDto } from '../dtos/update-lightning-board.dto';
-import { LightningBoardRepository } from './../repositories/lightning_recruitment_boards.repository';
 import { LightningInfoRepository } from './../repositories/lightning-info.repository';
 import {
   Injectable,
   InternalServerErrorException,
   BadRequestException,
 } from '@nestjs/common';
-import { CreateLightningBoardDto } from '../dtos/create-lightning-board.dto';
 import { CreateLightningInfoDto } from '../dtos/create-lightning-info.dto';
 import { UpdateLightningInfoDto } from '../dtos/update-lightning-info.dto';
 import { LightningToUserRepository } from '../repositories/lightning-to-user.repository';
@@ -18,71 +15,8 @@ import { UpdateAcceptLightningDto } from '../dtos/update-accept-lightning.dto';
 export class LightningService {
   constructor(
     private readonly lightningInfoRepository: LightningInfoRepository,
-    private readonly lightningBoardRepository: LightningBoardRepository,
     private readonly lightningToUserRepository: LightningToUserRepository,
   ) {}
-
-  async createLightningBoard(
-    lightningNo: number,
-    createLightningBoardDto: CreateLightningBoardDto,
-  ) {
-    const { title, contents, author } = createLightningBoardDto;
-
-    const response = await this.lightningBoardRepository.createLightningBoard(
-      lightningNo,
-      title,
-      contents,
-      author,
-    );
-
-    if (!response) {
-      throw new InternalServerErrorException('번개 모집글 생성 실패');
-    }
-  }
-
-  async deleteLightningBoard(boardNo: number) {
-    const board = await this.lightningBoardRepository.getLightningBoard(
-      boardNo,
-    );
-    if (!board) {
-      throw new BadRequestException('존재하지 않는 모집글 입니다.');
-    }
-    const response = await this.lightningBoardRepository.deleteLightningBoard(
-      boardNo,
-    );
-    if (!response) {
-      throw new InternalServerErrorException('번개 모집글 삭제 실패');
-    }
-  }
-
-  async updateLightningBoard(
-    boardNo: number,
-    updateLightningBoardDto: UpdateLightningBoardDto,
-  ) {
-    const { title, contents } = updateLightningBoardDto;
-    const board = await this.lightningBoardRepository.getLightningBoard(
-      boardNo,
-    );
-    if (!board) {
-      throw new BadRequestException('존재하지 않는 모집글 입니다.');
-    }
-    const response = await this.lightningBoardRepository.updateLightningBoard(
-      boardNo,
-      title,
-      contents,
-    );
-    if (!response) {
-      throw new InternalServerErrorException('번개 모집글 수정 실패');
-    }
-  }
-
-  async getLightningBoard(boardNo: number) {
-    return await this.lightningBoardRepository.getLightningBoard(boardNo);
-  }
-
-  async getAllLightningBoard() {
-    return await this.lightningBoardRepository.getAllLightningBoard();
-  }
 
   async createLightningInfo(
     createLightningInfoDto: CreateLightningInfoDto,
@@ -192,7 +126,6 @@ export class LightningService {
     relationNo: number,
     updateAcceptLightningDto: UpdateAcceptLightningDto,
   ) {
-    // isAccept = 0 대기, isAccept = 1 수락, isAccept = 2 거절
     const { isAccept } = updateAcceptLightningDto;
     if (isAccept === 2) {
       await this.lightningToUserRepository.deleteLightningToUser(relationNo);
