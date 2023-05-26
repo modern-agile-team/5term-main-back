@@ -33,4 +33,25 @@ export class StudyMembersRepository extends Repository<StudyToUserEntity> {
       .andWhere('study_id = :studyId', { studyId })
       .execute();
   }
+
+  async acceptStudy(userId, body) {
+    const studyId = body.studyId;
+
+    return this.createQueryBuilder()
+      .update()
+      .set({ isAccept: 1 })
+      .where('user_id = :userId', { userId })
+      .andWhere('study_id = :studyId', { studyId })
+      .execute();
+  }
+
+  async rejectStudy(userId, body) {
+    const studyId = body.studyId;
+
+    return this.createQueryBuilder()
+      .delete()
+      .where('user_id = :userId', { userId })
+      .andWhere('study_id = :studyId', { studyId })
+      .execute();
+  }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { StudyRepository } from '../repository/study.repository';
 import { StudyMembersRepository } from '../repository/study_members.repository';
@@ -69,6 +69,50 @@ export class StudyService {
   async exitStudy(user, body) {
     const memberInfo = await this.studyMembersRepository.exitStudy(
       user.userId,
+      body.studyId,
+    );
+    return memberInfo;
+  }
+  async acceptStudy(user, body) {
+    const isAdmin = await this.studyAdminsRepository.checkAdmin(
+      user.userId,
+      body.studyId,
+    );
+
+    if (isAdmin.success === false) throw new ForbiddenException('권한 없음');
+
+    const memberInfo = await this.studyMembersRepository.acceptStudy(
+      user.userId,
+      body,
+    );
+    return memberInfo;
+  }
+
+  async rejectStudy(user, body) {
+    const isAdmin = await this.studyAdminsRepository.checkAdmin(
+      user.userId,
+      body.studyId,
+    );
+
+    if (isAdmin.success === false) throw new ForbiddenException('권한 없음');
+
+    const memberInfo = await this.studyMembersRepository.rejectStudy(
+      user.userId,
+      body,
+    );
+    return memberInfo;
+  }
+
+  async transferAdmin(user, body) {
+    const isAdmin = await this.studyAdminsRepository.checkAdmin(
+      user.userId,
+      body.studyId,
+    );
+
+    if (isAdmin.success === false) throw new ForbiddenException('권한 없음');
+
+    const memberInfo = await this.studyAdminsRepository.transferAdmin(
+      body.userId,
       body.studyId,
     );
     return memberInfo;

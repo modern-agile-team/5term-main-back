@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { StudyService } from '../service/study.service';
 import { ApiOperation } from '@nestjs/swagger';
 
@@ -53,5 +61,32 @@ export class StudyController {
   @Patch('participation')
   exitStudy(user = { userId: 75 }, @Body() body) {
     return this.studysService.exitStudy(user, body);
+  }
+
+  @ApiOperation({
+    summary: '스터디 가입요청 수락',
+    description: '해당 스터디에 가입하려는 사람의 아이디를 받아 수락한다.',
+  })
+  @Patch('participation/accept')
+  acceptStudy(user = { userId: 75 }, @Body() body) {
+    return this.studysService.acceptStudy(user, body);
+  }
+
+  @ApiOperation({
+    summary: '스터디 가입요청 거절',
+    description: '스터디아이디와 가입요청한 유저의 아이디를 받아 거절한다.',
+  })
+  @Delete('participation/accept')
+  rejectStudy(user = { userId: 75 }, @Body() body) {
+    return this.studysService.rejectStudy(user, body);
+  }
+
+  @ApiOperation({
+    summary: '스터디 관리자 권한 양도',
+    description: '스터디 관리자 권한을 다른 멤버에게 양도한다.',
+  })
+  @Patch('authority')
+  transferAdmin(user = { userId: 75 }, @Body() body) {
+    return this.studysService.transferAdmin(user, body);
   }
 }
