@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
-  name: 'recruit_board_img',
+  name: 'study_recruit_board_img',
 })
 export class RecruitboardIMG extends BaseEntity {
   @PrimaryGeneratedColumn()

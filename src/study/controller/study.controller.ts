@@ -81,7 +81,7 @@ export class StudyController {
   }
 
   @ApiOperation({
-    summary: '스터디 가입요청 거절',
+    summary: '스터디 가입요청 거절 및 강제 퇴장',
     description: '스터디아이디와 가입요청한 유저의 아이디를 받아 거절한다.',
   })
   @Delete('participation/accept')
