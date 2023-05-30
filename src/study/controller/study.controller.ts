@@ -3,9 +3,9 @@ import {
   Controller,
   Delete,
   Get,
-  Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { StudyService } from '../service/study.service';
 import { ApiOperation } from '@nestjs/swagger';
@@ -15,12 +15,20 @@ export class StudyController {
   constructor(private studysService: StudyService) {}
 
   @ApiOperation({
-    summary: '스터디 멤버 조회',
-    description: '해당 스터디의 멤버들의 아이디를 가져온다',
+    summary: '스터디 조회',
+    description:
+      'url에 유저 아이디를 넣으면 유저가 가입한 스터디를 전부 리턴하고 스터디 아이디를 넣으면 스터디의 상세정보를 리턴한다.',
   })
-  @Get(':studyId')
-  getMembers(@Param('studyId') studyId: number) {
-    return this.studysService.getMembers(studyId);
+  @Get('')
+  getStudies(
+    @Query('userId') userId: number,
+    @Query('studyId') studyId: number,
+  ) {
+    if (userId) {
+      return this.studysService.getStudies(userId);
+    } else if (studyId) {
+      return this.studysService.getStudyInfo(studyId);
+    }
   }
 
   @ApiOperation({

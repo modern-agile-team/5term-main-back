@@ -18,13 +18,18 @@ export class StudyService {
     private userRepository: UserRepository,
   ) {}
 
-  async getMembers(studyId) {
-    const memberInfo = await this.studyMembersRepository.getMembers(studyId);
-    const memberId = memberInfo.map((member) => {
-      return member.StudyToUserEntity_user_id;
+  async getStudies(userId) {
+    const studyInfo = await this.studyMembersRepository.getStudies(userId);
+    const studyId = studyInfo.map((study) => {
+      return study.StudyToUserEntity_id;
     });
+    return studyId;
+  }
 
-    return memberId;
+  async getStudyInfo(studyId) {
+    const studyInfo = await this.studyRepository.getStudyInfo(studyId);
+    const memberInfo = await this.studyMembersRepository.getMembers(studyId);
+    return [studyInfo, memberInfo];
   }
 
   async createStudy(user, body) {

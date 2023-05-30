@@ -10,6 +10,12 @@ export class StudyRepository extends Repository<Study> {
       .execute();
   }
 
+  async getStudyInfo(studyId) {
+    return await this.createQueryBuilder()
+      .where('id = :studyId', { studyId })
+      .getRawMany();
+  }
+
   async deleteStudy(studyId) {
     const currentTime = new Date();
     return await this.createQueryBuilder()
