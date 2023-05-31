@@ -51,8 +51,8 @@ export class StudyMembersRepository extends Repository<StudyToUserEntity> {
       .execute();
   }
 
-  async rejectStudy(userId, body) {
-    const studyId = body.studyId;
+  async rejectStudy(userId, req) {
+    const studyId = req.studyId;
 
     return this.createQueryBuilder()
       .delete()

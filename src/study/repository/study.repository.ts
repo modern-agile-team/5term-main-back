@@ -3,10 +3,10 @@ import { Study } from 'src/study/entities/study.entity';
 
 @EntityRepository(Study)
 export class StudyRepository extends Repository<Study> {
-  async createStudy(body) {
+  async createStudy(content) {
     return await this.createQueryBuilder()
       .insert()
-      .values([{ end_date: body.endDate, active: body.active }])
+      .values([{ end_date: content.endDate, active: content.active }])
       .execute();
   }
 

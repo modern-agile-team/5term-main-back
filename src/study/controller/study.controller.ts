@@ -30,15 +30,14 @@ export class StudyController {
       return this.studysService.getStudyInfo(studyId);
     }
   }
-
   @ApiOperation({
     summary: '스터디 생성기능',
     description:
       '생성하는 유저의 아이디를 받아 스터디를 생성한 다음 관리자 권한이 부여하고 멤버로 바로 들어가게 된다.',
   })
   @Post('produce')
-  createStudy(user = { userId: 75 }, @Body() body) {
-    return this.studysService.createStudy(user, body);
+  createStudy(user = { userId: 75 }, @Body() content) {
+    return this.studysService.createStudy(user, content);
   }
 
   @ApiOperation({
@@ -47,8 +46,8 @@ export class StudyController {
       '삭제 하려는 유저가 관리자 권한이 있는지 확인하고 해당 스터디를 삭제한다. ',
   })
   @Patch('produce')
-  deleteStudy(user = { userId: 75 }, @Body() body) {
-    return this.studysService.deleteStudy(user, body);
+  deleteStudy(user = { userId: 75 }, @Body() study) {
+    return this.studysService.deleteStudy(user, study);
   }
 
   @ApiOperation({
@@ -57,8 +56,8 @@ export class StudyController {
       '참여하는 유저의 아이디와 참여하려는 스터디의 아이디를 받아 멤버 테이블에 대기중 상태로 넣는다.',
   })
   @Post('participation')
-  joinStudy(user = { userId: 77 }, @Body() body) {
-    return this.studysService.joinStudy(user, body);
+  joinStudy(user = { userId: 77 }, @Body() study) {
+    return this.studysService.joinStudy(user, study);
   }
 
   @ApiOperation({
@@ -67,8 +66,8 @@ export class StudyController {
       '탈퇴하려는 유저의 아이디와 스터디의 아이디를 받아 멤버 테이블에서 해당 열의 is_accept를 2로 변경한다. ',
   })
   @Patch('participation')
-  exitStudy(user = { userId: 75 }, @Body() body) {
-    return this.studysService.exitStudy(user, body);
+  exitStudy(user = { userId: 75 }, @Body() study) {
+    return this.studysService.exitStudy(user, study);
   }
 
   @ApiOperation({
@@ -76,8 +75,8 @@ export class StudyController {
     description: '해당 스터디에 가입하려는 사람의 아이디를 받아 수락한다.',
   })
   @Patch('participation/accept')
-  acceptStudy(user = { userId: 75 }, @Body() body) {
-    return this.studysService.acceptStudy(user, body);
+  acceptStudy(user = { userId: 75 }, @Body() req) {
+    return this.studysService.acceptStudy(user, req);
   }
 
   @ApiOperation({
@@ -85,8 +84,8 @@ export class StudyController {
     description: '스터디아이디와 가입요청한 유저의 아이디를 받아 거절한다.',
   })
   @Delete('participation/accept')
-  rejectStudy(user = { userId: 75 }, @Body() body) {
-    return this.studysService.rejectStudy(user, body);
+  rejectStudy(user = { userId: 75 }, @Body() req) {
+    return this.studysService.rejectStudy(user, req);
   }
 
   @ApiOperation({
@@ -94,7 +93,7 @@ export class StudyController {
     description: '스터디 관리자 권한을 다른 멤버에게 양도한다.',
   })
   @Patch('authority')
-  transferAdmin(user = { userId: 75 }, @Body() body) {
-    return this.studysService.transferAdmin(user, body);
+  transferAdmin(user = { userId: 75 }, @Body() req) {
+    return this.studysService.transferAdmin(user, req);
   }
 }

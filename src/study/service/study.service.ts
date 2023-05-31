@@ -32,9 +32,9 @@ export class StudyService {
     return [studyInfo, memberInfo];
   }
 
-  async createStudy(user, body) {
+  async createStudy(user, content) {
     //스터디 생성
-    const studyInfo = await this.studyRepository.createStudy(body);
+    const studyInfo = await this.studyRepository.createStudy(content);
 
     const studyId = studyInfo.identifiers[0].id;
 
@@ -53,72 +53,72 @@ export class StudyService {
     return { studyInfo, adminInfo, memberInfo };
   }
 
-  async deleteStudy(user, body) {
+  async deleteStudy(user, study) {
     const adminInfo = await this.studyAdminsRepository.checkAdmin(
       user.userId,
-      body.studyId,
+      study.studyId,
     );
     if (adminInfo.success === true) {
-      return await this.studyRepository.deleteStudy(body.studyId);
+      return await this.studyRepository.deleteStudy(study.studyId);
     }
   }
 
-  async joinStudy(user, body) {
+  async joinStudy(user, study) {
     const memberInfo = await this.studyMembersRepository.joinStudy(
       user.userId,
-      body.studyId,
+      study.studyId,
     );
     return memberInfo;
   }
 
-  async exitStudy(user, body) {
+  async exitStudy(user, study) {
     const memberInfo = await this.studyMembersRepository.exitStudy(
       user.userId,
-      body.studyId,
+      study.studyId,
     );
     return memberInfo;
   }
-  async acceptStudy(user, body) {
+  async acceptStudy(user, req) {
     const isAdmin = await this.studyAdminsRepository.checkAdmin(
       user.userId,
-      body.studyId,
+      req.studyId,
     );
 
     if (isAdmin.success === false) throw new ForbiddenException('권한 없음');
 
     const memberInfo = await this.studyMembersRepository.acceptStudy(
       user.userId,
-      body,
+      req,
     );
     return memberInfo;
   }
 
-  async rejectStudy(user, body) {
+  async rejectStudy(user, req) {
     const isAdmin = await this.studyAdminsRepository.checkAdmin(
       user.userId,
-      body.studyId,
+      req.studyId,
     );
 
     if (isAdmin.success === false) throw new ForbiddenException('권한 없음');
 
     const memberInfo = await this.studyMembersRepository.rejectStudy(
       user.userId,
-      body,
+      req,
     );
     return memberInfo;
   }
 
-  async transferAdmin(user, body) {
+  async transferAdmin(user, req) {
     const isAdmin = await this.studyAdminsRepository.checkAdmin(
       user.userId,
-      body.studyId,
+      req.studyId,
     );
 
     if (isAdmin.success === false) throw new ForbiddenException('권한 없음');
 
     const memberInfo = await this.studyAdminsRepository.transferAdmin(
-      body.userId,
-      body.studyId,
+      req.userId,
+      req.studyId,
     );
     return memberInfo;
   }
