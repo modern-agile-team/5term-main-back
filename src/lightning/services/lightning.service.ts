@@ -36,13 +36,13 @@ export class LightningService {
     const lightning = await this.lightningInfoRepository.getLightningInfo(
       lightningNo,
     );
-    if (!lightning) {
+    if (!lightning[0]) {
       throw new BadRequestException('존재하지 않는 번개 입니다.');
     }
     const response = await this.lightningInfoRepository.deleteLightningInfo(
       lightningNo,
     );
-    if (!response) {
+    if (!response[0]) {
       throw new InternalServerErrorException('번개 모임 삭제 실패');
     }
   }
@@ -51,13 +51,13 @@ export class LightningService {
     const relation = await this.lightningToUserRepository.getLightningToUser(
       relationNo,
     );
-    if (!relation) {
+    if (!relation[0]) {
       throw new BadRequestException('존재하지 않는 관계 입니다.');
     }
     const response = await this.lightningToUserRepository.deleteLightningToUser(
       relationNo,
     );
-    if (!response) {
+    if (!response[0]) {
       throw new InternalServerErrorException('번개 탈퇴 실패');
     }
   }
@@ -70,14 +70,14 @@ export class LightningService {
     const lightning = await this.lightningInfoRepository.getLightningInfo(
       lightningNo,
     );
-    if (!lightning) {
+    if (!lightning[0]) {
       throw new BadRequestException('존재하지 않는 번개 입니다.');
     }
     const response = await this.lightningInfoRepository.updateLightningInfo(
       lightningNo,
       meetingDate,
     );
-    if (!response) {
+    if (!response[0]) {
       throw new InternalServerErrorException('번개 모임 날짜 수정 실패');
     }
   }
@@ -90,14 +90,14 @@ export class LightningService {
     const relation = await this.lightningToUserRepository.getLightningToUser(
       relationNo,
     );
-    if (!relation) {
+    if (!relation[0]) {
       throw new BadRequestException('존재하지 않는 번개 입니다.');
     }
     const response = await this.lightningToUserRepository.updateLightningAdmin(
       relationNo,
       isAdmin,
     );
-    if (!response) {
+    if (!response[0]) {
       throw new InternalServerErrorException('번개 모임 관리자 변경 실패');
     }
   }
@@ -109,7 +109,7 @@ export class LightningService {
     const lightning = await this.lightningInfoRepository.getLightningInfo(
       lightningNo,
     );
-    if (!lightning) {
+    if (!lightning[0]) {
       throw new BadRequestException('존재하지 않는 번개 입니다.');
     }
     const response =
@@ -117,7 +117,7 @@ export class LightningService {
         userNo,
         lightningNo,
       );
-    if (!response) {
+    if (!response[0]) {
       throw new InternalServerErrorException('번개 모임 신청 실패');
     }
   }
@@ -135,56 +135,34 @@ export class LightningService {
       relationNo,
     );
 
-    if (!relation) {
+    if (!relation[0]) {
       throw new BadRequestException('존재하지 않는 신청입니다.');
     }
     const response = await this.lightningToUserRepository.acceptLightningToUser(
       relationNo,
       isAccept,
     );
-    if (!response) {
+    if (!response[0]) {
       throw new InternalServerErrorException('신청 수락 실패');
     }
     return response;
   }
 
   async getLightningByUser(userNo: number) {
-    const lightningNo = await this.lightningToUserRepository.getLightningByUser(
-      userNo,
-    );
-    if (!lightningNo) {
-      throw new InternalServerErrorException('해당 유저 번개 모임 조회 실패');
-    }
-    return lightningNo;
+    return await this.lightningToUserRepository.getLightningByUser(userNo);
   }
 
   async getUserByLightning(lightningNo: number) {
-    const userNo = await this.lightningToUserRepository.getUserByLightning(
-      lightningNo,
-    );
-    if (!userNo[0]) {
-      throw new InternalServerErrorException('번개 모임 멤버 조회 실패');
-    }
-    return userNo;
+    return await this.lightningToUserRepository.getUserByLightning(lightningNo);
   }
 
   async getLightningInfo(lightningNo: number) {
-    const lightning = await this.lightningInfoRepository.getLightningInfo(
-      lightningNo,
-    );
-    if (!lightning) {
-      throw new InternalServerErrorException('번개 모임 단일 조회 실패');
-    }
-    return lightning;
+    return await this.lightningInfoRepository.getLightningInfo(lightningNo);
   }
 
   async getLightningApplicant(lightningNo: number) {
-    const user = await this.lightningToUserRepository.getLightningApplicant(
+    return await this.lightningToUserRepository.getLightningApplicant(
       lightningNo,
     );
-    if (!user) {
-      throw new InternalServerErrorException('번개 신청자 조회 실패');
-    }
-    return user;
   }
 }
