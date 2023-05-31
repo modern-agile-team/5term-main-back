@@ -3,28 +3,31 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import * as config from 'config';
 import { UserRepository } from 'src/user/repositories/user.repository';
-import { User } from 'src/user/entities/user.entity';
+import { RedisService } from 'src/redis/redis.service';
 
 const jwtConfig = config.get('jwt');
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private userRepository: UserRepository) {
+export class JwtStrategy extends PassportStrategy(
+  Strategy,
+  'jwt-access-token',
+) {
+  constructor(private redisService: RedisService) {
     super({
       secretOrKey: jwtConfig.secretKey,
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     });
   }
 
-  async validate(payload): Promise<any> {
+  async validate(payload) {
     const { userId } = payload;
 
-    const user = await this.userRepository.findUserByNo(userId);
+    const result = await this.redisService.get(String(userId));
 
-    if (!user) {
-      throw new UnauthorizedException();
+    if (!result) {
+      throw new UnauthorizedException('로그인되어 있지 않은 토큰');
     }
 
-    return payload;
+    return userId;
   }
 }

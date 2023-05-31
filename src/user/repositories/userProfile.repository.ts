@@ -2,10 +2,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { UserProfile } from '../entities/user_profile.entity';
 import { AuthCredentialDto } from './../../auth/dto/auth-credential.dto';
 import { User } from '../entities/user.entity';
-import {
-  NicknameDuplicationCheckDto,
-  PhoneDuplicationCheckDto,
-} from 'src/auth/dto/duplicationCheck.dto';
+import { NicknameDuplicationCheckDto } from 'src/auth/dto/duplicationCheck.dto';
 
 @EntityRepository(UserProfile)
 export class UserProfileRepository extends Repository<UserProfile> {

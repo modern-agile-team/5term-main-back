@@ -6,9 +6,7 @@ import {
   BadRequestException,
   Get,
   Param,
-  Req,
   UseGuards,
-  UnauthorizedException,
   Delete,
   ParseIntPipe,
   Res,
@@ -20,17 +18,22 @@ import {
   NicknameDuplicationCheckDto,
 } from './dto/duplicationCheck.dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
 import { LoginDto } from './dto/login.dto';
 import { Response } from 'express';
+import { JwtRefreshGuard } from './guard/jwt-refresh-token.guard';
+import { GetUserId } from 'src/common/decorator/get-user-id.decorator';
+import { JwtAccessGuard } from './guard/jwt-access-token.guard';
+import * as config from 'config';
+
+const jwtConfig = config.get('jwt');
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
+  @Post('/signup')
   @ApiOperation({ summary: '회원가입', description: '회원가입' })
   @ApiBody({ type: AuthCredentialDto })
-  @Post('/signup')
   @HttpCode(200)
   singUp(@Body() authCredentialDto: AuthCredentialDto) {
     return this.authService.singUp(authCredentialDto);
@@ -38,7 +41,6 @@ export class AuthController {
 
   @Get('/id-duplication-ckecking/:id')
   @ApiOperation({ summary: 'id중복체크', description: 'id를 중복체크한다.' })
-  @HttpCode(200)
   async idDuplicationChekc(@Param() id: IdDuplicationCheckDto) {
     const result = await this.authService.idDuplicationCheck(id);
 
@@ -85,15 +87,18 @@ export class AuthController {
     description: '로그인을 하면 access과 refresh토큰을 같이 발급해 준다.',
   })
   @Post('/login')
+  @HttpCode(200)
   async login(@Body() loginDto: LoginDto, @Res() res: Response) {
     const { accessToken, refreshToken } = await this.authService.login(
       loginDto,
     );
-    res.cookie('refresh_token', refreshToken, {
+
+    const cookieOption = {
       httpOnly: true,
       domain: 'localhost',
-      maxAge: 7_200_000,
-    });
+      maxAge: jwtConfig.refreshExpiresIn,
+    };
+    res.cookie('Refresh', refreshToken, cookieOption);
 
     return res.send({
       accessToken,
@@ -101,23 +106,24 @@ export class AuthController {
   }
 
   @Get('/get-access-token')
-  @ApiBearerAuth('refresh-token')
-  @UseGuards(AuthGuard())
-  async recreatAccessToken(@Req() req) {
-    const payload = req.user;
-
-    if (payload.type !== 'REFRESH') {
-      throw new UnauthorizedException();
-    }
-
-    return await this.authService.recreateToken(payload.userId);
+  @ApiOperation({
+    summary: 'Access Token 재발급',
+    description: 'Access Token 재발급한다.',
+  })
+  @UseGuards(JwtRefreshGuard)
+  async recreatAccessToken(@GetUserId() userId) {
+    return await this.authService.recreateToken(userId);
   }
 
   @Delete('/logout')
-  @ApiBearerAuth('refresh-token')
-  @UseGuards(AuthGuard())
-  async logout(@Req() req) {
-    await this.authService.logout(req.user.userId);
+  @ApiBearerAuth('access-token')
+  @ApiOperation({
+    summary: '로그아웃',
+    description: '로그아웃',
+  })
+  @UseGuards(JwtAccessGuard)
+  async logout(@GetUserId() userId) {
+    await this.authService.logout(userId);
 
     return { msg: '로그아웃 완료' };
   }

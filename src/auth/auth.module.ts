@@ -9,8 +9,9 @@ import { UserProfileRepository } from 'src/user/repositories/userProfile.reposit
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import * as config from 'config';
-import { JwtStrategy } from './repositories/jwt.strategy';
+import { JwtStrategy } from './strategis/jwt.strategy';
 import { RedisModule } from 'src/redis/redis.module';
+import JwtRefreshStrategy from './strategis/jwt-refresh_token.strategy';
 
 const jwtConfig = config.get('jwt');
 
@@ -22,7 +23,7 @@ const jwtConfig = config.get('jwt');
       AuthPasswordLoginRepository,
       UserProfileRepository,
     ]),
-    PassportModule.register({ defaultStrategy: 'jwt' }),
+    PassportModule,
     JwtModule.register({
       secret: jwtConfig.secretKey,
       signOptions: {
@@ -31,7 +32,7 @@ const jwtConfig = config.get('jwt');
     }),
     RedisModule,
   ],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, JwtRefreshStrategy],
   controllers: [AuthController],
   exports: [JwtStrategy, PassportModule],
 })

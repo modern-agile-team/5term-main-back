@@ -169,6 +169,7 @@ export class AuthService {
     if (isPasswordOk) {
       const accessPayload = { userId: user.id, type: 'ACCESS' };
       const refreshPayload = { userId: user.id, type: 'REFRESH' };
+
       const accessToken = await this.jwtService.sign(accessPayload);
       const refreshToken = await this.jwtService.sign(refreshPayload, {
         secret: jwtConfig.secretKey,
@@ -190,7 +191,7 @@ export class AuthService {
     const isLogin = await this.redisService.get(String(userId));
 
     if (!isLogin) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('로그인 안된 아이디');
     }
     const accessToken = await this.jwtService.sign(payload);
 
