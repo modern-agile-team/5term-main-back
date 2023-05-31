@@ -16,18 +16,12 @@ export class LightningInfoEntity extends CommonEntity {
   @OneToMany(
     () => LightningBoardEntity,
     (board: LightningBoardEntity) => board.lightningNo,
-    {
-      cascade: true, // 사용자를 통해 블로그가 추가, 수정, 삭제되고 사용자가 저장되면 추가된 블로그도 저장된다.
-    },
   )
   lightningInfo: LightningBoardEntity[];
 
   @OneToMany(
     () => LightningToUserEntity,
     (lightningToUser) => lightningToUser.lightningInfo,
-    {
-      cascade: true,
-    },
   )
   lightningToUser: LightningToUserEntity[];
 }

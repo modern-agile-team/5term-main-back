@@ -162,7 +162,7 @@ export class LightningService {
     const userNo = await this.lightningToUserRepository.getUserByLightning(
       lightningNo,
     );
-    if (!userNo) {
+    if (!userNo[0]) {
       throw new InternalServerErrorException('번개 모임 멤버 조회 실패');
     }
     return userNo;

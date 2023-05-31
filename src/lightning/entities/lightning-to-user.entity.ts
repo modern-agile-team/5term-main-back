@@ -10,6 +10,9 @@ export class LightningToUserEntity extends CommonEntity {
   @ManyToOne(
     () => LightningInfoEntity,
     (lightningInfo) => lightningInfo.lightningToUser,
+    {
+      onDelete: 'CASCADE',
+    },
   )
   @JoinColumn({
     name: 'lightning_no',
@@ -17,7 +20,9 @@ export class LightningToUserEntity extends CommonEntity {
   })
   lightningInfo: LightningInfoEntity;
 
-  @ManyToOne(() => User, (user) => user.lightningToUser)
+  @ManyToOne(() => User, (user) => user.lightningToUser, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'user_no',
     referencedColumnName: 'id',

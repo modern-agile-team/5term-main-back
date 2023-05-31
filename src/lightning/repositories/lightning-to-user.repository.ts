@@ -99,6 +99,7 @@ export class LightningToUserRepository extends Repository<LightningToUserEntity>
         },
       )
       .getRawMany();
+
     return result;
   }
 
