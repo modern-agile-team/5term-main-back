@@ -131,10 +131,11 @@ export class AuthController {
   }
 
   @Get('/access-token-validation')
+  @ApiBearerAuth('access-token')
   @UseGuards(JwtAccessGuard)
   @ApiOperation({
-    summary: 'accessToken 유효성 검사',
-    description: 'accessToken의 유효 기간이 10분 밑이면 401',
+    summary: 'AccessToken 유효성 검사',
+    description: 'AccessToken의 유효 기간이 10분 밑이면 401',
   })
   async accessTokenValidation(@GetPayload() payload) {
     const expirationPeriod = payload.exp;

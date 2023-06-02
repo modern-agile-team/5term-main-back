@@ -33,15 +33,6 @@ async function bootstrap() {
       },
       'access-token',
     )
-    .addBearerAuth(
-      {
-        type: 'http',
-        scheme: 'bearer',
-        name: 'JWT',
-        in: 'header',
-      },
-      'refresh-token',
-    )
     .build();
   const document: OpenAPIObject = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
