@@ -10,6 +10,7 @@ import {
   Delete,
   ParseIntPipe,
   Res,
+  Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthCredentialDto } from './dto/auth-credential.dto';
@@ -24,6 +25,7 @@ import { JwtRefreshGuard } from './guard/jwt-refresh-token.guard';
 import { GetUserId } from 'src/common/decorator/get-user-id.decorator';
 import { JwtAccessGuard } from './guard/jwt-access-token.guard';
 import * as config from 'config';
+import { GetPayload } from 'src/common/decorator/getPayload.decorator';
 
 const jwtConfig = config.get('jwt');
 
@@ -126,5 +128,16 @@ export class AuthController {
     await this.authService.logout(userId);
 
     return { msg: '로그아웃 완료' };
+  }
+
+  @Get('/access-token-validation')
+  @UseGuards(JwtAccessGuard)
+  @ApiOperation({
+    summary: 'accessToken 유효성 검사',
+    description: 'accessToken의 유효 기간이 10분 밑이면 401',
+  })
+  async accessTokenValidation(@GetPayload() payload) {
+    const expirationPeriod = payload.exp;
+    return this.authService.accessTokenValidation(expirationPeriod);
   }
 }

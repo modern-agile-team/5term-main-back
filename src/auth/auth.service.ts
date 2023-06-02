@@ -201,4 +201,14 @@ export class AuthService {
   async logout(userId: number) {
     await this.redisService.del(String(userId));
   }
+
+  async accessTokenValidation(expirationPeriod: number) {
+    const timestemp = Math.floor(+new Date() / 1000);
+    const leftTime = expirationPeriod - timestemp;
+
+    if (leftTime < 600) {
+      throw new UnauthorizedException('유효 시간 10분 미만');
+    }
+    return { leftTime };
+  }
 }

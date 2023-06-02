@@ -28,6 +28,6 @@ export class JwtStrategy extends PassportStrategy(
       throw new UnauthorizedException('로그인되어 있지 않은 토큰');
     }
 
-    return userId;
+    return payload;
   }
 }
