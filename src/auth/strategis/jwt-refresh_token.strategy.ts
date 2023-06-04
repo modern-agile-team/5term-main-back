@@ -15,7 +15,7 @@ export default class JwtRefreshStrategy extends PassportStrategy(
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request) => {
-          if (request?.headers.cookie) {
+          if (!request?.headers.cookie) {
             throw new UnauthorizedException('header에 refresh 토큰이 없음');
           }
 
