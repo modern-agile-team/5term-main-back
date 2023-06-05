@@ -19,11 +19,7 @@ export class StudyService {
   ) {}
 
   async getStudies(userId) {
-    const studyInfo = await this.studyMembersRepository.getStudies(userId);
-    const studyId = studyInfo.map((study) => {
-      return study.StudyToUserEntity_id;
-    });
-    return studyId;
+    return await this.studyMembersRepository.getStudies(userId);
   }
 
   async getStudyInfo(studyId) {

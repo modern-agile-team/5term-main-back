@@ -11,6 +11,7 @@ export class StudyMembersRepository extends Repository<StudyToUserEntity> {
 
   async getStudies(userId) {
     return await this.createQueryBuilder()
+      .select('id')
       .where('user_id = :userId', { userId })
       .getRawMany();
   }
