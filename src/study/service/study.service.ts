@@ -27,9 +27,7 @@ export class StudyService {
   }
 
   async getStudyInfo(studyId) {
-    const studyInfo = await this.studyRepository.getStudyInfo(studyId);
-    const memberInfo = await this.studyMembersRepository.getMembers(studyId);
-    return [studyInfo, memberInfo];
+    return await this.studyRepository.getStudyInfo(studyId);
   }
 
   async createStudy(user, content) {

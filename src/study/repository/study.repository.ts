@@ -11,9 +11,12 @@ export class StudyRepository extends Repository<Study> {
   }
 
   async getStudyInfo(studyId) {
-    return await this.createQueryBuilder()
-      .where('id = :studyId', { studyId })
-      .getRawMany();
+    return await this.createQueryBuilder('study')
+      .leftJoinAndSelect('study.studyAdmin', 'admin')
+      .leftJoinAndSelect('study.studyToUser', 'member')
+      .leftJoinAndSelect('member.user', 'user')
+      .where('study.id = :studyId', { studyId })
+      .getMany();
   }
 
   async deleteStudy(studyId) {
