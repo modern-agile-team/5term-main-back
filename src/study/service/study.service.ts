@@ -58,11 +58,10 @@ export class StudyService {
   }
 
   async joinStudy(user, study) {
-    const memberInfo = await this.studyMembersRepository.joinStudy(
+    return await this.studyMembersRepository.joinStudy(
       user.userId,
       study.studyId,
     );
-    return memberInfo;
   }
 
   async exitStudy(user, study) {
@@ -79,11 +78,7 @@ export class StudyService {
 
     if (isAdmin.success === false) throw new ForbiddenException('권한 없음');
 
-    const memberInfo = await this.studyMembersRepository.acceptStudy(
-      user.userId,
-      req,
-    );
-    return memberInfo;
+    return await this.studyMembersRepository.acceptStudy(user.userId, req);
   }
 
   async rejectStudy(user, req) {
@@ -94,11 +89,7 @@ export class StudyService {
 
     if (isAdmin.success === false) throw new ForbiddenException('권한 없음');
 
-    const memberInfo = await this.studyMembersRepository.rejectStudy(
-      user.userId,
-      req,
-    );
-    return memberInfo;
+    return await this.studyMembersRepository.rejectStudy(user.userId, req);
   }
 
   async transferAdmin(user, req) {
@@ -109,10 +100,9 @@ export class StudyService {
 
     if (isAdmin.success === false) throw new ForbiddenException('권한 없음');
 
-    const memberInfo = await this.studyAdminsRepository.transferAdmin(
+    return await this.studyAdminsRepository.transferAdmin(
       req.userId,
       req.studyId,
     );
-    return memberInfo;
   }
 }
