@@ -66,11 +66,10 @@ export class StudyService {
   }
 
   async exitStudy(user, study) {
-    const memberInfo = await this.studyMembersRepository.exitStudy(
+    return await this.studyMembersRepository.exitStudy(
       user.userId,
       study.studyId,
     );
-    return memberInfo;
   }
   async acceptStudy(user, req) {
     const isAdmin = await this.studyAdminsRepository.checkAdmin(
