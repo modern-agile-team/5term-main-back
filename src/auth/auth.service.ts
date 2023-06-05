@@ -188,11 +188,7 @@ export class AuthService {
 
   async recreateToken(userId: number) {
     const payload = { userId: userId, type: 'ACCESS' };
-    const isLogin = await this.redisService.get(String(userId));
 
-    if (!isLogin) {
-      throw new UnauthorizedException('로그인 안된 아이디');
-    }
     const accessToken = await this.jwtService.sign(payload);
 
     return { accessToken };
