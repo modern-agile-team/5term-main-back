@@ -4,6 +4,7 @@ import { StudyRepository } from '../repository/study.repository';
 import { StudyMembersRepository } from '../repository/study_members.repository';
 import { StudyAdminsRepository } from '../repository/study_admins.repository';
 import { UserRepository } from 'src/user/repositories/user.repository';
+import { StudisQueryDto } from '../studis-query-dto';
 
 @Injectable()
 export class StudyService {
@@ -18,12 +19,14 @@ export class StudyService {
     private userRepository: UserRepository,
   ) {}
 
-  async getStudies(userId) {
-    return await this.studyMembersRepository.getStudies(userId);
+  getStudyList(studisQueryDto: StudisQueryDto) {
+    return this.studyRepository.find({
+      where: studisQueryDto,
+    });
   }
 
-  async getStudyInfo(studyId) {
-    return await this.studyRepository.getStudyInfo(studyId);
+  getStudy(studyId) {
+    return this.studyRepository.getStudy(studyId);
   }
 
   async createStudy(user, content) {
@@ -57,11 +60,8 @@ export class StudyService {
     }
   }
 
-  async joinStudy(user, study) {
-    return await this.studyMembersRepository.joinStudy(
-      user.userId,
-      study.studyId,
-    );
+  joinStudy(user, study) {
+    return this.studyMembersRepository.joinStudy(user.userId, study.studyId);
   }
 
   async exitStudy(user, study) {

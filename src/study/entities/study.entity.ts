@@ -14,7 +14,7 @@ export class Study extends CommonEntity {
   @Column()
   end_date: Date;
 
-  @OneToMany(() => StudyToUserEntity, (studyToUser) => studyToUser.studyInfo)
+  @OneToMany(() => StudyToUserEntity, (studyToUser) => studyToUser.user)
   studyToUser: StudyToUserEntity[];
 
   @OneToOne(() => StudyAdmins, (studyAdmin) => studyAdmin.study)

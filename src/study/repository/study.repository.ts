@@ -3,15 +3,15 @@ import { Study } from 'src/study/entities/study.entity';
 
 @EntityRepository(Study)
 export class StudyRepository extends Repository<Study> {
-  async createStudy(content) {
-    return await this.createQueryBuilder()
+  createStudy(content) {
+    return this.createQueryBuilder()
       .insert()
       .values([{ end_date: content.endDate, active: content.active }])
       .execute();
   }
 
-  async getStudyInfo(studyId) {
-    return await this.createQueryBuilder('study')
+  getStudy(studyId) {
+    return this.createQueryBuilder('study')
       .leftJoinAndSelect('study.studyAdmin', 'admin')
       .leftJoinAndSelect('study.studyToUser', 'member')
       .leftJoinAndSelect('member.user', 'user')
