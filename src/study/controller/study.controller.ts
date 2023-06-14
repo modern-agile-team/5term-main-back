@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { StudyService } from '../service/study.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { StudisQueryDto } from '../studis-query-dto';
+import { StudiesQueryDto } from '../studis-query-dto';
 
 @ApiTags('studies')
 @Controller('studies')
@@ -23,7 +23,7 @@ export class StudyController {
       'url에 변수를 넣으면 검색조건에 해당하는 스터디만 뽑아옴(없으면 모든 스터디 리턴)',
   })
   @Get('')
-  getStudyList(@Query() studisQueryDto: StudisQueryDto) {
+  getStudyList(@Query() studisQueryDto: StudiesQueryDto) {
     return this.studysService.getStudyList(studisQueryDto);
   }
 
@@ -52,7 +52,7 @@ export class StudyController {
       '삭제 하려는 유저가 관리자 권한이 있는지 확인하고 해당 스터디를 삭제한다. ',
   })
   @Patch('')
-  deleteStudy(user = { userId: 75 }, @Body() study) {
+  deleteStudy(user = { userId: 77 }, @Body() study) {
     return this.studysService.deleteStudy(user, study);
   }
 
@@ -62,7 +62,7 @@ export class StudyController {
       '참여하는 유저의 아이디와 참여하려는 스터디의 아이디를 받아 멤버 테이블에 대기중 상태로 넣는다.',
   })
   @Post('member')
-  joinStudy(user = { userId: 77 }, @Body() study) {
+  joinStudy(user = { userId: 76 }, @Body() study) {
     return this.studysService.joinStudy(user, study);
   }
 
@@ -80,8 +80,8 @@ export class StudyController {
     summary: '스터디 가입요청 수락',
     description: '해당 스터디에 가입하려는 사람의 아이디를 받아 수락한다.',
   })
-  @Patch('member/admin')
-  acceptStudy(user = { userId: 75 }, @Body() req) {
+  @Patch('admin')
+  acceptStudy(user = { userId: 77 }, @Body() req) {
     return this.studysService.acceptStudy(user, req);
   }
 
@@ -89,7 +89,7 @@ export class StudyController {
     summary: '스터디 가입요청 거절 및 강제 퇴장',
     description: '스터디아이디와 가입요청한 유저의 아이디를 받아 거절한다.',
   })
-  @Delete('member/admin')
+  @Delete('admin')
   rejectStudy(user = { userId: 75 }, @Body() req) {
     return this.studysService.rejectStudy(user, req);
   }
@@ -98,7 +98,7 @@ export class StudyController {
     summary: '스터디 관리자 권한 양도',
     description: '스터디 관리자 권한을 다른 멤버에게 양도한다.',
   })
-  @Patch('member/admin/transfer-admin')
+  @Patch('admin/transfer-admin')
   transferAdmin(user = { userId: 75 }, @Body() req) {
     return this.studysService.transferAdmin(user, req);
   }

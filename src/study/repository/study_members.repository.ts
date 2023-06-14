@@ -41,9 +41,9 @@ export class StudyMembersRepository extends Repository<StudyToUserEntity> {
       .execute();
   }
 
-  async acceptStudy(userId, body) {
-    const studyId = body.studyId;
-
+  async acceptStudy(user, req) {
+    const studyId = req.studyId;
+    const userId = user.userId;
     return this.createQueryBuilder()
       .update()
       .set({ isAccept: 1 })

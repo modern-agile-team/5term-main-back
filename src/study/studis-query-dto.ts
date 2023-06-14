@@ -2,7 +2,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type, Transform } from 'class-transformer';
 import { Min, IsInt, IsOptional, IsBoolean } from 'class-validator';
 
-export class StudisQueryDto {
+export class StudiesQueryDto {
   @ApiPropertyOptional({
     description: 'id filtering',
   })
