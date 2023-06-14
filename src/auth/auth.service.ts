@@ -72,25 +72,15 @@ export class AuthService {
   }
 
   async idDuplicationCheck(id: IdDuplicationCheckDto) {
-    const result = await this.userRepository.idDuplicationCheck(id);
-
-    return result;
+    return await this.userRepository.idDuplicationCheck(id);
   }
 
   async nicknameDuplicationCheck(nickname: NicknameDuplicationCheckDto) {
-    const result = await this.userProfileRepository.nicknameDuplicationCheck(
-      nickname,
-    );
-
-    return result;
+    return await this.userProfileRepository.nicknameDuplicationCheck(nickname);
   }
 
   async phoneDuplicationCheck(phoneNumber: number) {
-    const result = await this.userProfileRepository.phoneDuplicationCheck(
-      phoneNumber,
-    );
-
-    return result ? true : false;
+    return await this.userProfileRepository.phoneDuplicationCheck(phoneNumber);
   }
 
   async smsCertification(toPhoneNumber: number) {
