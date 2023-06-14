@@ -13,20 +13,32 @@ export class LightningInfoRepository extends Repository<LightningInfoEntity> {
 
     return raw[0].id;
   }
-  async createLightningToUser(
-    userNo: number,
-    lightningNo: number,
-  ): Promise<InsertResult> {
-    const { raw }: InsertResult = await this.createQueryBuilder()
-      .insert()
-      .into(LightningToUserEntity)
-      .values({
-        user: { id: userNo },
-        lightningInfo: { id: lightningNo },
-        isAccept: 1,
-        isAdmin: 1,
-      })
+
+  async deleteLightningInfo(relationNo: number): Promise<number> {
+    const { affected } = await this.createQueryBuilder()
+      .delete()
+      .from(LightningInfoEntity)
+      .where('id = :relationNo', { relationNo })
       .execute();
-    return raw;
+    return affected;
+  }
+
+  async updateLightningInfo(
+    lightningNo: number,
+    meetingDate: Date,
+  ): Promise<number> {
+    const { affected } = await this.createQueryBuilder()
+      .update(LightningInfoEntity)
+      .set({ meetingDate })
+      .where('id = :lightningNo', { lightningNo })
+      .execute();
+    return affected;
+  }
+
+  async getLightningInfo(lightningNo: number): Promise<LightningInfoEntity> {
+    const result = await this.createQueryBuilder()
+      .where('id = :lightningNo', { lightningNo })
+      .getOne();
+    return result;
   }
 }
