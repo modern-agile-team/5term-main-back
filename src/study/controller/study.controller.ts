@@ -23,7 +23,7 @@ export class StudyController {
   @ApiOperation({
     summary: '스터디 조회',
     description:
-      'url에 변수를 넣으면 검색조건에 해당하는 스터디만 뽑아옴(없으면 모든 스터디 리턴)',
+      'url에 변수를 넣으면 검색조건에 해당하는 스터디만 뽑아온다(없으면 모든 스터디 리턴)',
   })
   @Get('')
   getStudyList(@Query() studisQueryDto: StudiesQueryDto) {
@@ -32,7 +32,8 @@ export class StudyController {
 
   @ApiOperation({
     summary: '스터디 상세 조회',
-    description: '스터디 아이디 받아서 스터디정보,관리자 멤버 정보 return',
+    description:
+      '스터디 아이디를 받아서 스터디정보,관리자 멤버 정보를 리턴한다.',
   })
   @Get(':id')
   getStudy(@Param('id') studyId: number) {
@@ -41,8 +42,7 @@ export class StudyController {
 
   @ApiOperation({
     summary: '스터디 생성기능',
-    description:
-      '생성하는 유저의 아이디를 받아 스터디를 생성한 다음 관리자 권한이 부여하고 멤버로 바로 들어가게 된다.',
+    description: '스터디를 생성하고 생성한 유저는 관리자와 멤버로 들어간다',
   })
   @UseGuards(JwtAccessGuard)
   @Post('')
