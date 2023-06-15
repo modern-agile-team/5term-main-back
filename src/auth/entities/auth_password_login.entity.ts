@@ -16,7 +16,9 @@ export class AuthPasswordLogin extends BaseEntity {
   @Column()
   password: string;
 
-  @OneToOne(() => User, (user) => user.authPasswordLogin)
+  @OneToOne(() => User, (user) => user.authPasswordLogin, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'user_id' })
   user: User;
 }
