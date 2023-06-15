@@ -7,16 +7,22 @@ import {
   Patch,
   Post,
   Query,
+  UseFilters,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { StudyService } from '../service/study.service';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { StudiesQueryDto } from '../studis-query-dto';
 import { GetUserId } from 'src/common/decorator/get-user-id.decorator';
 import { JwtAccessGuard } from 'src/auth/guard/jwt-access-token.guard';
+import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
+import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 
 @ApiTags('studies')
 @Controller('studies')
+@UseFilters(HttpExceptionFilter)
+@UseInterceptors(SuccessInterceptor)
 export class StudyController {
   constructor(private studysService: StudyService) {}
 
