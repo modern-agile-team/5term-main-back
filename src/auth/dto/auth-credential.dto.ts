@@ -23,9 +23,6 @@ export class AuthCredentialDto {
     description: '비밀번호',
     example: '1234',
   })
-  @Matches(/^.*(?=^.{4,20}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/, {
-    message: '비밀번호 규격을 확인하세요',
-  })
   password: string;
 
   @IsString()
@@ -33,10 +30,7 @@ export class AuthCredentialDto {
   @ApiProperty({
     name: 'phone',
     description: '전화번호',
-    example: '010-1234-5678',
-  })
-  @Matches(/^\d{3}-\d{3,4}-\d{4}$/, {
-    message: '전화번호 규격이 틀립니다.',
+    example: '01012345678',
   })
   phone: string;
 
@@ -46,7 +40,7 @@ export class AuthCredentialDto {
   @ApiProperty({
     name: 'nickname',
     description: '닉네임',
-    example: '닉네임',
+    example: '닉네임123',
   })
   nickname: string;
 
@@ -59,10 +53,10 @@ export class AuthCredentialDto {
   @Matches(
     /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
     {
-      message: '전화번호 규격이 틀립니다.',
+      message: '이메일 규격이 틀립니다.',
     },
   )
-  email: string;
+  email?: string;
 
   @IsString()
   @MinLength(2)
