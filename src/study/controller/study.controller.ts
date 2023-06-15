@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { StudyService } from '../service/study.service';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { StudiesQueryDto } from '../studis-query-dto';
 import { GetUserId } from 'src/common/decorator/get-user-id.decorator';
 import { JwtAccessGuard } from 'src/auth/guard/jwt-access-token.guard';
@@ -25,6 +25,7 @@ export class StudyController {
     description:
       'url에 변수를 넣으면 검색조건에 해당하는 스터디만 뽑아온다(없으면 모든 스터디 리턴)',
   })
+  @ApiParam({ name: '검색 조건', example: '/studies/82?active=true' })
   @Get('')
   getStudyList(@Query() studisQueryDto: StudiesQueryDto) {
     return this.studysService.getStudyList(studisQueryDto);
@@ -35,6 +36,7 @@ export class StudyController {
     description:
       '스터디 아이디를 받아서 스터디정보,관리자 멤버 정보를 리턴한다.',
   })
+  @ApiParam({ name: '스터디 id', example: '/studies?id=10', required: true })
   @Get(':id')
   getStudy(@Param('id') studyId: number) {
     return this.studysService.getStudy(studyId);
