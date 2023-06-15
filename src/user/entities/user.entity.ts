@@ -2,9 +2,6 @@ import { AuthPasswordLogin } from 'src/auth/entities/auth_password_login.entity'
 import { AuthSocialLogin } from 'src/auth/entities/auth_social_login.entity';
 import { CommonEntity } from 'src/common/entities/common.entity';
 import { LightningBoardEntity } from 'src/lightning/entities/lightning-boards.entity';
-<<<<<<< HEAD
-import { Column, Entity, OneToOne, OneToMany } from 'typeorm';
-=======
 import { LightningInfoEntity } from 'src/lightning/entities/lightning-info.entity';
 import {
   Column,
@@ -15,7 +12,6 @@ import {
   OneToMany,
 } from 'typeorm';
 import { UserProfile } from './user_profile.entity';
->>>>>>> a0aa648179a5eb018781fcba48b59a192502cfeb
 import { UserScheldule } from './user_schedule.entity';
 import { LightningToUserEntity } from 'src/lightning/entities/lightning-to-user.entity';
 import { StudyToUserEntity } from 'src/study/entities/study_to_user.entity';
@@ -47,12 +43,9 @@ export class User extends CommonEntity {
     },
   )
   lightningToUser: LightningToUserEntity[];
-<<<<<<< HEAD
 
   @OneToMany(() => StudyToUserEntity, (studyToUser) => studyToUser.user)
   studyToUser: StudyToUserEntity[];
-=======
->>>>>>> a0aa648179a5eb018781fcba48b59a192502cfeb
 
   @OneToOne(() => AuthSocialLogin, (authSocialLogin) => authSocialLogin.user)
   authSocialLogin: AuthSocialLogin;

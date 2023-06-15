@@ -25,13 +25,13 @@ export class UserRepository extends Repository<User> {
       .getOne();
   }
 
-<<<<<<< HEAD
   async getUserId(user) {
     return await this.createQueryBuilder('user')
       .select(['user.id'])
       .where('user.id = :userId', { userId: user.userId })
       .getOne();
-=======
+  }
+
   async login(id: string) {
     return await this.createQueryBuilder('user')
       .leftJoinAndSelect('user.authPasswordLogin', 'authPasswordLogin')
@@ -46,6 +46,5 @@ export class UserRepository extends Repository<User> {
     return await this.createQueryBuilder('user')
       .where('user.id = :userId', { userId })
       .getRawOne();
->>>>>>> a0aa648179a5eb018781fcba48b59a192502cfeb
   }
 }

@@ -11,6 +11,7 @@ import {
 import { StudyService } from '../service/study.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { StudiesQueryDto } from '../studis-query-dto';
+import { GetUserId } from 'src/common/decorator/get-user-id.decorator';
 
 @ApiTags('studies')
 @Controller('studies')
@@ -42,8 +43,9 @@ export class StudyController {
       '생성하는 유저의 아이디를 받아 스터디를 생성한 다음 관리자 권한이 부여하고 멤버로 바로 들어가게 된다.',
   })
   @Post('')
-  createStudy(user = { userId: 75 }, @Body() content) {
-    return this.studysService.createStudy(user, content);
+  createStudy(@GetUserId() user, @Body() content) {
+    console.log(user);
+    // return this.studysService.createStudy(user, content);
   }
 
   @ApiOperation({
