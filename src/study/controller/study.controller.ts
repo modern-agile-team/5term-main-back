@@ -7,11 +7,13 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { StudyService } from '../service/study.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { StudiesQueryDto } from '../studis-query-dto';
 import { GetUserId } from 'src/common/decorator/get-user-id.decorator';
+import { JwtAccessGuard } from 'src/auth/guard/jwt-access-token.guard';
 
 @ApiTags('studies')
 @Controller('studies')
@@ -42,10 +44,10 @@ export class StudyController {
     description:
       '생성하는 유저의 아이디를 받아 스터디를 생성한 다음 관리자 권한이 부여하고 멤버로 바로 들어가게 된다.',
   })
+  @UseGuards(JwtAccessGuard)
   @Post('')
   createStudy(@GetUserId() user, @Body() content) {
-    console.log(user);
-    // return this.studysService.createStudy(user, content);
+    return this.studysService.createStudy(user, content);
   }
 
   @ApiOperation({
@@ -53,8 +55,9 @@ export class StudyController {
     description:
       '삭제 하려는 유저가 관리자 권한이 있는지 확인하고 해당 스터디를 삭제한다. ',
   })
+  @UseGuards(JwtAccessGuard)
   @Patch('')
-  deleteStudy(user = { userId: 77 }, @Body() study) {
+  deleteStudy(@GetUserId() user, @Body() study) {
     return this.studysService.deleteStudy(user, study);
   }
 
@@ -63,8 +66,9 @@ export class StudyController {
     description:
       '참여하는 유저의 아이디와 참여하려는 스터디의 아이디를 받아 멤버 테이블에 대기중 상태로 넣는다.',
   })
+  @UseGuards(JwtAccessGuard)
   @Post('member')
-  joinStudy(user = { userId: 76 }, @Body() study) {
+  joinStudy(@GetUserId() user, @Body() study) {
     return this.studysService.joinStudy(user, study);
   }
 
@@ -73,8 +77,9 @@ export class StudyController {
     description:
       '탈퇴하려는 유저의 아이디와 스터디의 아이디를 받아 멤버 테이블에서 해당 열의 is_accept를 2로 변경한다. ',
   })
+  @UseGuards(JwtAccessGuard)
   @Patch('member')
-  exitStudy(user = { userId: 75 }, @Body() study) {
+  exitStudy(@GetUserId() user, @Body() study) {
     return this.studysService.exitStudy(user, study);
   }
 
@@ -82,8 +87,9 @@ export class StudyController {
     summary: '스터디 가입요청 수락',
     description: '해당 스터디에 가입하려는 사람의 아이디를 받아 수락한다.',
   })
+  @UseGuards(JwtAccessGuard)
   @Patch('admin')
-  acceptStudy(user = { userId: 77 }, @Body() req) {
+  acceptStudy(@GetUserId() user, @Body() req) {
     return this.studysService.acceptStudy(user, req);
   }
 
@@ -91,8 +97,9 @@ export class StudyController {
     summary: '스터디 가입요청 거절 및 강제 퇴장',
     description: '스터디아이디와 가입요청한 유저의 아이디를 받아 거절한다.',
   })
+  @UseGuards(JwtAccessGuard)
   @Delete('admin')
-  rejectStudy(user = { userId: 75 }, @Body() req) {
+  rejectStudy(@GetUserId() user, @Body() req) {
     return this.studysService.rejectStudy(user, req);
   }
 
@@ -100,8 +107,9 @@ export class StudyController {
     summary: '스터디 관리자 권한 양도',
     description: '스터디 관리자 권한을 다른 멤버에게 양도한다.',
   })
+  @UseGuards(JwtAccessGuard)
   @Patch('admin/transfer-admin')
-  transferAdmin(user = { userId: 75 }, @Body() req) {
+  transferAdmin(@GetUserId() user, @Body() req) {
     return this.studysService.transferAdmin(user, req);
   }
 }
