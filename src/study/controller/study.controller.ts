@@ -18,6 +18,7 @@ import { GetUserId } from 'src/common/decorator/get-user-id.decorator';
 import { JwtAccessGuard } from 'src/auth/guard/jwt-access-token.guard';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
+import { StudyCreateDto } from '../study-create-dto';
 
 @ApiTags('studies')
 @Controller('studies')
@@ -54,7 +55,7 @@ export class StudyController {
   })
   @UseGuards(JwtAccessGuard)
   @Post('')
-  createStudy(@GetUserId() user, @Body() content) {
+  createStudy(@GetUserId() user, @Body() content: StudyCreateDto) {
     return this.studysService.createStudy(user, content);
   }
 
