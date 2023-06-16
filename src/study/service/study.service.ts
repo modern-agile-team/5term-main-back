@@ -8,6 +8,7 @@ import { StudyRepository } from '../repository/study.repository';
 import { StudyMembersRepository } from '../repository/study_members.repository';
 import { StudyAdminsRepository } from '../repository/study_admins.repository';
 import { StudiesQueryDto } from '../studis-query-dto';
+import { UserRepository } from 'src/user/repositories/user.repository';
 
 @Injectable()
 export class StudyService {
@@ -18,6 +19,8 @@ export class StudyService {
     private studyAdminsRepository: StudyAdminsRepository,
     @InjectRepository(StudyMembersRepository)
     private studyMembersRepository: StudyMembersRepository,
+    @InjectRepository(UserRepository)
+    private userRepository: UserRepository,
   ) {}
 
   getStudyList(studiesQueryDto: StudiesQueryDto) {
@@ -32,6 +35,16 @@ export class StudyService {
     } catch {
       throw new BadRequestException('존재하지 않는 스터디');
     }
+  }
+
+  async getUserStudy(userId) {
+    const userInfo = await this.userRepository.getUserId({ userId: userId });
+    if (userInfo === undefined)
+      throw new BadRequestException('존재하지 않는 사용자입니다');
+    const memberInfo = await this.studyMembersRepository.getUserStudy(userId);
+
+    if (!!memberInfo[0]) return memberInfo;
+    else throw new BadRequestException('가입된 스터디가 없습니다.');
   }
 
   async createStudy(user, content) {

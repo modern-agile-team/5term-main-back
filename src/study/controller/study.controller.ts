@@ -48,6 +48,16 @@ export class StudyController {
   getStudy(@Param('id') studyId: number) {
     return this.studysService.getStudy(studyId);
   }
+  @ApiOperation({
+    summary: '유저의 스터디 조회',
+    description:
+      '유저의 아이디를 받아서 가입되어있는 스터디의 아이디를 리턴한다.',
+  })
+  @ApiParam({ name: '스터디 id', example: '/studies/75', required: true })
+  @Get('/userid/:id')
+  getUserStudy(@Param('id') userId: number) {
+    return this.studysService.getUserStudy(userId);
+  }
 
   @ApiOperation({
     summary: '스터디 생성기능',
