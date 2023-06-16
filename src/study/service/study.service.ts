@@ -52,7 +52,12 @@ export class StudyService {
         studyId,
       );
 
-      return { studyInfo, adminInfo, memberInfo };
+      return {
+        msg: '스터디 생성 성공',
+        studyInfo: studyInfo.identifiers,
+        adminInfo: adminInfo.identifiers,
+        memberInfo: memberInfo.identifiers,
+      };
     } catch {
       throw new BadRequestException('유효하지 않은 요청');
     }
