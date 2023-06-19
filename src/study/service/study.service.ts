@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { StudyRepository } from '../repository/study.repository';
 import { StudyMembersRepository } from '../repository/study_members.repository';
 import { StudyAdminsRepository } from '../repository/study_admins.repository';
-import { StudiesQueryDto } from '../dto/studis-query-dto';
+import { StudiesQueryDto } from '../dto/studies-query-dto';
 import { UserRepository } from 'src/user/repositories/user.repository';
 
 @Injectable()
@@ -24,6 +24,7 @@ export class StudyService {
   ) {}
 
   getStudyList(studiesQueryDto: StudiesQueryDto) {
+    // console.log(studiesQueryDto);
     return this.studyRepository.find({
       where: studiesQueryDto,
     });

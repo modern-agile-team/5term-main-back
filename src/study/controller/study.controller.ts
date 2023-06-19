@@ -6,14 +6,13 @@ import {
   Param,
   Patch,
   Post,
-  Query,
   UseFilters,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { StudyService } from '../service/study.service';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { StudiesQueryDto } from '../dto/studis-query-dto';
+import { StudiesQueryDto } from '../dto/studies-query-dto';
 import { GetUserId } from 'src/common/decorator/get-user-id.decorator';
 import { JwtAccessGuard } from 'src/auth/guard/jwt-access-token.guard';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
@@ -30,12 +29,11 @@ export class StudyController {
   @ApiOperation({
     summary: '스터디 조회',
     description:
-      'url에 변수를 넣으면 검색조건에 해당하는 스터디만 뽑아온다(없으면 모든 스터디 리턴)',
+      'body에 변수를 넣으면 검색조건에 해당하는 스터디만 뽑아온다(없으면 모든 스터디 리턴)',
   })
-  @ApiParam({ name: '검색 조건', example: '/studies/82?active=true' })
-  @Get('/list/')
-  getStudyList(@Query() studisQueryDto: StudiesQueryDto) {
-    return this.studysService.getStudyList(studisQueryDto);
+  @Post('/search')
+  getStudyList(@Body() studiesQueryDto: StudiesQueryDto) {
+    return this.studysService.getStudyList(studiesQueryDto);
   }
 
   @ApiOperation({
