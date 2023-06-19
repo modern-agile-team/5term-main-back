@@ -13,12 +13,12 @@ import {
 } from '@nestjs/common';
 import { StudyService } from '../service/study.service';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { StudiesQueryDto } from '../studis-query-dto';
+import { StudiesQueryDto } from '../dto/studis-query-dto';
 import { GetUserId } from 'src/common/decorator/get-user-id.decorator';
 import { JwtAccessGuard } from 'src/auth/guard/jwt-access-token.guard';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
-import { StudyCreateDto } from '../study-create-dto';
+import { StudyCreateDto } from '../dto/study-create-dto';
 
 @ApiTags('studies')
 @Controller('studies')
