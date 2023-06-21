@@ -7,20 +7,24 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ChatsModule } from './chats/chats.module';
-import { ChatsGateway } from './chats/chats.gateway';
+import { EventsModule } from './events/events.module';
 import typeORMConfig from 'typeorm.config';
 import * as config from 'config';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(typeORMConfig),
-    MongooseModule.forRoot(config.get('db').MONGO_DB_URI),
+    MongooseModule.forRoot(config.get('mongo'), {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }),
     AuthModule,
     UserModule,
     LightningModule,
     ChatsModule,
+    EventsModule,
   ],
   controllers: [AppController],
-  providers: [AppService, ChatsGateway],
+  providers: [AppService],
 })
 export class AppModule {}
