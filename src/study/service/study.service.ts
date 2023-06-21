@@ -9,7 +9,6 @@ import { StudyRepository } from '../repository/study.repository';
 import { StudyMembersRepository } from '../repository/study_members.repository';
 import { StudyAdminsRepository } from '../repository/study_admins.repository';
 import { UserRepository } from 'src/user/repositories/user.repository';
-import { error } from 'console';
 
 @Injectable()
 export class StudyService {
@@ -36,12 +35,15 @@ export class StudyService {
   }
 
   async getUsers(studyId) {
-    const studyInfo = await this.studyMembersRepository.find({
-      where: { study: studyId },
+    const studyInfo = await this.studyRepository.find({
+      where: { id: studyId },
     });
     if (!!studyInfo[0] === false)
       throw new BadRequestException('존재하지 않는 스터디');
-    return studyInfo;
+
+    return await this.studyMembersRepository.find({
+      where: { study: studyId },
+    });
   }
 
   async getUserStudy(userId) {
@@ -87,9 +89,9 @@ export class StudyService {
     const checkAdmin = await this.studyAdminsRepository.find({
       where: { user: user.userId, study: study.studyId },
     });
-    return !!checkAdmin[0]
-      ? this.studyRepository.deleteStudy(study.studyId)
-      : new UnauthorizedException('관리자 권한 없음');
+    if (!!checkAdmin[0] === false)
+      throw new UnauthorizedException('관리자 권한 없음');
+    return this.studyRepository.deleteStudy(study.studyId);
   }
 
   async joinStudy(user, study) {
@@ -106,9 +108,10 @@ export class StudyService {
     const studyInfo = await this.studyRepository.find({
       where: { id: study.studyId },
     });
-    return !!studyInfo[0]
-      ? this.studyMembersRepository.joinStudy(user.userId, study.studyId)
-      : new BadRequestException('유효하지 않은 스터디.');
+
+    if (!!studyInfo[0] === false)
+      throw new BadRequestException('유효하지 않은 스터디.');
+    return this.studyMembersRepository.joinStudy(user.userId, study.studyId);
   }
 
   async exitStudy(user, study) {
@@ -117,7 +120,7 @@ export class StudyService {
     });
     if (!studyInfo[0]) throw new BadRequestException('존재하지 않는 스터디');
     const memberInfo = await this.studyMembersRepository.find({
-      where: { studyInfo: study.studyId, user: user.userId },
+      where: { study: study.studyId, user: user.userId },
     });
     if (!memberInfo[0]) throw new BadRequestException('멤버가 아님');
 
@@ -137,9 +140,9 @@ export class StudyService {
       where: { study: req.studyId, user: req.userId },
     });
 
-    if (memberInfo[0].isAccept === 1)
-      return await this.studyMembersRepository.expelStudy(req);
-    else throw new BadRequestException('멤버가 아님');
+    if (!!memberInfo[0] === false || memberInfo[0].isAccept !== 1)
+      throw new BadRequestException('멤버가 아님');
+    else return await this.studyMembersRepository.expelStudy(req);
   }
 
   async acceptStudy(user, req) {
@@ -166,7 +169,6 @@ export class StudyService {
     const checkAdmin = await this.studyAdminsRepository.find({
       where: { user: user.userId, study: req.studyId },
     });
-    console.log(!!checkAdmin[0]);
     const memberInfo = await this.studyMembersRepository.find({
       where: { user: req.userId, study: req.studyId },
     });
