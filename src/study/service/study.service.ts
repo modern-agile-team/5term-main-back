@@ -166,8 +166,15 @@ export class StudyService {
     const checkAdmin = await this.studyAdminsRepository.find({
       where: { user: user.userId, study: req.studyId },
     });
-    return !!checkAdmin[0]
-      ? this.studyAdminsRepository.transferAdmin(user, req.studyId)
-      : new UnauthorizedException('관리자 권한 없음');
+    console.log(!!checkAdmin[0]);
+    const memberInfo = await this.studyMembersRepository.find({
+      where: { user: req.userId, study: req.studyId },
+    });
+    if (!!checkAdmin[0] === false)
+      throw new UnauthorizedException('관리자 권한 없음');
+    if (!!memberInfo[0] === false || memberInfo[0].isAccept !== 1)
+      throw new BadRequestException('멤버가 아님');
+
+    return this.studyAdminsRepository.transferAdmin(req);
   }
 }

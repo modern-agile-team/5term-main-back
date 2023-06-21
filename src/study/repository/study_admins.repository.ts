@@ -10,7 +10,10 @@ export class StudyAdminsRepository extends Repository<StudyAdmins> {
       .execute();
   }
 
-  async transferAdmin(userId, studyId) {
+  async transferAdmin(req) {
+    const studyId = req.studyId;
+    const userId = req.userId;
+
     return await this.createQueryBuilder()
       .update()
       .set({ user: userId })
