@@ -9,6 +9,7 @@ import { StudyRepository } from '../repository/study.repository';
 import { StudyMembersRepository } from '../repository/study_members.repository';
 import { StudyAdminsRepository } from '../repository/study_admins.repository';
 import { UserRepository } from 'src/user/repositories/user.repository';
+import { error } from 'console';
 
 @Injectable()
 export class StudyService {
@@ -92,6 +93,16 @@ export class StudyService {
   }
 
   async joinStudy(user, study) {
+    const memberInfo = await this.studyMembersRepository.find({
+      where: { study: study.studyId, user: user.userId },
+    });
+    if (!!memberInfo[0]) {
+      if (memberInfo[0].isAccept === 0)
+        return new BadRequestException('이미 신청한 스터디');
+      if (memberInfo[0].isAccept === 1)
+        return new BadRequestException('이미 가입된 스터디');
+    }
+
     const studyInfo = await this.studyRepository.find({
       where: { id: study.studyId },
     });
@@ -115,22 +126,40 @@ export class StudyService {
       study.studyId,
     );
   }
+
+  async expelStudy(user, req) {
+    const checkAdmin = await this.studyAdminsRepository.find({
+      where: { user: user.userId, study: req.studyId },
+    });
+    if (!checkAdmin[0]) throw new UnauthorizedException('관리자 권한 없음');
+
+    const memberInfo = await this.studyMembersRepository.find({
+      where: { study: req.studyId, user: req.userId },
+    });
+
+    if (memberInfo[0].isAccept === 1)
+      return await this.studyMembersRepository.expelStudy(req);
+    else throw new BadRequestException('멤버가 아님');
+  }
+
   async acceptStudy(user, req) {
     const checkAdmin = await this.studyAdminsRepository.find({
       where: { user: user.userId, study: req.studyId },
     });
-    return !!checkAdmin[0]
-      ? this.studyMembersRepository.acceptStudy(user, req.studyId)
-      : new UnauthorizedException('관리자 권한 없음');
+    if (!checkAdmin[0]) throw new UnauthorizedException('관리자 권한 없음');
+    const result = await this.studyMembersRepository.acceptStudy(req);
+    if (result.affected === 0) throw new BadRequestException('수락 요청 실패');
+    else return result;
   }
 
   async rejectStudy(user, req) {
     const checkAdmin = await this.studyAdminsRepository.find({
       where: { user: user.userId, study: req.studyId },
     });
-    return !!checkAdmin[0]
-      ? this.studyMembersRepository.rejectStudy(user, req.studyId)
-      : new UnauthorizedException('관리자 권한 없음');
+    if (!checkAdmin[0]) throw new UnauthorizedException('관리자 권한 없음');
+    const result = await this.studyMembersRepository.rejectStudy(req);
+    if (result.affected === 0) throw new BadRequestException('거절 요청 실패');
+    else return result;
   }
 
   async transferAdmin(user, req) {

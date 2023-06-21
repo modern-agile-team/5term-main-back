@@ -117,6 +117,17 @@ export class StudyController {
   }
 
   @ApiOperation({
+    summary: '스터디 추방기능',
+    description:
+      '추방할 유저의 아이디와 스터디의 아이디를 받아 멤버 테이블에서 해당 열의 is_accept를 2로 변경한다. ',
+  })
+  @UseGuards(JwtAccessGuard)
+  @Patch('member/admin')
+  expelStudy(@GetUserId() user, @Body() req) {
+    return this.studyService.expelStudy(user, req);
+  }
+
+  @ApiOperation({
     summary: '스터디 가입요청 수락',
     description: '해당 스터디에 가입하려는 사람의 아이디를 받아 수락한다.',
   })
@@ -127,7 +138,7 @@ export class StudyController {
   }
 
   @ApiOperation({
-    summary: '스터디 가입요청 거절 및 강제 퇴장',
+    summary: '스터디 가입요청 거절',
     description: '스터디아이디와 가입요청한 유저의 아이디를 받아 거절한다.',
   })
   @UseGuards(JwtAccessGuard)

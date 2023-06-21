@@ -41,9 +41,20 @@ export class StudyMembersRepository extends Repository<StudyToUserEntity> {
       .execute();
   }
 
-  async acceptStudy(user, req) {
+  async expelStudy(req) {
     const studyId = req.studyId;
-    const userId = user.userId;
+    const userId = req.userId;
+    return this.createQueryBuilder()
+      .update()
+      .set({ isAccept: 2 })
+      .where('user_id = :userId', { userId })
+      .andWhere('study_id = :studyId', { studyId })
+      .execute();
+  }
+
+  async acceptStudy(req) {
+    const studyId = req.studyId;
+    const userId = req.userId;
     return this.createQueryBuilder()
       .update()
       .set({ isAccept: 1 })
@@ -52,9 +63,9 @@ export class StudyMembersRepository extends Repository<StudyToUserEntity> {
       .execute();
   }
 
-  async rejectStudy(userId, req) {
+  async rejectStudy(req) {
     const studyId = req.studyId;
-
+    const userId = req.userId;
     return this.createQueryBuilder()
       .delete()
       .where('user_id = :userId', { userId })
