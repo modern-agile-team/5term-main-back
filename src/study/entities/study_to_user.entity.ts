@@ -2,17 +2,16 @@ import { CommonEntity } from 'src/common/entities/common.entity';
 import { User } from 'src/user/entities/user.entity';
 import { Entity, ManyToOne, JoinColumn, Column } from 'typeorm';
 import { Study } from './study.entity';
-
 @Entity({
   name: 'study_to_user',
 })
 export class StudyToUserEntity extends CommonEntity {
-  @ManyToOne(() => Study, (studyInfo) => studyInfo.studyToUser)
+  @ManyToOne(() => Study, (study) => study.studyToUser)
   @JoinColumn({
     name: 'study_id',
     referencedColumnName: 'id',
   })
-  studyInfo: Study;
+  study: Study;
 
   @ManyToOne(() => User, (user) => user.studyToUser)
   @JoinColumn({

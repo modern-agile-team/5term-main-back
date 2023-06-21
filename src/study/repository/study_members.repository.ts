@@ -20,14 +20,14 @@ export class StudyMembersRepository extends Repository<StudyToUserEntity> {
     return await this.createQueryBuilder()
       .insert()
       .into(StudyToUserEntity)
-      .values({ studyInfo: { id: studyId }, user: { id: userId }, isAccept: 1 })
+      .values({ study: { id: studyId }, user: { id: userId }, isAccept: 1 })
       .execute();
   }
   async joinStudy(userId: number, studyId: number) {
     return await this.createQueryBuilder()
       .insert()
       .into(StudyToUserEntity)
-      .values({ studyInfo: { id: studyId }, user: { id: userId } })
+      .values({ study: { id: studyId }, user: { id: userId } })
       .execute();
   }
 

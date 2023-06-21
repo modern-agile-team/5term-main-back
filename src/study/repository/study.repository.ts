@@ -10,11 +10,12 @@ export class StudyRepository extends Repository<Study> {
       .execute();
   }
 
-  getStudy(studyId) {
-    return this.createQueryBuilder('study')
+  async getStudy(studyId) {
+    return await this.createQueryBuilder('study')
       .leftJoinAndSelect('study.studyAdmin', 'admin')
+      .leftJoinAndSelect('admin.user', 'adminUser')
       .leftJoinAndSelect('study.studyToUser', 'member')
-      .leftJoinAndSelect('member.user', 'user')
+      .leftJoinAndSelect('member.user', 'memberUser')
       .where('study.id = :studyId', { studyId })
       .getMany();
   }

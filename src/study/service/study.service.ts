@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -23,19 +24,18 @@ export class StudyService {
     private userRepository: UserRepository,
   ) {}
 
-  getStudyList(studiesQueryDto: StudiesQueryDto) {
-    // console.log(studiesQueryDto);
-    return this.studyRepository.find({
-      where: studiesQueryDto,
-    });
+  async getStudyList() {
+    return await this.studyRepository.find();
   }
 
-  getStudy(studyId) {
-    try {
-      return this.studyRepository.getStudy(studyId);
-    } catch {
-      throw new BadRequestException('존재하지 않는 스터디');
-    }
+  async getStudy(studyId) {
+    return await this.studyRepository.getStudy(studyId);
+  }
+
+  async getUsers(studyId) {
+    return await this.studyMembersRepository.find({
+      where: { study: studyId },
+    });
   }
 
   async getUserStudy(userId) {
@@ -45,7 +45,7 @@ export class StudyService {
     const memberInfo = await this.studyMembersRepository.getUserStudy(userId);
 
     if (!!memberInfo[0]) return memberInfo;
-    else throw new BadRequestException('가입된 스터디가 없습니다.');
+    else throw new NotFoundException('가입된 스터디가 없습니다.');
   }
 
   async createStudy(user, content) {
@@ -101,7 +101,7 @@ export class StudyService {
     });
     if (!studyInfo[0]) throw new BadRequestException('존재하지 않는 스터디');
     const memberInfo = await this.studyMembersRepository.find({
-      where: { study_id: study.studyId, user_id: user.userId },
+      where: { studyInfo: study.studyId, user: user.userId },
     });
     if (!memberInfo[0]) throw new BadRequestException('멤버가 아님');
 

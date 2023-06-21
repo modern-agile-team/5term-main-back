@@ -18,6 +18,7 @@ import { JwtAccessGuard } from 'src/auth/guard/jwt-access-token.guard';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 import { StudyCreateDto } from '../dto/study-create-dto';
+import { description } from 'commander';
 
 @ApiTags('studies')
 @Controller('studies')
@@ -27,25 +28,42 @@ export class StudyController {
   constructor(private studysService: StudyService) {}
 
   @ApiOperation({
-    summary: '스터디 조회',
-    description:
-      'body에 변수를 넣으면 검색조건에 해당하는 스터디만 뽑아온다(없으면 모든 스터디 리턴)',
+    summary: '스터디 목록 조회',
+    description: '모든 스터디의 목록을 리턴한다.',
   })
-  @Post('/search')
-  getStudyList(@Body() studiesQueryDto: StudiesQueryDto) {
-    return this.studysService.getStudyList(studiesQueryDto);
+  @Get('/search')
+  getStudyList() {
+    return this.studysService.getStudyList();
   }
 
   @ApiOperation({
     summary: '스터디 상세 조회',
-    description:
-      '스터디 아이디를 받아서 스터디정보,관리자 멤버 정보를 리턴한다.',
+    description: '스터디 아이디를 받아서 스터디정보,관리자 정보를 리턴한다.',
   })
-  @ApiParam({ name: '스터디 id', example: '/studies/', required: true })
-  @Get('/studyid/:id')
+  @ApiParam({
+    name: '스터디 id',
+    example: '/studies/search/study-info/75',
+    required: true,
+  })
+  @Get('/search/study-info/:id')
   getStudy(@Param('id') studyId: number) {
     return this.studysService.getStudy(studyId);
   }
+
+  @ApiOperation({
+    summary: '스터디 유저 조회',
+    description: '스터디 아이디를 받고 해당하는 스터디의 멤버들을 리턴한다.',
+  })
+  @ApiParam({
+    name: '스터디 id',
+    example: '/studies/search/members/75',
+    required: true,
+  })
+  @Get('/search/members/:id')
+  getUser(@Param('id') studyId: number) {
+    return this.studysService.getUsers(studyId);
+  }
+
   @ApiOperation({
     summary: '유저의 스터디 조회',
     description:

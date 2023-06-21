@@ -24,12 +24,12 @@ export class StudiesQueryDto {
   @IsOptional()
   active?: boolean;
 
-  // @ApiPropertyOptional({
-  //   description: ' user id filtering',
-  // })
-  // @Min(1)
-  // @IsInt()
-  // @Type(() => Number)
-  // @IsOptional()
-  // userId?: number;
+  //   @ApiPropertyOptional({
+  //     description: ' user id filtering',
+  //   })
+  //   @Min(1)
+  //   @IsInt()
+  //   @Type(() => Number)
+  //   @IsOptional()
+  //   userId?: number;
 }
