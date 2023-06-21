@@ -1,31 +1,34 @@
-// import { IsNotEmpty, IsString } from 'class-validator';
-// import { Schema, SchemaFactory, Prop } from '@nestjs/mongoose';
-// import { SchemaOptions, Document, Types } from 'mongoose';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { Schema, SchemaFactory, Prop } from '@nestjs/mongoose';
+import { SchemaOptions, Document } from 'mongoose';
 
-// const options: SchemaOptions = {
-//   collection: 'lightning-chats',
-//   timestamps: true,
-// };
+const options: SchemaOptions = {
+  collection: 'lightning-chats',
+  timestamps: true,
+};
 
-// @Schema(options)
-// export class Chatting extends Document {
-//   @Prop({
-//     type: {
-//       _id: { type: Types.ObjectId, required: true, ref: 'sockets' },
-//       id: { type: String },
-//       username: { type: String, requried: true },
-//     },
-//   })
-//   @IsNotEmpty()
-//   @IsString()
-//   user: SocketModel;
+@Schema(options)
+export class LightningChatting extends Document {
+  @Prop({ required: true })
+  @IsNotEmpty()
+  @IsNumber()
+  senderId: number;
 
-//   @Prop({
-//     required: true,
-//   })
-//   @IsNotEmpty()
-//   @IsString()
-//   chat: string;
-// }
+  @Prop({ required: true })
+  @IsNotEmpty()
+  @IsNumber()
+  receiver: number;
 
-// export const ChattingSchema = SchemaFactory.createForClass(Chatting);
+  @Prop({ required: true })
+  @IsNotEmpty()
+  @IsNumber()
+  lightningBoardNo: number;
+
+  @Prop({ required: true })
+  @IsNotEmpty()
+  @IsString()
+  content: string;
+}
+
+export const LightningChattingSchema =
+  SchemaFactory.createForClass(LightningChatting);
