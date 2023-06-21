@@ -8,7 +8,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { StudyRepository } from '../repository/study.repository';
 import { StudyMembersRepository } from '../repository/study_members.repository';
 import { StudyAdminsRepository } from '../repository/study_admins.repository';
-import { StudiesQueryDto } from '../dto/studies.query.dto';
 import { UserRepository } from 'src/user/repositories/user.repository';
 
 @Injectable()
@@ -29,23 +28,29 @@ export class StudyService {
   }
 
   async getStudy(studyId) {
-    return await this.studyRepository.getStudy(studyId);
+    const studyInfo = await this.studyRepository.getStudy(studyId);
+    if (!!studyInfo[0] === false)
+      throw new BadRequestException('존재하지 않는 스터디');
+    return studyInfo;
   }
 
   async getUsers(studyId) {
-    return await this.studyMembersRepository.find({
+    const studyInfo = await this.studyMembersRepository.find({
       where: { study: studyId },
     });
+    if (!!studyInfo[0] === false)
+      throw new BadRequestException('존재하지 않는 스터디');
+    return studyInfo;
   }
 
   async getUserStudy(userId) {
     const userInfo = await this.userRepository.getUserId({ userId: userId });
     if (userInfo === undefined)
-      throw new BadRequestException('존재하지 않는 사용자입니다');
+      throw new BadRequestException('존재하지 않는 사용자');
     const memberInfo = await this.studyMembersRepository.getUserStudy(userId);
 
     if (!!memberInfo[0]) return memberInfo;
-    else throw new NotFoundException('가입된 스터디가 없습니다.');
+    else throw new NotFoundException('가입된 스터디가 없음.');
   }
 
   async createStudy(user, content) {
@@ -73,7 +78,7 @@ export class StudyService {
         memberInfo: memberInfo.identifiers,
       };
     } catch {
-      throw new BadRequestException('유효하지 않은 요청');
+      throw new BadRequestException('스터디 생성 실패');
     }
   }
 
@@ -92,7 +97,7 @@ export class StudyService {
     });
     return !!studyInfo[0]
       ? this.studyMembersRepository.joinStudy(user.userId, study.studyId)
-      : new BadRequestException('유효하지 않은 스터디입니다.');
+      : new BadRequestException('유효하지 않은 스터디.');
   }
 
   async exitStudy(user, study) {

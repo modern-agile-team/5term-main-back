@@ -12,20 +12,18 @@ import {
 } from '@nestjs/common';
 import { StudyService } from '../service/study.service';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { StudiesQueryDto } from '../dto/studies.query.dto';
 import { GetUserId } from 'src/common/decorator/get-user-id.decorator';
 import { JwtAccessGuard } from 'src/auth/guard/jwt-access-token.guard';
-import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
+import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
 import { StudyCreateDto } from '../dto/study.create.dto';
-import { description } from 'commander';
 
 @ApiTags('studies')
 @Controller('studies')
 @UseFilters(HttpExceptionFilter)
 @UseInterceptors(SuccessInterceptor)
 export class StudyController {
-  constructor(private studysService: StudyService) {}
+  constructor(private studyService: StudyService) {}
 
   @ApiOperation({
     summary: '스터디 목록 조회',
@@ -33,7 +31,7 @@ export class StudyController {
   })
   @Get('/search')
   getStudyList() {
-    return this.studysService.getStudyList();
+    return this.studyService.getStudyList();
   }
 
   @ApiOperation({
@@ -47,7 +45,7 @@ export class StudyController {
   })
   @Get('/search/study-info/:id')
   getStudy(@Param('id') studyId: number) {
-    return this.studysService.getStudy(studyId);
+    return this.studyService.getStudy(studyId);
   }
 
   @ApiOperation({
@@ -61,7 +59,7 @@ export class StudyController {
   })
   @Get('/search/members/:id')
   getUser(@Param('id') studyId: number) {
-    return this.studysService.getUsers(studyId);
+    return this.studyService.getUsers(studyId);
   }
 
   @ApiOperation({
@@ -72,7 +70,7 @@ export class StudyController {
   @ApiParam({ name: '스터디 id', example: '/studies/75', required: true })
   @Get('/userid/:id')
   getUserStudy(@Param('id') userId: number) {
-    return this.studysService.getUserStudy(userId);
+    return this.studyService.getUserStudy(userId);
   }
 
   @ApiOperation({
@@ -82,7 +80,7 @@ export class StudyController {
   @UseGuards(JwtAccessGuard)
   @Post('')
   createStudy(@GetUserId() user, @Body() content: StudyCreateDto) {
-    return this.studysService.createStudy(user, content);
+    return this.studyService.createStudy(user, content);
   }
 
   @ApiOperation({
@@ -93,7 +91,7 @@ export class StudyController {
   @UseGuards(JwtAccessGuard)
   @Patch('')
   deleteStudy(@GetUserId() user, @Body() study) {
-    return this.studysService.deleteStudy(user, study);
+    return this.studyService.deleteStudy(user, study);
   }
 
   @ApiOperation({
@@ -104,7 +102,7 @@ export class StudyController {
   @UseGuards(JwtAccessGuard)
   @Post('member')
   joinStudy(@GetUserId() user, @Body() study) {
-    return this.studysService.joinStudy(user, study);
+    return this.studyService.joinStudy(user, study);
   }
 
   @ApiOperation({
@@ -115,7 +113,7 @@ export class StudyController {
   @UseGuards(JwtAccessGuard)
   @Patch('member')
   exitStudy(@GetUserId() user, @Body() study) {
-    return this.studysService.exitStudy(user, study);
+    return this.studyService.exitStudy(user, study);
   }
 
   @ApiOperation({
@@ -125,7 +123,7 @@ export class StudyController {
   @UseGuards(JwtAccessGuard)
   @Patch('admin')
   acceptStudy(@GetUserId() user, @Body() req) {
-    return this.studysService.acceptStudy(user, req);
+    return this.studyService.acceptStudy(user, req);
   }
 
   @ApiOperation({
@@ -135,7 +133,7 @@ export class StudyController {
   @UseGuards(JwtAccessGuard)
   @Delete('admin')
   rejectStudy(@GetUserId() user, @Body() req) {
-    return this.studysService.rejectStudy(user, req);
+    return this.studyService.rejectStudy(user, req);
   }
 
   @ApiOperation({
@@ -145,6 +143,6 @@ export class StudyController {
   @UseGuards(JwtAccessGuard)
   @Patch('admin/transfer-admin')
   transferAdmin(@GetUserId() user, @Body() req) {
-    return this.studysService.transferAdmin(user, req);
+    return this.studyService.transferAdmin(user, req);
   }
 }
