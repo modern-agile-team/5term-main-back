@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAccessGuard } from 'src/auth/guard/jwt-access-token.guard';
-import { GetUserId } from 'src/common/decorator/get-user-id.decorator';
+import { GetUserId } from 'src/common/decorator/getUserId.decorator';
 import { ProfileService } from './profile.service';
 
 @Controller('profile')
@@ -17,6 +17,6 @@ export class ProfileController {
   @UseGuards(JwtAccessGuard)
   @UseInterceptors(FileInterceptor('file'))
   async uploadProfileImg(@UploadedFile() file, @GetUserId() userNo) {
-    return this.profileService.uploadProfileImg(file, userNo.userId);
+    return this.profileService.uploadProfileImg(file, userNo);
   }
 }
