@@ -79,8 +79,8 @@ export class StudyController {
   })
   @UseGuards(JwtAccessGuard)
   @Post('')
-  createStudy(@GetUserId() user, @Body() content: StudyCreateDto) {
-    return this.studyService.createStudy(user, content);
+  createStudy(@GetUserId() userId, @Body() content: StudyCreateDto) {
+    return this.studyService.createStudy(userId, content);
   }
 
   @ApiOperation({
@@ -90,8 +90,8 @@ export class StudyController {
   })
   @UseGuards(JwtAccessGuard)
   @Patch('')
-  deleteStudy(@GetUserId() user, @Body() study) {
-    return this.studyService.deleteStudy(user, study);
+  deleteStudy(@GetUserId() userId, @Body() study) {
+    return this.studyService.deleteStudy(userId, study);
   }
 
   @ApiOperation({
@@ -101,8 +101,8 @@ export class StudyController {
   })
   @UseGuards(JwtAccessGuard)
   @Post('member')
-  joinStudy(@GetUserId() user, @Body() study) {
-    return this.studyService.joinStudy(user, study);
+  joinStudy(@GetUserId() userId, @Body() study) {
+    return this.studyService.joinStudy(userId, study);
   }
 
   @ApiOperation({
@@ -112,8 +112,8 @@ export class StudyController {
   })
   @UseGuards(JwtAccessGuard)
   @Patch('member')
-  exitStudy(@GetUserId() user, @Body() study) {
-    return this.studyService.exitStudy(user, study);
+  exitStudy(@GetUserId() userId, @Body() study) {
+    return this.studyService.exitStudy(userId, study);
   }
 
   @ApiOperation({
@@ -123,8 +123,8 @@ export class StudyController {
   })
   @UseGuards(JwtAccessGuard)
   @Patch('member/admin')
-  expelStudy(@GetUserId() user, @Body() req) {
-    return this.studyService.expelStudy(user, req);
+  expelStudy(@GetUserId() userId, @Body() req) {
+    return this.studyService.expelStudy(userId, req);
   }
 
   @ApiOperation({
@@ -143,8 +143,8 @@ export class StudyController {
   })
   @UseGuards(JwtAccessGuard)
   @Delete('admin')
-  rejectStudy(@GetUserId() user, @Body() req) {
-    return this.studyService.rejectStudy(user, req);
+  rejectStudy(@GetUserId() userId, @Body() req) {
+    return this.studyService.rejectStudy(userId, req);
   }
 
   @ApiOperation({
@@ -153,7 +153,7 @@ export class StudyController {
   })
   @UseGuards(JwtAccessGuard)
   @Patch('admin/transfer-admin')
-  transferAdmin(@GetUserId() user, @Body() req) {
-    return this.studyService.transferAdmin(user, req);
+  transferAdmin(@GetUserId() userId, @Body() req) {
+    return this.studyService.transferAdmin(userId, req);
   }
 }
