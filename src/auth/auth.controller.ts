@@ -22,7 +22,7 @@ import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LoginDto } from './dto/login.dto';
 import { Response } from 'express';
 import { JwtRefreshGuard } from './guard/jwt-refresh-token.guard';
-import { GetUserId } from 'src/common/decorator/get-user-id.decorator';
+import { GetUserId } from 'src/common/decorator/getUserId.decorator';
 import { JwtAccessGuard } from './guard/jwt-access-token.guard';
 import * as config from 'config';
 import { GetPayload } from 'src/common/decorator/getPayload.decorator';

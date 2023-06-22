@@ -8,9 +8,18 @@ import * as config from 'config';
 
 const serverConfig = config.get('server');
 const swaggerConfig = config.get('swagger');
+import { setupSwagger } from './util/swagger';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  setupSwagger(app);
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  );
+
   app.use(
     ['/docs', '/docs-json'],
     expressBasicAuth({

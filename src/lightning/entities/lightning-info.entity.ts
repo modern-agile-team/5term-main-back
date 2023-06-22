@@ -25,6 +25,9 @@ export class LightningInfoEntity extends CommonEntity {
   @OneToMany(
     () => LightningToUserEntity,
     (lightningToUser) => lightningToUser.lightningInfo,
+    {
+      cascade: true,
+    },
   )
   lightningToUser: LightningToUserEntity[];
 }
