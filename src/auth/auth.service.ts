@@ -56,9 +56,10 @@ export class AuthService {
       throw new BadRequestException('닉네임 중복');
     }
 
-    const user: User = (
-      await this.userRepository.createUser(authCredentialDto, 0)
-    ).raw[0];
+    const user: User = await this.userRepository.createUser(
+      authCredentialDto,
+      0,
+    );
 
     const result = await this.userProfileRepository.createUserProfile(
       authCredentialDto,

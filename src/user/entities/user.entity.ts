@@ -17,6 +17,7 @@ import { LightningToUserEntity } from 'src/lightning/entities/lightning-to-user.
 import { StudyToUserEntity } from 'src/study/entities/study.to.user.entity';
 import { StudyAdmins } from 'src/study/entities/study.admins.entity';
 import { StudyRecruitBoard } from 'src/study_recruit/entities/study_recruit_board.entity';
+import { UserImage } from './user_image.entity';
 
 @Entity()
 export class User extends CommonEntity {
@@ -53,6 +54,7 @@ export class User extends CommonEntity {
   @OneToOne(
     () => AuthPasswordLogin,
     (authPasswordLogin) => authPasswordLogin.user,
+    { cascade: true },
   )
   authPasswordLogin: AuthPasswordLogin;
 
@@ -67,4 +69,9 @@ export class User extends CommonEntity {
     (studyRecruitBoard) => studyRecruitBoard.writer,
   )
   writer: StudyRecruitBoard[];
+
+  @OneToOne(() => UserImage, (userImage) => userImage.userId, {
+    cascade: true,
+  })
+  UserImage: UserImage;
 }

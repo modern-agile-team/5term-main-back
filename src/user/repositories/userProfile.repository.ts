@@ -26,8 +26,4 @@ export class UserProfileRepository extends Repository<UserProfile> {
       .where('userProfile.phone = :phone', { phone: phoneNumber })
       .getOne();
   }
-
-  async uploadProfileImg() {
-    return;
-  }
 }

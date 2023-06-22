@@ -29,7 +29,7 @@ export class UserProfile extends BaseEntity {
   @Column()
   bio?: string;
 
-  @OneToOne(() => User, { onDelete: 'CASCADE' })
+  @OneToOne(() => User, { onDelete: 'CASCADE', cascade: true })
   @JoinColumn({ name: 'user_id' })
   user: User;
 
