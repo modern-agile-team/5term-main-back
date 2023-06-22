@@ -9,14 +9,6 @@ export class UserRepository extends Repository<User> {
   async createUser(authCredentialDto: AuthCredentialDto, loginType: number) {
     const { id } = authCredentialDto;
 
-    // return await this.createQueryBuilder('User')
-    //   .insert()
-    //   .into(User)
-    //   .values({
-    //     userId: id,
-    //     loginType,
-    //   })
-    //   .execute();
     const user = { userId: id, loginType };
     return this.save(user);
   }

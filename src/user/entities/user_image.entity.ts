@@ -14,5 +14,5 @@ export class UserImage extends CommonEntity {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'user_id' })
-  userId: User;
+  userId: number;
 }

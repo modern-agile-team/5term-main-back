@@ -53,7 +53,7 @@ export class User extends CommonEntity {
 
   @OneToOne(
     () => AuthPasswordLogin,
-    (authPasswordLogin) => authPasswordLogin.user,
+    (authPasswordLogin) => authPasswordLogin.userId,
     { cascade: true },
   )
   authPasswordLogin: AuthPasswordLogin;

@@ -4,12 +4,19 @@ import { User } from '../entities/user.entity';
 
 @EntityRepository(UserImage)
 export class UserImageRepository extends Repository<UserImage> {
-  async updateUserImg(imgUrl, user: User) {
+  async createUserImg(user: User) {
     const userImage = {
-      imgUrl,
-      imgKey: `main-user/userNo:${user.userId}`,
-      userId: user,
+      imgUrl: null,
+      imgKey: `main-user/userNo_${user.id}`,
+      userId: user.id,
     };
+
+    return await this.save(userImage);
+  }
+
+  async updateUserImg(imgUrl, userId) {
+    const userImage = await this.findOne({ where: { userId } });
+    userImage.imgUrl = imgUrl;
 
     return await this.save(userImage);
   }
