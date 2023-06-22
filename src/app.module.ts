@@ -6,6 +6,9 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { RedisModule } from './redis/redis.module';
+import { S3Service } from './s3/s3.service';
+import { S3Module } from './s3/s3.module';
+import { ProfileModule } from './profile/profile.module';
 import typeORMConfig from 'typeorm.config';
 
 @Module({
@@ -15,8 +18,10 @@ import typeORMConfig from 'typeorm.config';
     UserModule,
     LightningModule,
     RedisModule,
+    S3Module,
+    ProfileModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, S3Service],
 })
 export class AppModule {}
