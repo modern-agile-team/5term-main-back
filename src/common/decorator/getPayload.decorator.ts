@@ -4,6 +4,6 @@ export const GetPayload = createParamDecorator(
   (data, ctx: ExecutionContext) => {
     const req = ctx.switchToHttp().getRequest();
 
-    return req.user.userId;
+    return req.user;
   },
 );
