@@ -26,6 +26,7 @@ import { UserImageRepository } from 'src/user/repositories/userImage.repository'
 import { UserProfile } from 'src/user/entities/user_profile.entity';
 import { UserImage } from 'src/user/entities/user_image.entity';
 import { AuthPasswordLogin } from './entities/auth_password_login.entity';
+import { log } from 'console';
 
 @Injectable()
 export class AuthService {
@@ -80,7 +81,7 @@ export class AuthService {
       );
 
     const authPasswordLogin: AuthPasswordLogin =
-      await await this.authPasswordLoginRepository.createPasswordUser(
+      await this.authPasswordLoginRepository.createPasswordUser(
         authCredentialDto,
         user,
       );

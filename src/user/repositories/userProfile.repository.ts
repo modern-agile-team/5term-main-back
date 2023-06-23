@@ -45,16 +45,47 @@ export class UserProfileRepository extends Repository<UserProfile> {
       .select('userProfile.name', 'name')
       .addSelect('userProfile.nickname', 'nickname')
       .addSelect('userProfile.phone', 'phone')
-      .addSelect('user.userId', 'userId')
-      .addSelect('userImage.imgUrl', 'imgUrl')
-      .addSelect('userProfile.email', 'email')
       .addSelect('userProfile.phone', 'phone')
+      .addSelect('userProfile.email', 'email')
+      .addSelect('userImage.imgUrl', 'imgUrl')
       .getRawOne();
 
     if (!userProfile) {
       return null;
     }
-    const user = userProfile.userId;
+
     return { ...userProfile };
   }
+
+  async changeEmail(email: string, userId: number) {
+    const userProfile = await this.findOne({
+      where: { userId },
+    });
+
+    userProfile.email = email;
+
+    return this.save(userProfile);
+  }
+
+  async changePhoneNumber(phone: string, userId: number) {
+    const userProfile = await this.findOne({
+      where: { userId },
+    });
+
+    userProfile.phone = phone;
+
+    return this.save(userProfile);
+  }
+
+  async changeBio(bio: string, userId: number) {
+    const userProfile = await this.findOne({
+      where: { userId },
+    });
+
+    userProfile.bio = bio;
+
+    return this.save(userProfile);
+  }
+
+  // async getMyPost(userId: number) {}
 }

@@ -6,6 +6,10 @@ import { UserRepository } from 'src/user/repositories/user.repository';
 import { UserImageRepository } from 'src/user/repositories/userImage.repository';
 import { ChangePasswordDto } from 'src/auth/dto/changePassword.dto';
 import { AuthPasswordLoginRepository } from 'src/auth/repositories/authPasswordLogin.repository';
+import { ChangeEmailDto } from './dto/changeEmail.dto';
+import { ChangePhoneDto } from './dto/changePhone.dto';
+import { ChangeBioDto } from './dto/changeBio.dto';
+import { LightningBoardRepository } from 'src/lightning/repositories/lightning_recruitment_boards.repository';
 
 @Injectable()
 export class ProfileService {
@@ -19,6 +23,8 @@ export class ProfileService {
     private userImageRepository: UserImageRepository,
     @InjectRepository(AuthPasswordLoginRepository)
     private authPasswordLoginRepository: AuthPasswordLoginRepository,
+    @InjectRepository(LightningBoardRepository)
+    private lightningBoardRepository: LightningBoardRepository,
   ) {}
 
   async uploadProfileImg(file, userNo) {
@@ -47,5 +53,34 @@ export class ProfileService {
       userNo,
       changePasswordDto,
     );
+  }
+
+  async changeEmail(userNo: number, changeEmailDto: ChangeEmailDto) {
+    const { email } = changeEmailDto;
+
+    return await this.userProfileRepository.changeEmail(email, userNo);
+  }
+
+  async changePhoneNumber(userNo: number, changePhoneDto: ChangePhoneDto) {
+    const { phone } = changePhoneDto;
+
+    return await this.userProfileRepository.changePhoneNumber(phone, userNo);
+  }
+
+  async changeBio(userNo: number, changeBioDto: ChangeBioDto) {
+    const { bio } = changeBioDto;
+
+    return await this.userProfileRepository.changeBio(bio, userNo);
+  }
+
+  async getMyPosts(userNo: number) {
+    const lightningrecruitmentBoards =
+      await this.lightningBoardRepository.getAllLightingRecruitmentBoardsByUserNo(
+        userNo,
+      );
+
+    const studyRecruitmentBoards = [];
+
+    return { lightningrecruitmentBoards, studyRecruitmentBoards };
   }
 }
