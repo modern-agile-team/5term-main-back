@@ -20,6 +20,7 @@ import {
   StudyChattingRoom,
   StudyChattingRoomSchema,
 } from './schemas/study-chats-rooms.schema';
+import { ParseObjectIdPipe } from './parse-object-id.pipe';
 
 @Module({
   imports: [
@@ -31,6 +32,6 @@ import {
     ]),
   ],
   controllers: [LightningChatsController, StudyChatsController],
-  providers: [LightningChatsService, StudyChatsService],
+  providers: [LightningChatsService, StudyChatsService, ParseObjectIdPipe],
 })
 export class ChatsModule {}
