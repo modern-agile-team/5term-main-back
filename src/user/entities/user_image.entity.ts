@@ -4,7 +4,7 @@ import { User } from './user.entity';
 
 @Entity()
 export class UserImage extends CommonEntity {
-  @Column({ name: 'img_url' })
+  @Column({ name: 'img_url', nullable: true })
   imgUrl: string;
 
   @Column({ name: 'img_key' })

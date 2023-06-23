@@ -22,7 +22,7 @@ export class LightningChatting extends Document {
   @Prop({ required: true })
   @IsNotEmpty()
   @IsNumber()
-  lightningBoardNo: number;
+  chattingRoomId: number;
 
   @Prop({ required: true })
   @IsNotEmpty()

@@ -5,16 +5,17 @@ import { User } from 'src/user/entities/user.entity';
 @EntityRepository(LightningBoardEntity)
 export class LightningBoardRepository extends Repository<LightningBoardEntity> {
   async createLightningBoard(
-    lightningNo: number,
+    lightningId: number,
     title: string,
     contents: string,
-    author: User,
+    authorId: number,
   ): Promise<InsertResult> {
     const lightningBoard = new LightningBoardEntity();
     lightningBoard.title = title;
     lightningBoard.contents = contents;
-    lightningBoard.author = author;
-    lightningBoard.lightningNo = lightningNo;
+    lightningBoard.authorId = authorId;
+    lightningBoard.lightningId = lightningId;
+
     const { raw } = await this.createQueryBuilder(
       'lightning_recruitment_boards',
     )
@@ -60,9 +61,7 @@ export class LightningBoardRepository extends Repository<LightningBoardEntity> {
   }
 
   async getAllLightningBoard(): Promise<LightningBoardEntity[]> {
-    const result = await this.createQueryBuilder('lightning_recruitment_boards')
-      .select()
-      .getMany();
+    const result = await this.createQueryBuilder().getMany();
     return result;
   }
 }

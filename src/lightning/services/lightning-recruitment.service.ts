@@ -14,16 +14,16 @@ export class LightningRecruitmentService {
   ) {}
 
   async createLightningBoard(
-    lightningNo: number,
+    lightningId: number,
     createLightningBoardDto: CreateLightningBoardDto,
   ) {
-    const { title, contents, author } = createLightningBoardDto;
+    const { title, contents, authorId } = createLightningBoardDto;
 
     const response = await this.lightningBoardRepository.createLightningBoard(
-      lightningNo,
+      lightningId,
       title,
       contents,
-      author,
+      authorId,
     );
 
     if (!response) {
