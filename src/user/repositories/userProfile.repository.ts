@@ -3,6 +3,7 @@ import { UserProfile } from '../entities/user_profile.entity';
 import { AuthCredentialDto } from './../../auth/dto/auth-credential.dto';
 import { User } from '../entities/user.entity';
 import { NicknameDuplicationCheckDto } from 'src/auth/dto/duplicationCheck.dto';
+import { BadRequestException } from '@nestjs/common';
 
 @EntityRepository(UserProfile)
 export class UserProfileRepository extends Repository<UserProfile> {
@@ -62,6 +63,10 @@ export class UserProfileRepository extends Repository<UserProfile> {
       where: { userId },
     });
 
+    if (userProfile.email === email) {
+      throw new BadRequestException('변경 전 이메일과 같은 이메일');
+    }
+
     userProfile.email = email;
 
     return this.save(userProfile);
@@ -71,6 +76,10 @@ export class UserProfileRepository extends Repository<UserProfile> {
     const userProfile = await this.findOne({
       where: { userId },
     });
+
+    if (userProfile.phone === phone) {
+      throw new BadRequestException('변경 전 전화번호와 같은 번호');
+    }
 
     userProfile.phone = phone;
 
@@ -86,6 +95,4 @@ export class UserProfileRepository extends Repository<UserProfile> {
 
     return this.save(userProfile);
   }
-
-  // async getMyPost(userId: number) {}
 }
