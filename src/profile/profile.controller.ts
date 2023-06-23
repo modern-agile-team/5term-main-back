@@ -17,9 +17,20 @@ import { ChangePhoneDto } from './dto/changePhone.dto';
 import { ChangeBioDto } from './dto/changeBio.dto';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 
-@Controller('profile')
+@Controller('profiles')
 export class ProfileController {
   constructor(private profileService: ProfileService) {}
+  @Get('/')
+  @ApiBearerAuth('access-token')
+  @ApiOperation({
+    summary: '프로필 가져오기',
+    description: '프로필 가져오는 api',
+  })
+  @UseGuards(JwtAccessGuard)
+  async getUserProfile(@GetUserId() userNo) {
+    return await this.profileService.getUserProfile(userNo);
+  }
+
   @Patch('/imgs')
   @ApiBearerAuth('access-token')
   @ApiOperation({
@@ -30,17 +41,6 @@ export class ProfileController {
   @UseInterceptors(FileInterceptor('file'))
   async uploadProfileImg(@UploadedFile() file, @GetUserId() userNo) {
     return this.profileService.uploadProfileImg(file, userNo);
-  }
-
-  @Get('/')
-  @ApiBearerAuth('access-token')
-  @ApiOperation({
-    summary: '프로필 가져오기',
-    description: '프로필 가져오는 api',
-  })
-  @UseGuards(JwtAccessGuard)
-  async getUserProfile(@GetUserId() userNo) {
-    return await this.profileService.getUserProfile(userNo);
   }
 
   @Patch('/password')

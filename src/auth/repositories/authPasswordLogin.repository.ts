@@ -23,7 +23,7 @@ export class AuthPasswordLoginRepository extends Repository<AuthPasswordLogin> {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    if (authPasswordLogin.password === password) {
+    if (await bcrypt.compare(password, authPasswordLogin.password)) {
       throw new BadRequestException('지금 사용중인 비밀번호와 같은 비밀번호');
     }
 

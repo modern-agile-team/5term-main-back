@@ -10,7 +10,6 @@ import {
   Delete,
   ParseIntPipe,
   Res,
-  Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthCredentialDto } from './dto/auth-credential.dto';
