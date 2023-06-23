@@ -14,17 +14,17 @@ export class LightningBoardEntity extends CommonEntity {
   contents: string;
 
   @Column({ type: 'int', nullable: false })
-  authorId: number;
+  author_id: number;
 
   @Column({ type: 'int', nullable: false })
-  lightningId: number;
+  lightning_id: number;
 
   @ManyToOne(() => User, (author: User) => author.lightningBoard, {
     onDelete: 'CASCADE',
   })
   @JoinColumn([
     {
-      name: 'authorId',
+      name: 'author_id',
       referencedColumnName: 'id',
     },
   ])
@@ -39,7 +39,7 @@ export class LightningBoardEntity extends CommonEntity {
   )
   @JoinColumn([
     {
-      name: 'lightningId',
+      name: 'lightning_id',
       referencedColumnName: 'id',
     },
   ])

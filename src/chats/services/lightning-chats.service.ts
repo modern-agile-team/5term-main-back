@@ -14,7 +14,11 @@ export class LightningChatsService {
   ) {}
 
   async getLightningChattingRooms(userId: number) {
-    return await this.lightningChattingRoomModel.find({ userId: userId });
+    return await this.lightningChattingRoomModel
+      .find({
+        $or: [{ 'userId.owner': userId }, { 'userId.applicant': userId }],
+      })
+      .exec();
   }
 
   async createLightningChattingRooms(

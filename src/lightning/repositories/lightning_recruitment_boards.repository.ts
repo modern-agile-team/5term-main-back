@@ -13,8 +13,8 @@ export class LightningBoardRepository extends Repository<LightningBoardEntity> {
     const lightningBoard = new LightningBoardEntity();
     lightningBoard.title = title;
     lightningBoard.contents = contents;
-    lightningBoard.authorId = authorId;
-    lightningBoard.lightningId = lightningId;
+    lightningBoard.author_id = authorId;
+    lightningBoard.lightning_id = lightningId;
 
     const { raw } = await this.createQueryBuilder(
       'lightning_recruitment_boards',

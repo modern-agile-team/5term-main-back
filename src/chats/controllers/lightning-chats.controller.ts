@@ -9,7 +9,7 @@ export class LightningChatsController {
 
   @Get()
   async getLightningChattingRooms() {
-    // return await this.lightningChatsService.getLightningChattingRooms(user.id);
+    return await this.lightningChatsService.getLightningChattingRooms(95);
   }
   @Post('lightningBoards/:boardId/authors/:authorId/users/:userId')
   async createLightningChattingRoom(

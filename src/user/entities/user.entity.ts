@@ -19,7 +19,7 @@ export class User extends CommonEntity {
 
   @OneToMany(
     () => LightningBoardEntity,
-    (lightningBoard: LightningBoardEntity) => lightningBoard.authorId,
+    (lightningBoard: LightningBoardEntity) => lightningBoard.author_id,
     {
       cascade: true,
     },

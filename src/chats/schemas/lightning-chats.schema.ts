@@ -1,6 +1,10 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Schema, SchemaFactory, Prop } from '@nestjs/mongoose';
-import { SchemaOptions, Document } from 'mongoose';
+import mongoose, { SchemaOptions, Document } from 'mongoose';
+import {
+  LightningChattingRoom,
+  LightningChattingRoomSchema,
+} from './lightning-chats-rooms.schema';
 
 const options: SchemaOptions = {
   collection: 'lightning-chats',
@@ -19,10 +23,13 @@ export class LightningChatting extends Document {
   @IsNumber()
   receiver: number;
 
-  @Prop({ required: true })
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'LightningChattingRoomSchema',
+  })
   @IsNotEmpty()
   @IsNumber()
-  chattingRoomId: number;
+  chattingRoomId: LightningChattingRoom;
 
   @Prop({ required: true })
   @IsNotEmpty()
