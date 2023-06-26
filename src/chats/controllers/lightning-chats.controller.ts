@@ -1,12 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
   Post,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { LightningChatsService } from '../services/lightning-chats.service';
@@ -45,7 +44,6 @@ export class LightningChatsController {
     return await this.lightningChatsService.getLightningChattings(roomId);
   }
 
-  @UsePipes(new ValidationPipe({ transform: true }))
   @Post('senders/:senderId/receivers/:receiverId')
   async createLightningChattings(
     @Param('senderId', ParseIntPipe) senderId: number,
@@ -56,6 +54,15 @@ export class LightningChatsController {
       senderId,
       receiverId,
       createLightningChattingDto,
+    );
+  }
+
+  @Delete(':roomId')
+  async deleteLightningChattingRooms(
+    @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
+  ) {
+    return await this.lightningChatsService.deleteLightningChattingRooms(
+      roomId,
     );
   }
 }

@@ -3,7 +3,7 @@ import { Schema, SchemaFactory, Prop } from '@nestjs/mongoose';
 import { SchemaOptions, Document } from 'mongoose';
 
 const options: SchemaOptions = {
-  collection: 'study-chats',
+  collection: 'study_chats',
   timestamps: true,
 };
 
@@ -28,6 +28,9 @@ export class StudyChatting extends Document {
   @IsNotEmpty()
   @IsString()
   content: string;
+
+  @Prop({ type: Date, default: false })
+  deletedAt: Date;
 }
 
 export const StudyChattingSchema = SchemaFactory.createForClass(StudyChatting);

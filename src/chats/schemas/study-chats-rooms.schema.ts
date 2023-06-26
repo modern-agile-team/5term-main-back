@@ -3,7 +3,7 @@ import { Schema, SchemaFactory, Prop } from '@nestjs/mongoose';
 import { SchemaOptions, Document } from 'mongoose';
 
 const options: SchemaOptions = {
-  collection: 'study-chats-rooms',
+  collection: 'study_chats_rooms',
   timestamps: true,
 };
 
@@ -18,6 +18,9 @@ export class StudyChattingRoom extends Document {
   @IsNotEmpty()
   @IsNumber()
   userId: number;
+
+  @Prop({ type: Date, default: false })
+  deletedAt: Date;
 }
 
 export const StudyChattingRoomSchema =
