@@ -24,8 +24,8 @@ export class LightningChattingRoom extends Document {
   @IsNumber()
   applicant: number;
 
-  @Prop({ type: Date, default: false })
-  deletedAt: Date | boolean;
+  @Prop({ type: Date, default: null })
+  deletedAt: Date | null;
 }
 
 export const LightningChattingRoomSchema = SchemaFactory.createForClass(

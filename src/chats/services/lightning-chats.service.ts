@@ -17,7 +17,10 @@ export class LightningChatsService {
   async getLightningChattingRooms(userId: number) {
     return await this.lightningChattingRoomModel
       .find({
-        $or: [{ owner: userId }, { applicant: userId }],
+        $and: [
+          { $or: [{ owner: userId }, { applicant: userId }] },
+          { deletedAt: null },
+        ],
       })
       .exec();
   }
@@ -53,6 +56,12 @@ export class LightningChatsService {
       receiver: receiverId,
       chatting_room_id: chattingRoomId,
       content: content,
+    });
+  }
+
+  async deleteLightningChattingRooms(roomId: mongoose.Types.ObjectId) {
+    return await this.lightningChattingRoomModel.findByIdAndUpdate(roomId, {
+      deletedAt: new Date(),
     });
   }
 }
