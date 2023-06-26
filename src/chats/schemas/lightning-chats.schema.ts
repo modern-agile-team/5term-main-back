@@ -20,10 +20,9 @@ export class LightningChatting extends Document {
   @IsNumber()
   receiver: number;
 
-  @Prop({ required: true })
+  @Prop({ type: mongoose.Types.ObjectId, ref: LightningChattingRoom.name })
   @IsNotEmpty()
-  @IsNumber()
-  chatting_room_id: LightningChattingRoom;
+  chatting_room_id: mongoose.Types.ObjectId;
 
   @Prop({ required: true })
   @IsNotEmpty()
@@ -33,10 +32,3 @@ export class LightningChatting extends Document {
 
 export const LightningChattingSchema =
   SchemaFactory.createForClass(LightningChatting);
-
-// LightningChattingSchema.virtual('room', {
-//   ref: 'LightningChattingRoom', // 참조할 collections
-//   localField: 'chatting_room_id', // 현재 스키마에 선언되어 있는 참조할 필드
-//   foreignField: '_id', // collections에서 참조할 필드
-//   justOne: true, // 하나만 반환하는지 여부
-// });

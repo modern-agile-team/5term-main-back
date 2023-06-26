@@ -1,9 +1,18 @@
-import { ObjectID } from 'mongodb';
-import { Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { LightningChatsService } from '../services/lightning-chats.service';
 import { ParseObjectIdPipe } from '../parse-object-id.pipe';
 import mongoose from 'mongoose';
+import { CreateLightningChattingDto } from '../dtos/create-lightning-chattings.dto';
 
 @ApiTags('chats')
 @Controller('lightning-chats')
@@ -34,5 +43,19 @@ export class LightningChatsController {
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
   ) {
     return await this.lightningChatsService.getLightningChattings(roomId);
+  }
+
+  @UsePipes(new ValidationPipe({ transform: true }))
+  @Post('senders/:senderId/receivers/:receiverId')
+  async createLightningChattings(
+    @Param('senderId', ParseIntPipe) senderId: number,
+    @Param('receiverId', ParseIntPipe) receiverId: number,
+    @Body() createLightningChattingDto: CreateLightningChattingDto,
+  ) {
+    return await this.lightningChatsService.createLightningChattings(
+      senderId,
+      receiverId,
+      createLightningChattingDto,
+    );
   }
 }

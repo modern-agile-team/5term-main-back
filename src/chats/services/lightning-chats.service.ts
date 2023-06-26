@@ -1,3 +1,4 @@
+import { CreateLightningChattingDto } from './../dtos/create-lightning-chattings.dto';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LightningChatting } from '../schemas/lightning-chats.schema';
@@ -37,5 +38,21 @@ export class LightningChatsService {
     return await this.lightningChattingModel
       .find({ chatting_room_id: roomId })
       .exec();
+  }
+
+  async createLightningChattings(
+    senderId: number,
+    receiverId: number,
+    createLightningChattingDto: CreateLightningChattingDto,
+  ) {
+    const { content, roomId } = createLightningChattingDto;
+    const chattingRoomId = new mongoose.Types.ObjectId(roomId);
+
+    return await this.lightningChattingModel.create({
+      sender: senderId,
+      receiver: receiverId,
+      chatting_room_id: chattingRoomId,
+      content: content,
+    });
   }
 }
