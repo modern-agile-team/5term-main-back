@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { StudyModule } from './study/study.module';
 import { RedisModule } from './redis/redis.module';
+import { StudyRecruitModule } from './study_recruit/study_recruit.module';
 import typeORMConfig from 'typeorm.config';
 
 @Module({
@@ -17,6 +18,7 @@ import typeORMConfig from 'typeorm.config';
     StudyModule,
     LightningModule,
     RedisModule,
+    StudyRecruitModule,
   ],
   controllers: [AppController],
   providers: [AppService],
