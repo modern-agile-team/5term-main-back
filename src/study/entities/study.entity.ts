@@ -2,7 +2,7 @@ import { CommonEntity } from 'src/common/entities/common.entity';
 import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
 import { StudyToUserEntity } from './study.to.user.entity';
 import { StudyAdmins } from './study.admins.entity';
-import { StudyRecruitBoard } from 'src/study_recruit/entities/study_recruit_board.entity';
+import { StudyRecruitBoardEntity } from 'src/study_recruit/entities/study_recruit_board.entity';
 
 @Entity({
   name: 'study',
@@ -21,8 +21,8 @@ export class Study extends CommonEntity {
   studyAdmin: StudyAdmins[];
 
   @OneToMany(
-    () => StudyRecruitBoard,
+    () => StudyRecruitBoardEntity,
     (studyRecruitBoard) => studyRecruitBoard.study,
   )
-  studyRecruitBoard: StudyRecruitBoard[];
+  studyRecruitBoard: StudyRecruitBoardEntity[];
 }

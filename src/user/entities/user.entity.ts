@@ -16,7 +16,7 @@ import { UserScheldule } from './user_schedule.entity';
 import { LightningToUserEntity } from 'src/lightning/entities/lightning-to-user.entity';
 import { StudyToUserEntity } from 'src/study/entities/study.to.user.entity';
 import { StudyAdmins } from 'src/study/entities/study.admins.entity';
-import { StudyRecruitBoard } from 'src/study_recruit/entities/study_recruit_board.entity';
+import { StudyRecruitBoardEntity } from 'src/study_recruit/entities/study_recruit_board.entity';
 
 @Entity()
 export class User extends CommonEntity {
@@ -63,8 +63,8 @@ export class User extends CommonEntity {
   studyAdmin: StudyAdmins[];
 
   @OneToMany(
-    () => StudyRecruitBoard,
-    (studyRecruitBoard) => studyRecruitBoard.writer,
+    () => StudyRecruitBoardEntity,
+    (StudyRecruitBoardEntity) => StudyRecruitBoardEntity.writer,
   )
-  writer: StudyRecruitBoard[];
+  writer: StudyRecruitBoardEntity[];
 }

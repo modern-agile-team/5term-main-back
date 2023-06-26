@@ -1,18 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from 'aws-sdk/clients/appstream';
 import { IsNumber, IsNotEmpty, IsString } from 'class-validator';
 import { Study } from 'src/study/entities/study.entity';
 
-export class CreatestudyBoardDto {
-  @ApiProperty({
-    example: '75',
-    description: '작성자',
-    required: true,
-  })
-  @IsNumber()
-  @IsNotEmpty()
-  writer: User;
-
+export class CreateStudyBoardDto {
   @ApiProperty({
     example: '모집글 제목 예시',
     description: 'title',
