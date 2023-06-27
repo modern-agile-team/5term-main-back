@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { StudyRecruitBoardRepository } from '../reoisitories/study_recruitment_repository';
 import { CreateStudyBoardDto } from '../dto/create-study-board-dto';
@@ -37,6 +41,8 @@ export class StudyRecruitService {
     const boardInfo = await this.studyRecruitRepository.getStudyRecruitBoard(
       boardId,
     );
+    if (!!boardInfo === false)
+      throw new BadRequestException('존재하지 않는 게시글');
     return boardInfo;
   }
 }

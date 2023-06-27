@@ -45,4 +45,12 @@ export class StudyRecruitController {
   getStudyRecruitBoard(@Param() board) {
     return this.studyRecruitService.getStudyRecruitBoard(board.id);
   }
+
+  // @ApiOperation({
+  //   summary: '스터디 모집글 목록 조회',
+  // })
+  // @Get('/list')
+  // getStudyRecruitBoardList(){
+  //   return this.studyRecruitService.getStudyRecruitBoardList()
+  // }
 }
