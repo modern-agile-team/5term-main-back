@@ -45,4 +45,10 @@ export class StudyRecruitService {
       throw new BadRequestException('존재하지 않는 게시글');
     return boardInfo;
   }
+
+  async getStudyRecruitBoardList() {
+    return await this.studyRecruitRepository.find({
+      select: ['id', 'title'],
+    });
+  }
 }

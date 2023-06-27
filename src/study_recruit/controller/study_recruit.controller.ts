@@ -46,11 +46,15 @@ export class StudyRecruitController {
     return this.studyRecruitService.getStudyRecruitBoard(board.id);
   }
 
-  // @ApiOperation({
-  //   summary: '스터디 모집글 목록 조회',
-  // })
-  // @Get('/list')
-  // getStudyRecruitBoardList(){
-  //   return this.studyRecruitService.getStudyRecruitBoardList()
-  // }
+  @ApiOperation({
+    summary: '스터디 모집글 목록 조회',
+  })
+  @Get('')
+  getStudyRecruitBoardList() {
+    try {
+      return this.studyRecruitService.getStudyRecruitBoardList();
+    } catch (error) {
+      throw new error();
+    }
+  }
 }
