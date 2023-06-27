@@ -1,6 +1,7 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Schema, SchemaFactory, Prop } from '@nestjs/mongoose';
-import { SchemaOptions, Document } from 'mongoose';
+import mongoose, { SchemaOptions, Document } from 'mongoose';
+import { StudyChattingRoom } from './study-chats-rooms.schema';
 
 const options: SchemaOptions = {
   collection: 'study_chats',
@@ -12,25 +13,21 @@ export class StudyChatting extends Document {
   @Prop({ required: true })
   @IsNotEmpty()
   @IsNumber()
-  senderId: number;
+  sender: number;
 
   @Prop({ required: true })
   @IsNotEmpty()
   @IsNumber()
   receiver: number;
 
-  @Prop({ required: true })
+  @Prop({ type: mongoose.Types.ObjectId, ref: StudyChattingRoom.name })
   @IsNotEmpty()
-  @IsNumber()
-  studyBoardNo: number;
+  chatting_room_id: mongoose.Types.ObjectId;
 
   @Prop({ required: true })
   @IsNotEmpty()
   @IsString()
   content: string;
-
-  @Prop({ type: Date, default: false })
-  deletedAt: Date;
 }
 
 export const StudyChattingSchema = SchemaFactory.createForClass(StudyChatting);

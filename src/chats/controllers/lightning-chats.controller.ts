@@ -6,15 +6,24 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  UseFilters,
+  UseInterceptors,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { LightningChatsService } from '../services/lightning-chats.service';
 import { ParseObjectIdPipe } from '../parse-object-id.pipe';
 import mongoose from 'mongoose';
 import { CreateLightningChattingDto } from '../dtos/create-lightning-chattings.dto';
+import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
+import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 
 @ApiTags('chats')
 @Controller('lightning-chats')
+@UsePipes(ValidationPipe)
+@UseFilters(HttpExceptionFilter)
+@UseInterceptors(SuccessInterceptor)
 export class LightningChatsController {
   constructor(private readonly lightningChatsService: LightningChatsService) {}
 

@@ -49,12 +49,12 @@ export class LightningChatsService {
     createLightningChattingDto: CreateLightningChattingDto,
   ) {
     const { content, roomId } = createLightningChattingDto;
-    const chattingRoomId = new mongoose.Types.ObjectId(roomId);
+    const roomObjectId = new mongoose.Types.ObjectId(roomId);
 
     return await this.lightningChattingModel.create({
       sender: senderId,
       receiver: receiverId,
-      chatting_room_id: chattingRoomId,
+      chatting_room_id: roomObjectId,
       content: content,
     });
   }

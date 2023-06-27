@@ -12,15 +12,20 @@ export class StudyChattingRoom extends Document {
   @Prop({ required: true })
   @IsNotEmpty()
   @IsNumber()
-  studyBoardId: number;
+  study_board_id: number;
 
   @Prop({ required: true })
   @IsNotEmpty()
   @IsNumber()
-  userId: number;
+  owner: number;
 
-  @Prop({ type: Date, default: false })
-  deletedAt: Date;
+  @Prop({ required: true })
+  @IsNotEmpty()
+  @IsNumber()
+  applicant: number;
+
+  @Prop({ type: Date, default: null })
+  deletedAt: Date | null;
 }
 
 export const StudyChattingRoomSchema =
