@@ -1,6 +1,8 @@
 import {
   Body,
   Controller,
+  Get,
+  Param,
   Post,
   UseFilters,
   UseGuards,
@@ -34,5 +36,13 @@ export class StudyRecruitController {
       userId,
       createStudyBoardDto,
     );
+  }
+
+  @ApiOperation({
+    summary: '스터디 모집글 조회',
+  })
+  @Get('/:id')
+  getStudyRecruitBoard(@Param() board) {
+    return this.studyRecruitService.getStudyRecruitBoard(board.id);
   }
 }

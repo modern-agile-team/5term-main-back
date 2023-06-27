@@ -32,4 +32,11 @@ export class StudyRecruitService {
     const result = this.studyRecruitRepository.createStudyRecruitBoard(req);
     return (await result).identifiers;
   }
+
+  async getStudyRecruitBoard(boardId) {
+    const boardInfo = await this.studyRecruitRepository.getStudyRecruitBoard(
+      boardId,
+    );
+    return boardInfo;
+  }
 }

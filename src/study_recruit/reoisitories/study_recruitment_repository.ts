@@ -10,4 +10,12 @@ export class StudyRecruitBoardRepository extends Repository<StudyRecruitBoardEnt
       .values(studyRecruitBoard)
       .execute();
   }
+
+  async getStudyRecruitBoard(boardId) {
+    return await this.createQueryBuilder('studyRecruitBoard')
+      .leftJoinAndSelect('studyRecruitBoard.study', 'study')
+      .leftJoinAndSelect('studyRecruitBoard.writer', 'writer')
+      .where('studyRecruitBoard.id = :boardId', { boardId })
+      .getOne();
+  }
 }
