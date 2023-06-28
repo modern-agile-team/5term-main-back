@@ -19,7 +19,7 @@ import { CreateStuidyChattingDto } from '../dtos/create-study-chattings.dto';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 
-@ApiTags('chats')
+@ApiTags('study-chats')
 @Controller('study-chats')
 @UsePipes(ValidationPipe)
 @UseFilters(HttpExceptionFilter)

@@ -19,7 +19,7 @@ import { CreateLightningChattingDto } from '../dtos/create-lightning-chattings.d
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 
-@ApiTags('chats')
+@ApiTags('lightning-chats')
 @Controller('lightning-chats')
 @UsePipes(ValidationPipe)
 @UseFilters(HttpExceptionFilter)
