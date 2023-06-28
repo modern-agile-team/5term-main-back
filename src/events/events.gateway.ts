@@ -31,7 +31,7 @@ export class EventsGateway
     const rooms = data[0].rooms;
     console.log('login', userName);
     rooms.forEach((room: string) => {
-      console.log('join', socket.id);
+      console.log('join', room);
       socket.join(`${room}`);
     });
   }

@@ -15,6 +15,9 @@ export class UserProfile extends BaseEntity {
   id: number;
 
   @Column()
+  name: string;
+
+  @Column()
   nickname: string;
 
   @Column()
@@ -24,12 +27,9 @@ export class UserProfile extends BaseEntity {
   email: string;
 
   @Column()
-  bio: string;
+  bio?: string;
 
-  @Column()
-  name: string;
-
-  @OneToOne(() => User, (user) => user.userProfile)
+  @OneToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: User;
 

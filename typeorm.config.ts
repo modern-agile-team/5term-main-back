@@ -16,6 +16,7 @@ const typeORMConfig: TypeOrmModuleOptions = {
   cli: {
     migrationsDir: __dirname + '/dist/src/migrations',
   },
+  logging: false,
 };
 
 export default typeORMConfig;

@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { LightningChatting } from '../schemas/lightning-chats.schema';
 import mongoose, { Model } from 'mongoose';
 import { LightningChattingRoom } from '../schemas/lightning-chats-rooms.schema';
+import { RedisService } from 'src/redis/redis.service';
 
 @Injectable()
 export class LightningChatsService {
@@ -12,6 +13,7 @@ export class LightningChatsService {
     private readonly lightningChattingModel: Model<LightningChatting>,
     @InjectModel(LightningChattingRoom.name)
     private readonly lightningChattingRoomModel: Model<LightningChattingRoom>,
+    private readonly redisService: RedisService,
   ) {}
 
   async getLightningChattingRooms(userId: number) {
@@ -30,7 +32,7 @@ export class LightningChatsService {
     authorId: number,
     boardId: number,
   ) {
-    return await this.lightningChattingRoomModel.create({
+    const newChatRoom = await this.lightningChattingRoomModel.create({
       lightning_board_id: boardId,
       owner: authorId,
       applicant: applicantId,

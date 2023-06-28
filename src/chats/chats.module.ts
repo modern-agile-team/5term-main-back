@@ -21,6 +21,7 @@ import {
   StudyChattingRoomSchema,
 } from './schemas/study-chats-rooms.schema';
 import { ParseObjectIdPipe } from './parse-object-id.pipe';
+import { RedisModule } from 'src/redis/redis.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { ParseObjectIdPipe } from './parse-object-id.pipe';
       { name: LightningChattingRoom.name, schema: LightningChattingRoomSchema },
       { name: StudyChattingRoom.name, schema: StudyChattingRoomSchema },
     ]),
+    RedisModule,
   ],
   controllers: [LightningChatsController, StudyChatsController],
   providers: [LightningChatsService, StudyChatsService, ParseObjectIdPipe],

@@ -8,9 +8,18 @@ import * as config from 'config';
 
 const serverConfig = config.get('server');
 const swaggerConfig = config.get('swagger');
+import { setupSwagger } from './util/swagger';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  setupSwagger(app);
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  );
+
   app.use(
     ['/docs', '/docs-json'],
     expressBasicAuth({
@@ -24,6 +33,15 @@ async function bootstrap() {
     .setTitle('5term-main-api')
     .setDescription('모임서비스API')
     .setVersion('1.0.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        name: 'JWT',
+        in: 'header',
+      },
+      'access-token',
+    )
     .build();
   const document: OpenAPIObject = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
