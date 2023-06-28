@@ -5,12 +5,12 @@ import {
   Entity,
   JoinColumn,
   OneToOne,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
 } from 'typeorm';
 
 @Entity()
 export class AuthSocialLogin extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   id: number;
 
   @Column({ name: 'access_token' })
