@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Schema, SchemaFactory, Prop } from '@nestjs/mongoose';
 import { SchemaOptions, Document } from 'mongoose';
 
@@ -23,6 +23,11 @@ export class StudyChattingRoom extends Document {
   @IsNotEmpty()
   @IsNumber()
   applicant: number;
+
+  @Prop({ required: true })
+  @IsNotEmpty()
+  @IsString()
+  roomId: string;
 
   @Prop({ type: Date, default: null })
   deletedAt: Date | null;

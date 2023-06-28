@@ -4,7 +4,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { LightningChatting } from '../schemas/lightning-chats.schema';
 import mongoose, { Model } from 'mongoose';
 import { LightningChattingRoom } from '../schemas/lightning-chats-rooms.schema';
-import { RedisService } from 'src/redis/redis.service';
+import { v4 as uuidv4 } from 'uuid';
+import { EventsGateway } from 'src/events/events.gateway';
 
 @Injectable()
 export class LightningChatsService {
@@ -13,7 +14,7 @@ export class LightningChatsService {
     private readonly lightningChattingModel: Model<LightningChatting>,
     @InjectModel(LightningChattingRoom.name)
     private readonly lightningChattingRoomModel: Model<LightningChattingRoom>,
-    private readonly redisService: RedisService,
+    private readonly eventsGateway: EventsGateway,
   ) {}
 
   async getLightningChattingRooms(userId: number) {
@@ -32,11 +33,15 @@ export class LightningChatsService {
     authorId: number,
     boardId: number,
   ) {
+    const roomId = uuidv4();
     const newChatRoom = await this.lightningChattingRoomModel.create({
       lightning_board_id: boardId,
       owner: authorId,
       applicant: applicantId,
+      roomId: roomId,
     });
+
+    return newChatRoom;
   }
 
   async getLightningChattings(roomId: mongoose.Types.ObjectId) {
@@ -52,13 +57,27 @@ export class LightningChatsService {
   ) {
     const { content, roomId } = createLightningChattingDto;
     const roomObjectId = new mongoose.Types.ObjectId(roomId);
-
-    return await this.lightningChattingModel.create({
+    const getRoomId = await this.lightningChattingRoomModel
+      .find({
+        $and: [{ _id: roomObjectId }, { deletedAt: null }],
+      })
+      .select('roomId');
+    const socketRoomId = getRoomId[0].roomId;
+    const resource = await this.lightningChattingModel.create({
       sender: senderId,
       receiver: receiverId,
       chatting_room_id: roomObjectId,
       content: content,
     });
+    const message = {
+      sender: resource.sender,
+      receiver: resource.receiver,
+      content: resource.content,
+    };
+
+    this.eventsGateway.server.to(socketRoomId).emit('newChat', message);
+
+    return resource;
   }
 
   async deleteLightningChattingRooms(roomId: mongoose.Types.ObjectId) {

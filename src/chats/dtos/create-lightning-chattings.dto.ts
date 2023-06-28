@@ -5,5 +5,5 @@ import mongoose from 'mongoose';
 export class CreateLightningChattingDto extends PickType(LightningChatting, [
   'content',
 ] as const) {
-  roomId: mongoose.Types.ObjectId;
+  roomId: string;
 }

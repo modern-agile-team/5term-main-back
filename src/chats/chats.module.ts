@@ -22,6 +22,7 @@ import {
 } from './schemas/study-chats-rooms.schema';
 import { ParseObjectIdPipe } from './parse-object-id.pipe';
 import { RedisModule } from 'src/redis/redis.module';
+import { EventsModule } from 'src/events/events.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { RedisModule } from 'src/redis/redis.module';
       { name: StudyChattingRoom.name, schema: StudyChattingRoomSchema },
     ]),
     RedisModule,
+    EventsModule,
   ],
   controllers: [LightningChatsController, StudyChatsController],
   providers: [LightningChatsService, StudyChatsService, ParseObjectIdPipe],

@@ -9,7 +9,6 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import mongoose from 'mongoose';
 
 @WebSocketGateway({ namespace: /\/chatroom\d+/ })
 export class EventsGateway
@@ -27,9 +26,11 @@ export class EventsGateway
     @MessageBody() data: { userName: string; rooms: string[] },
     @ConnectedSocket() socket: Socket,
   ) {
-    const userName = data[0].userName;
-    const rooms = data[0].rooms;
+    const userName = data.userName;
+    const rooms = data.rooms;
+
     console.log('login', userName);
+
     rooms.forEach((room: string) => {
       console.log('join', room);
       socket.join(`${room}`);
@@ -42,6 +43,9 @@ export class EventsGateway
 
   handleConnection(@ConnectedSocket() socket: Socket) {
     console.log('connected', socket.nsp.name);
+    socket.on('newChat', (message) => {
+      console.log('Received new chat message:', message);
+    });
   }
 
   handleDisconnect(@ConnectedSocket() socket: Socket) {
