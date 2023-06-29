@@ -51,4 +51,16 @@ export class StudyRecruitService {
       select: ['id', 'title'],
     });
   }
+
+  async updateStudyRecruitBoard(userId, updateStudyBoardDto) {
+    const checkAccess = await this.studyRecruitRepository.getWriter(
+      updateStudyBoardDto,
+    );
+    if (checkAccess.writer.id !== userId) {
+      throw new UnauthorizedException('수정 권한 없음');
+    }
+    return await this.studyRecruitRepository.updateStudyRecruitBoard(
+      updateStudyBoardDto,
+    );
+  }
 }

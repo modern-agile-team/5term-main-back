@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Post,
   UseFilters,
   UseGuards,
@@ -15,6 +16,7 @@ import { StudyRecruitService } from '../service/study_recruit.service';
 import { CreateStudyBoardDto } from '../dto/create-study-board-dto';
 import { JwtAccessGuard } from 'src/auth/guard/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorator/getUserId.decorator';
+import { UpdateStudyBoardDto } from '../dto/update-study-board-dto';
 
 @ApiTags('study-recruitment')
 @Controller('study-recruit')
@@ -43,7 +45,11 @@ export class StudyRecruitController {
   })
   @Get('/:id')
   getStudyRecruitBoard(@Param() board) {
-    return this.studyRecruitService.getStudyRecruitBoard(board.id);
+    try {
+      return this.studyRecruitService.getStudyRecruitBoard(board.id);
+    } catch (error) {
+      throw new error();
+    }
   }
 
   @ApiOperation({
@@ -56,5 +62,20 @@ export class StudyRecruitController {
     } catch (error) {
       throw new error();
     }
+  }
+
+  @ApiOperation({
+    summary: '스터디 모집글 수정',
+  })
+  @UseGuards(JwtAccessGuard)
+  @Patch('')
+  updateStudyRecruitBoard(
+    @GetUserId() userId,
+    @Body() updateStudyBoardDto: UpdateStudyBoardDto,
+  ) {
+    return this.studyRecruitService.updateStudyRecruitBoard(
+      userId,
+      updateStudyBoardDto,
+    );
   }
 }
