@@ -6,7 +6,7 @@ const dbConfig = config.get('postgres');
 const typeORMConfig: TypeOrmModuleOptions = {
   type: dbConfig.type,
   host: dbConfig.host,
-  port: dbConfig.Port,
+  port: dbConfig.port,
   username: dbConfig.username,
   password: dbConfig.password,
   database: dbConfig.database,
