@@ -1,8 +1,8 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { StudyRecruitBoardEntity } from '../entities/study_recruit_board.entity';
+import { StudyRecruitBoard } from '../entities/study_recruit_board.entity';
 
-@EntityRepository(StudyRecruitBoardEntity)
-export class StudyRecruitBoardRepository extends Repository<StudyRecruitBoardEntity> {
+@EntityRepository(StudyRecruitBoard)
+export class StudyRecruitBoardRepository extends Repository<StudyRecruitBoard> {
   async getWriter(updateStudyBoardDto) {
     const boardId = updateStudyBoardDto.boardId;
     return await this.createQueryBuilder('studyRecruitBoard')
@@ -15,7 +15,7 @@ export class StudyRecruitBoardRepository extends Repository<StudyRecruitBoardEnt
   async createStudyRecruitBoard(studyRecruitBoard) {
     return await this.createQueryBuilder()
       .insert()
-      .into(StudyRecruitBoardEntity)
+      .into(StudyRecruitBoard)
       .values(studyRecruitBoard)
       .execute();
   }

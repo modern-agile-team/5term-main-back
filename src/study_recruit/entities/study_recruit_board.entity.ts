@@ -6,7 +6,7 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 @Entity({
   name: 'study_recruit_board',
 })
-export class StudyRecruitBoardEntity extends CommonEntity {
+export class StudyRecruitBoard extends CommonEntity {
   @ManyToOne(() => Study, (study) => study.studyRecruitBoard)
   @JoinColumn({ name: 'study_id' })
   study: Study;

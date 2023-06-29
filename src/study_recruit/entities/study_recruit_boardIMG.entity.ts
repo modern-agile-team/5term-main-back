@@ -1,4 +1,3 @@
-import { Study } from 'src/study/entities/study.entity';
 import {
   BaseEntity,
   Column,
@@ -7,6 +6,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { StudyRecruitBoard } from './study_recruit_board.entity';
 
 @Entity({
   name: 'study_recruit_board_img',
@@ -21,7 +21,7 @@ export class RecruitboardIMG extends BaseEntity {
   @Column()
   imgKey: string;
 
-  @OneToOne(() => Study)
-  @JoinColumn({ name: 'study_id' })
-  studyId: Study;
+  @OneToOne(() => StudyRecruitBoard)
+  @JoinColumn({ name: 'studyRecruitBoardId_id' })
+  studyRecruitBoardId: StudyRecruitBoard;
 }
