@@ -14,7 +14,7 @@ import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { LightningRecruitmentService } from '../services/lightning-recruitment.service';
 
 @ApiTags('lightning-recruitment')
-@Controller('lightnings')
+@Controller('lightning-boards')
 @UseFilters(HttpExceptionFilter)
 @UseInterceptors(SuccessInterceptor)
 export class LightningRecruitmentController {
@@ -26,14 +26,14 @@ export class LightningRecruitmentController {
     summary: '번개 모집글 작성',
   })
   @ApiParam({ name: 'lightningNo', example: '1', required: true })
-  @Post('/boards/:lightningNo')
+  @Post(':lightningId')
   async createLightningBoard(
-    @Param('lightningNo', ParseIntPipe)
-    lightningNo: number,
+    @Param('lightningId', ParseIntPipe)
+    lightningId: number,
     @Body() createLightningBoardDto: CreateLightningBoardDto,
   ) {
     await this.lightningRecruitService.createLightningBoard(
-      lightningNo,
+      lightningId,
       createLightningBoardDto,
     );
     return { msg: '번개 모집글 생성 성공' };
@@ -43,7 +43,7 @@ export class LightningRecruitmentController {
     summary: '번개 모집글 삭제',
   })
   @ApiParam({ name: 'boardNo', example: '1', required: true })
-  @Delete('/boards/:boardNo')
+  @Delete(':boardNo')
   async deleteLightningBoard(@Param('boardNo', ParseIntPipe) boardNo: number) {
     await this.lightningRecruitService.deleteLightningBoard(boardNo);
     return { msg: '번개 모집글 삭제 성공' };
@@ -53,7 +53,7 @@ export class LightningRecruitmentController {
     summary: '번개 모집글 수정',
   })
   @ApiParam({ name: 'boardNo', example: '1', required: true })
-  @Patch('/boards/:boardNo')
+  @Patch(':boardNo')
   async updateLightningBoard(
     @Param('boardNo', ParseIntPipe) boardNo: number,
     @Body() updateLightningboardDto: UpdateLightningBoardDto,
@@ -66,21 +66,21 @@ export class LightningRecruitmentController {
   }
 
   @ApiOperation({
-    summary: '번개 모집글 단일 조회',
-  })
-  @ApiParam({ name: 'boardNo', example: '1', required: true })
-  @Get('/boards/:boardNo')
-  async getLightningBoard(@Param('boardNo', ParseIntPipe) boardNo: number) {
-    const board = await this.lightningRecruitService.getLightningBoard(boardNo);
-    return { msg: '번개 모집글 단일 조회 성공', response: { board } };
-  }
-
-  @ApiOperation({
     summary: '번개 모집글 전부 조회',
   })
-  @Get('/boards')
+  @Get()
   async getAllLightningBoard() {
     const allBoards = await this.lightningRecruitService.getAllLightningBoard();
     return { msg: '번개 모집글 전부 조회 성공', response: { allBoards } };
+  }
+
+  @ApiOperation({
+    summary: '번개 모집글 단일 조회',
+  })
+  @ApiParam({ name: 'boardNo', example: '1', required: true })
+  @Get(':boardNo')
+  async getLightningBoard(@Param('boardNo', ParseIntPipe) boardNo: number) {
+    const board = await this.lightningRecruitService.getLightningBoard(boardNo);
+    return { msg: '번개 모집글 단일 조회 성공', response: { board } };
   }
 }
