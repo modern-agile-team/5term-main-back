@@ -34,14 +34,12 @@ export class LightningChatsService {
     boardId: number,
   ) {
     const roomId = uuidv4();
-    const newChatRoom = await this.lightningChattingRoomModel.create({
+    return await this.lightningChattingRoomModel.create({
       lightning_board_id: boardId,
       owner: authorId,
       applicant: applicantId,
       roomId: roomId,
     });
-
-    return newChatRoom;
   }
 
   async getLightningChattings(roomId: mongoose.Types.ObjectId) {
