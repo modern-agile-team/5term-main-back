@@ -10,5 +10,5 @@ export class CreateLightningChattingDto extends PickType(LightningChatting, [
     description: '방 id 값',
     required: true,
   })
-  roomId: string;
+  roomId: mongoose.Types.ObjectId;
 }
