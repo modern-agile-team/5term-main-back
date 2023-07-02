@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Post,
   UseFilters,
+  UseGuards,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
@@ -18,12 +19,15 @@ import mongoose from 'mongoose';
 import { CreateLightningChattingDto } from '../dtos/create-lightning-chattings.dto';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
+import { JwtAccessGuard } from 'src/auth/guard/jwt-access-token.guard';
+import { GetUserId } from 'src/common/decorator/getUserId.decorator';
 
 @ApiTags('lightning-chats')
 @Controller('lightning-chats')
 @UsePipes(ValidationPipe)
 @UseFilters(HttpExceptionFilter)
 @UseInterceptors(SuccessInterceptor)
+@UseGuards(JwtAccessGuard)
 export class LightningChatsController {
   constructor(private readonly lightningChatsService: LightningChatsService) {}
 
@@ -31,8 +35,8 @@ export class LightningChatsController {
     summary: '번개 채팅방 전부 조회',
   })
   @Get()
-  async getLightningChattingRooms() {
-    return await this.lightningChatsService.getLightningChattingRooms(95);
+  async getLightningChattingRooms(@GetUserId() userId: number) {
+    return await this.lightningChatsService.getLightningChattingRooms(userId);
   }
 
   @ApiOperation({
@@ -40,12 +44,12 @@ export class LightningChatsController {
   })
   @ApiParam({ name: 'boardId', example: '1', required: true })
   @ApiParam({ name: 'userId', example: '1', required: true })
-  @Post('lightning-boards/:boardId/authors/:authorId/users/:userId')
+  @Post('lightning-boards/:boardId/authors/:authorId')
   async createLightningChattingRoom(
     @Param('boardId', ParseIntPipe) boardId: number,
     @Param('authorId', ParseIntPipe)
     authorId: number,
-    @Param('userId', ParseIntPipe) userId: number,
+    @GetUserId() userId: number,
   ) {
     return await this.lightningChatsService.createLightningChattingRooms(
       userId,
@@ -74,9 +78,9 @@ export class LightningChatsController {
   })
   @ApiParam({ name: 'senderId', example: '1', required: true })
   @ApiParam({ name: 'receiverId', example: '1', required: true })
-  @Post('senders/:senderId/receivers/:receiverId')
+  @Post('receivers/:receiverId')
   async createLightningChattings(
-    @Param('senderId', ParseIntPipe) senderId: number,
+    @GetUserId() senderId: number,
     @Param('receiverId', ParseIntPipe) receiverId: number,
     @Body() createLightningChattingDto: CreateLightningChattingDto,
   ) {
