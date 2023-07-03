@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Post,
   UseFilters,
+  UseGuards,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
@@ -18,12 +19,15 @@ import mongoose from 'mongoose';
 import { CreateStuidyChattingDto } from '../dtos/create-study-chattings.dto';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
+import { JwtAccessGuard } from 'src/auth/guard/jwt-access-token.guard';
+import { GetUserId } from 'src/common/decorator/getUserId.decorator';
 
 @ApiTags('study-chats')
 @Controller('study-chats')
 @UsePipes(ValidationPipe)
 @UseFilters(HttpExceptionFilter)
 @UseInterceptors(SuccessInterceptor)
+@UseGuards(JwtAccessGuard)
 export class StudyChatsController {
   constructor(private readonly studyChatsService: StudyChatsService) {}
 
@@ -31,8 +35,8 @@ export class StudyChatsController {
     summary: '스터디 채팅방 전부 조회',
   })
   @Get()
-  async getStudyChattingRooms() {
-    return await this.studyChatsService.getStudyChattingRooms(95);
+  async getStudyChattingRooms(@GetUserId() userId: number) {
+    return await this.studyChatsService.getStudyChattingRooms(userId);
   }
 
   @ApiOperation({
@@ -40,12 +44,12 @@ export class StudyChatsController {
   })
   @ApiParam({ name: 'boardId', example: '1', required: true })
   @ApiParam({ name: 'userId', example: '1', required: true })
-  @Post('study-boards/:boardId/authors/:authorId/users/:userId')
+  @Post('study-boards/:boardId/authors/:authorId')
   async createStudyChattingRoom(
     @Param('boardId', ParseIntPipe) boardId: number,
     @Param('authorId', ParseIntPipe)
     authorId: number,
-    @Param('userId', ParseIntPipe) userId: number,
+    @GetUserId() userId: number,
   ) {
     return await this.studyChatsService.createStudyChattingRooms(
       userId,
@@ -74,9 +78,9 @@ export class StudyChatsController {
   })
   @ApiParam({ name: 'senderId', example: '1', required: true })
   @ApiParam({ name: 'receiverId', example: '1', required: true })
-  @Post('senders/:senderId/receivers/:receiverId')
+  @Post('receivers/:receiverId')
   async createStudyChattings(
-    @Param('senderId', ParseIntPipe) senderId: number,
+    @GetUserId() senderId: number,
     @Param('receiverId', ParseIntPipe) receiverId: number,
     @Body() createStudyChattingDto: CreateStuidyChattingDto,
   ) {
