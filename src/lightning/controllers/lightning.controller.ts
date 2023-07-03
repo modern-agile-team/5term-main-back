@@ -5,6 +5,7 @@ import {
   Param,
   Patch,
   UseFilters,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common/decorators';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
@@ -15,11 +16,14 @@ import { UpdateLightningInfoDto } from '../dtos/update-lightning-info.dto';
 import { UpdateLightningToUserDto } from '../dtos/update-lightning-to-user.dto';
 import { RequestLightningDto } from '../dtos/request-lightning.dto';
 import { UpdateAcceptLightningDto } from '../dtos/update-accept-lightning.dto';
+import { JwtAccessGuard } from 'src/auth/guard/jwt-access-token.guard';
+import { GetUserId } from 'src/common/decorator/getUserId.decorator';
 
 @ApiTags('lightning')
 @Controller('lightnings')
 @UseFilters(HttpExceptionFilter)
 @UseInterceptors(SuccessInterceptor)
+@UseGuards(JwtAccessGuard)
 export class LightningController {
   constructor(private readonly lightningService: LightningService) {}
 
@@ -27,14 +31,14 @@ export class LightningController {
     summary: '번개 모임 생성',
   })
   @ApiParam({ name: 'userNo', example: '1', required: true })
-  @Post('/:userNo')
+  @Post()
   async createLightningInfo(
-    @Param('userNo', ParseIntPipe) userNo: number,
+    @GetUserId() userId: number,
     @Body() createLightninginfoDto: CreateLightningInfoDto,
   ) {
     await this.lightningService.createLightningInfo(
       createLightninginfoDto,
-      userNo,
+      userId,
     );
     return { msg: '번개 모임 생성 성공' };
   }
@@ -94,13 +98,12 @@ export class LightningController {
   @ApiOperation({
     summary: '번개 모임 신청',
   })
-  @ApiParam({ name: 'userNo', example: '1', required: true })
-  @Post('/relations/:userNo')
+  @Post('/relations')
   async requestLightning(
-    @Param('userNo', ParseIntPipe) userNo: number,
+    @GetUserId() userId: number,
     @Body() requestLightningDto: RequestLightningDto,
   ) {
-    await this.lightningService.requestLightning(requestLightningDto, userNo);
+    await this.lightningService.requestLightning(requestLightningDto, userId);
     return { msg: '번개 모임 신청 성공' };
   }
 
@@ -126,10 +129,9 @@ export class LightningController {
   @ApiOperation({
     summary: '해당 유저 번개 모임 조회',
   })
-  @ApiParam({ name: 'userNo', example: '1', required: true })
   @Get('/my-pages/:userNo')
-  async getLightningByUser(@Param('userNo', ParseIntPipe) userNo: number) {
-    const lightning = await this.lightningService.getLightningByUser(userNo);
+  async getLightningByUser(@GetUserId() userId: number) {
+    const lightning = await this.lightningService.getLightningByUser(userId);
     return { msg: '해당 유저 번개 모임 조회 성공', lightning };
   }
 
