@@ -49,7 +49,7 @@ export class StudyRecruitController {
     try {
       return this.studyRecruitService.getStudyRecruitBoard(board.id);
     } catch (error) {
-      throw new error();
+      throw new error('스터디 모집글 조회 실패');
     }
   }
 
@@ -61,7 +61,7 @@ export class StudyRecruitController {
     try {
       return this.studyRecruitService.getStudyRecruitBoardList();
     } catch (error) {
-      throw new error();
+      throw new error('스터디 모집글 목록 조회 실패');
     }
   }
 
