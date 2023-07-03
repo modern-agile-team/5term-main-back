@@ -6,17 +6,20 @@ import {
   Param,
   Patch,
   UseFilters,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common/decorators';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { LightningRecruitmentService } from '../services/lightning-recruitment.service';
+import { JwtAccessGuard } from 'src/auth/guard/jwt-access-token.guard';
 
 @ApiTags('lightning-recruitment')
 @Controller('lightning-boards')
 @UseFilters(HttpExceptionFilter)
 @UseInterceptors(SuccessInterceptor)
+@UseGuards(JwtAccessGuard)
 export class LightningRecruitmentController {
   constructor(
     private readonly lightningRecruitService: LightningRecruitmentService,
