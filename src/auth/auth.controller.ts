@@ -10,6 +10,7 @@ import {
   Delete,
   ParseIntPipe,
   Res,
+  Query,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthCredentialDto } from './dto/auth-credential.dto';
@@ -101,9 +102,7 @@ export class AuthController {
     };
     res.cookie('Refresh', refreshToken, cookieOption);
 
-    return res.send({
-      accessToken,
-    });
+    return res.json({ accessToken });
   }
 
   @Get('/get-access-token')
@@ -139,5 +138,33 @@ export class AuthController {
   async accessTokenValidation(@GetPayload() payload) {
     const expirationPeriod = payload.exp;
     return this.authService.accessTokenValidation(expirationPeriod);
+  }
+
+  @Get('/social-login')
+  async socialLogin(@Query() { code }, @Res() res: Response) {
+    if (!code) {
+      throw new BadRequestException('인가코드가 없음');
+    }
+    const { accessToken, refreshToken } = await this.authService.socialLogin(
+      code,
+    );
+    const cookieOption = {
+      httpOnly: true,
+      domain: 'localhost',
+      maxAge: jwtConfig.refreshExpiresIn,
+    };
+    res.cookie('Refresh', refreshToken, cookieOption);
+
+    return res.json({ accessToken });
+  }
+
+  @Get('/social-logout')
+  async socialLogout() {
+    return;
+  }
+
+  @Get('/social-unlink')
+  async socialUnlink() {
+    return;
   }
 }

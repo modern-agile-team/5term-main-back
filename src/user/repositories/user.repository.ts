@@ -1,14 +1,10 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
-import { AuthCredentialDto } from './../../auth/dto/auth-credential.dto';
 import { IdDuplicationCheckDto } from 'src/auth/dto/duplicationCheck.dto';
-import { LoginDto } from 'src/auth/dto/login.dto';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
-  async createUser(authCredentialDto: AuthCredentialDto, loginType: number) {
-    const { id } = authCredentialDto;
-
+  async createUser(id: string, loginType: number) {
     const user = { userId: id, loginType };
     return this.save(user);
   }
@@ -19,11 +15,8 @@ export class UserRepository extends Repository<User> {
       .getOne();
   }
 
-  async getUserId(user) {
-    return await this.createQueryBuilder('user')
-      .select(['user.id'])
-      .where('user.id = :userId', { userId: user.userId })
-      .getOne();
+  async getUserId({ userId }): Promise<User> {
+    return await this.findOne({ where: { id: userId } });
   }
 
   async login(id: string) {

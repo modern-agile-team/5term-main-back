@@ -19,6 +19,7 @@ import axios from 'axios';
 import * as config from 'config';
 import * as crypto from 'crypto';
 import * as bcrypt from 'bcrypt';
+import * as jwt from 'jsonwebtoken';
 import { JwtService } from '@nestjs/jwt';
 import { RedisService } from 'src/redis/redis.service';
 import { LoginDto } from './dto/login.dto';
@@ -26,7 +27,7 @@ import { UserImageRepository } from 'src/user/repositories/userImage.repository'
 import { UserProfile } from 'src/user/entities/user_profile.entity';
 import { UserImage } from 'src/user/entities/user_image.entity';
 import { AuthPasswordLogin } from './entities/auth_password_login.entity';
-import { log } from 'console';
+import { AuthSocialLogin } from './entities/auth_social_login.entity';
 
 @Injectable()
 export class AuthService {
@@ -65,7 +66,7 @@ export class AuthService {
     }
 
     const user: User = await this.userRepository.createUser(
-      authCredentialDto,
+      authCredentialDto.id,
       0,
     );
 
@@ -167,7 +168,6 @@ export class AuthService {
 
   async login(loginDto: LoginDto) {
     const { id, password } = loginDto;
-    const jwtConfig = config.get('jwt');
     const user = await this.userRepository.login(id);
     if (!user) {
       throw new BadRequestException('없는 아이디');
@@ -175,18 +175,8 @@ export class AuthService {
     const isPasswordOk = await bcrypt.compare(password, user.password);
 
     if (isPasswordOk) {
-      const accessPayload = { userId: user.id, type: 'ACCESS' };
-      const refreshPayload = { userId: user.id, type: 'REFRESH' };
-
-      const accessToken = await this.jwtService.sign(accessPayload);
-      const refreshToken = await this.jwtService.sign(refreshPayload, {
-        secret: jwtConfig.secretKey,
-        expiresIn: jwtConfig.refreshExpiresIn,
-      });
-
-      await this.redisService.set(String(user.id), refreshToken, {
-        ttl: jwtConfig.refreshExpiresIn,
-      });
+      const accessToken = await this.createAccessToken(user);
+      const refreshToken = await this.createRefreshToken(user);
 
       return { accessToken, refreshToken };
     }
@@ -194,12 +184,40 @@ export class AuthService {
     throw new BadRequestException('비밀번호가 틀렸습니다.');
   }
 
+  async createAccessToken(user: User) {
+    const accessPayload = {
+      userId: user.id,
+      type: 'ACCESS',
+      loginType: user.loginType,
+    };
+
+    const accessToken = await this.jwtService.sign(accessPayload);
+
+    return accessToken;
+  }
+
+  async createRefreshToken(user: User) {
+    const jwtConfig = config.get('jwt');
+    const refreshPayload = { userId: user.id, type: 'REFRESH' };
+
+    const refreshToken = await this.jwtService.sign(refreshPayload, {
+      secret: jwtConfig.secretKey,
+      expiresIn: jwtConfig.refreshExpiresIn,
+    });
+
+    await this.redisService.set(String(user.id), refreshToken, {
+      ttl: jwtConfig.refreshExpiresIn,
+    });
+
+    return refreshToken;
+  }
+
   async recreateToken(userId: number) {
     const payload = { userId: userId, type: 'ACCESS' };
 
     const accessToken = await this.jwtService.sign(payload);
 
-    return { accessToken };
+    return accessToken;
   }
 
   async logout(userId: number) {
@@ -214,5 +232,65 @@ export class AuthService {
       throw new UnauthorizedException('유효 시간 10분 미만');
     }
     return { leftTime };
+  }
+
+  async socialLogin(AUTHORIZE_CODE) {
+    const socialConfig = config.get('socialLogin');
+    const URL = 'https://kauth.kakao.com/oauth/token';
+    const userDataUrl = 'https://kauth.kakao.com/oauth/tokeninfo';
+    const REST_API_KEY = socialConfig.restApiKey;
+    const REDIRECT_URI = socialConfig.redirectUrl;
+
+    const headers = {
+      'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+    };
+
+    const body = {
+      grant_type: 'authorization_code',
+      client_id: REST_API_KEY,
+      redirect_uri: REDIRECT_URI,
+      code: AUTHORIZE_CODE,
+    };
+
+    const result = (await axios.post(URL, body, { headers })).data;
+    const { id_token } = result;
+    const userData = (await axios.post(userDataUrl, { id_token }, { headers }))
+      .data;
+    const { email, sub } = userData;
+
+    const isOurUser: AuthSocialLogin =
+      await this.authSocialLoginRepository.getUser(sub);
+
+    if (!isOurUser) {
+      const user: User = await this.userRepository.createUser(email, 1);
+      // 소셜로그인 엔티티 생성
+      await this.authSocialLoginRepository.createSocialUser(
+        sub,
+        result.access_token,
+        user,
+      );
+
+      // 토큰 생성
+      const accessToken = this.createAccessToken(user);
+
+      // access토큰 리턴
+      return { accessToken };
+    }
+
+    // userNo로 유저정보 가져오기
+    const user: User = await this.userRepository.getUserId({
+      userId: isOurUser.userId,
+    });
+
+    // 유저 정보로 토큰 만들기
+    const accessToken = await this.createAccessToken(user);
+    const refreshToken = await this.createRefreshToken(user);
+
+    // 토큰 값 리턴하기
+    return { accessToken, refreshToken };
+  }
+
+  async socialSingUp() {
+    return;
   }
 }

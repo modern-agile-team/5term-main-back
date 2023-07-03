@@ -2,16 +2,7 @@ import { AuthPasswordLogin } from 'src/auth/entities/auth_password_login.entity'
 import { AuthSocialLogin } from 'src/auth/entities/auth_social_login.entity';
 import { CommonEntity } from 'src/common/entities/common.entity';
 import { LightningBoardEntity } from 'src/lightning/entities/lightning-boards.entity';
-import { LightningInfoEntity } from 'src/lightning/entities/lightning-info.entity';
-import {
-  Column,
-  Entity,
-  OneToOne,
-  JoinTable,
-  ManyToMany,
-  OneToMany,
-} from 'typeorm';
-import { UserProfile } from './user_profile.entity';
+import { Column, Entity, OneToOne, OneToMany } from 'typeorm';
 import { UserScheldule } from './user_schedule.entity';
 import { LightningToUserEntity } from 'src/lightning/entities/lightning-to-user.entity';
 import { StudyToUserEntity } from 'src/study/entities/study.to.user.entity';
