@@ -3,8 +3,7 @@ import { StudyRecruitBoard } from '../entities/study_recruit_board.entity';
 
 @EntityRepository(StudyRecruitBoard)
 export class StudyRecruitBoardRepository extends Repository<StudyRecruitBoard> {
-  async getWriter(updateStudyBoardDto) {
-    const boardId = updateStudyBoardDto.boardId;
+  async getWriter(boardId) {
     return await this.createQueryBuilder('studyRecruitBoard')
       .select()
       .leftJoinAndSelect('studyRecruitBoard.writer', 'writer')
@@ -38,6 +37,13 @@ export class StudyRecruitBoardRepository extends Repository<StudyRecruitBoard> {
         contents: updateStudyBoardDto.contents,
       })
       .where('study_recruit_board.id = :boardId', { boardId })
+      .execute();
+  }
+
+  async deleteStudyRecruitBoard(boardId) {
+    return await this.createQueryBuilder()
+      .softDelete()
+      .where({ id: boardId })
       .execute();
   }
 }

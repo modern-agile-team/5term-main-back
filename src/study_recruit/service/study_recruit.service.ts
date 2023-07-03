@@ -54,7 +54,7 @@ export class StudyRecruitService {
 
   async updateStudyRecruitBoard(userId, updateStudyBoardDto) {
     const checkAccess = await this.studyRecruitRepository.getWriter(
-      updateStudyBoardDto,
+      updateStudyBoardDto.boardId,
     );
     if (checkAccess.writer.id !== userId) {
       throw new UnauthorizedException('수정 권한 없음');
@@ -62,5 +62,13 @@ export class StudyRecruitService {
     return await this.studyRecruitRepository.updateStudyRecruitBoard(
       updateStudyBoardDto,
     );
+  }
+
+  async deleteStudyRecruitBoard(userId, boardId) {
+    const checkAccess = await this.studyRecruitRepository.getWriter(boardId);
+    if (checkAccess.writer.id !== userId) {
+      throw new UnauthorizedException('수정 권한 없음');
+    }
+    return await this.studyRecruitRepository.deleteStudyRecruitBoard(boardId);
   }
 }

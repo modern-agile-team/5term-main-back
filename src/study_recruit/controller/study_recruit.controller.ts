@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -77,5 +78,14 @@ export class StudyRecruitController {
       userId,
       updateStudyBoardDto,
     );
+  }
+
+  @ApiOperation({
+    summary: '스터디 모집글 삭제',
+  })
+  @UseGuards(JwtAccessGuard)
+  @Delete('/:id')
+  deleteStudyRecruitBoard(@GetUserId() userId, @Param('id') boardId) {
+    return this.studyRecruitService.deleteStudyRecruitBoard(userId, boardId);
   }
 }
