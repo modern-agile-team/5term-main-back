@@ -8,8 +8,12 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { StudyModule } from './study/study.module';
 import { RedisModule } from './redis/redis.module';
+import { S3Module } from './s3/s3.module';
+import { ProfileModule } from './profile/profile.module';
+
 import { ChatsModule } from './chats/chats.module';
 import { EventsModule } from './events/events.module';
+
 import typeORMConfig from 'typeorm.config';
 import * as config from 'config';
 
@@ -25,6 +29,8 @@ import * as config from 'config';
     StudyModule,
     LightningModule,
     RedisModule,
+    S3Module,
+    ProfileModule,
     ChatsModule,
     EventsModule,
   ],

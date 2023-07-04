@@ -9,14 +9,8 @@ export class UserRepository extends Repository<User> {
   async createUser(authCredentialDto: AuthCredentialDto, loginType: number) {
     const { id } = authCredentialDto;
 
-    return await this.createQueryBuilder('User')
-      .insert()
-      .into(User)
-      .values({
-        userId: id,
-        loginType,
-      })
-      .execute();
+    const user = { userId: id, loginType };
+    return this.save(user);
   }
 
   async idDuplicationCheck({ id }: IdDuplicationCheckDto) {
@@ -43,8 +37,6 @@ export class UserRepository extends Repository<User> {
   }
 
   async findUserByNo(userId: number) {
-    return await this.createQueryBuilder('user')
-      .where('user.id = :userId', { userId })
-      .getRawOne();
+    return await this.findOne(userId);
   }
 }

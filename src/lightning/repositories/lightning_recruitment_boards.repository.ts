@@ -64,4 +64,15 @@ export class LightningBoardRepository extends Repository<LightningBoardEntity> {
     const result = await this.createQueryBuilder().getMany();
     return result;
   }
+
+  async getAllLightingRecruitmentBoardsByUserNo(userId: number) {
+    return await this.createQueryBuilder('l')
+      .select([
+        'l.id AS id',
+        'l.title AS title',
+        `TO_CHAR(l.createdAt, 'YYYY-MM-DD HH24:MI') AS createdAt`,
+      ])
+      .where('author_id = :author_id', { author_id: userId })
+      .getRawMany();
+  }
 }
