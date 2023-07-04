@@ -10,7 +10,7 @@ export class CreateLightningBoardDto {
   })
   @IsNumber()
   @IsNotEmpty()
-  author: User;
+  authorId: number;
 
   @ApiProperty({
     example: '현준이형 때릴 사람 구함',

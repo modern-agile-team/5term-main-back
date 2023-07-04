@@ -20,14 +20,14 @@ export class LightningService {
 
   async createLightningInfo(
     createLightningInfoDto: CreateLightningInfoDto,
-    userNo: number,
+    userId: number,
   ) {
     const { meetingDate } = createLightningInfoDto;
     const lightningNo = await this.lightningInfoRepository.createLightningInfo(
       meetingDate,
     );
     return await this.lightningToUserRepository.createLightningToUser(
-      userNo,
+      userId,
       lightningNo,
     );
   }
@@ -103,7 +103,7 @@ export class LightningService {
   }
   async requestLightning(
     requestLightningDto: RequestLightningDto,
-    userNo: number,
+    userId: number,
   ) {
     const { lightningNo } = requestLightningDto;
     const lightning = await this.lightningInfoRepository.getLightningInfo(
@@ -114,7 +114,7 @@ export class LightningService {
     }
     const response =
       await this.lightningToUserRepository.requestLightningToUser(
-        userNo,
+        userId,
         lightningNo,
       );
     if (!response) {
@@ -148,9 +148,9 @@ export class LightningService {
     return response;
   }
 
-  async getLightningByUser(userNo: number) {
+  async getLightningByUser(userId: number) {
     const lightningNo = await this.lightningToUserRepository.getLightningByUser(
-      userNo,
+      userId,
     );
     if (!lightningNo) {
       throw new InternalServerErrorException('해당 유저 번개 모임 조회 실패');

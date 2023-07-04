@@ -36,6 +36,6 @@ const jwtConfig = config.get('jwt');
   ],
   providers: [AuthService, JwtStrategy, JwtRefreshStrategy],
   controllers: [AuthController],
-  exports: [JwtStrategy, PassportModule, TypeOrmModule],
+  exports: [JwtStrategy, PassportModule],
 })
 export class AuthModule {}

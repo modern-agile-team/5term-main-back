@@ -4,14 +4,14 @@ import { LightningToUserEntity } from '../entities/lightning-to-user.entity';
 @EntityRepository(LightningToUserEntity)
 export class LightningToUserRepository extends Repository<LightningToUserEntity> {
   async createLightningToUser(
-    userNo: number,
+    userId: number,
     lightningNo: number,
   ): Promise<InsertResult> {
     const { raw }: InsertResult = await this.createQueryBuilder()
       .insert()
       .into(LightningToUserEntity)
       .values({
-        user: { id: userNo },
+        user: { id: userId },
         lightningInfo: { id: lightningNo },
         isAccept: 1,
         isAdmin: 1,
@@ -61,14 +61,14 @@ export class LightningToUserRepository extends Repository<LightningToUserEntity>
   }
 
   async requestLightningToUser(
-    userNo: number,
+    userId: number,
     lightningNo: number,
   ): Promise<InsertResult> {
     const { raw }: InsertResult = await this.createQueryBuilder()
       .insert()
       .into(LightningToUserEntity)
       .values({
-        user: { id: userNo },
+        user: { id: userId },
         lightningInfo: { id: lightningNo },
         isAccept: 0,
         isAdmin: 0,
@@ -77,11 +77,11 @@ export class LightningToUserRepository extends Repository<LightningToUserEntity>
     return raw;
   }
 
-  async getLightningByUser(userNo: number): Promise<LightningToUserEntity[]> {
+  async getLightningByUser(userId: number): Promise<LightningToUserEntity[]> {
     const result = await this.createQueryBuilder('lightning')
       .select('lightning.lightning_no AS id')
       .where('lightning.user_no = :userNo AND lightning.is_accept = 1', {
-        userNo,
+        userId,
       })
       .getRawMany();
     return result;
