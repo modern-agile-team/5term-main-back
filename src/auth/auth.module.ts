@@ -12,6 +12,7 @@ import * as config from 'config';
 import { JwtStrategy } from './strategis/jwt.strategy';
 import { RedisModule } from 'src/redis/redis.module';
 import JwtRefreshStrategy from './strategis/jwt-refresh_token.strategy';
+import { UserImageRepository } from 'src/user/repositories/userImage.repository';
 
 const jwtConfig = config.get('jwt');
 
@@ -22,6 +23,7 @@ const jwtConfig = config.get('jwt');
       UserRepository,
       AuthPasswordLoginRepository,
       UserProfileRepository,
+      UserImageRepository,
     ]),
     PassportModule,
     JwtModule.register({

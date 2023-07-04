@@ -10,7 +10,9 @@ export class UserImage extends CommonEntity {
   @Column({ name: 'img_key', nullable: true })
   imgKey: string;
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, (userId: User) => userId.UserImage, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  userId: number;
 }

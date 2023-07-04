@@ -22,6 +22,11 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { RedisService } from 'src/redis/redis.service';
 import { LoginDto } from './dto/login.dto';
+import { UserImageRepository } from 'src/user/repositories/userImage.repository';
+import { UserProfile } from 'src/user/entities/user_profile.entity';
+import { UserImage } from 'src/user/entities/user_image.entity';
+import { AuthPasswordLogin } from './entities/auth_password_login.entity';
+import { log } from 'console';
 
 @Injectable()
 export class AuthService {
@@ -34,6 +39,8 @@ export class AuthService {
     private userRepository: UserRepository,
     @InjectRepository(UserProfileRepository)
     private userProfileRepository: UserProfileRepository,
+    @InjectRepository(UserImageRepository)
+    private userImageRepositoy: UserImageRepository,
     private jwtService: JwtService,
     private redisService: RedisService,
   ) {}
@@ -45,6 +52,7 @@ export class AuthService {
     };
 
     const idDuplicationCheckingResult = await this.idDuplicationCheck(id);
+
     const nicknameDuplicationCheckingResult =
       await this.nicknameDuplicationCheck(nickname);
 
@@ -56,19 +64,29 @@ export class AuthService {
       throw new BadRequestException('닉네임 중복');
     }
 
-    const user: User = (
-      await this.userRepository.createUser(authCredentialDto, 0)
-    ).raw[0];
-
-    const result = await this.userProfileRepository.createUserProfile(
+    const user: User = await this.userRepository.createUser(
       authCredentialDto,
+      0,
+    );
+
+    const userImage: UserImage = await this.userImageRepositoy.createUserImg(
       user,
     );
 
-    await this.authPasswordLoginRepository.createPasswordUser(
-      authCredentialDto,
-      user,
-    );
+    const userProfile: UserProfile =
+      await this.userProfileRepository.createUserProfile(
+        authCredentialDto,
+        user,
+        userImage.id,
+      );
+
+    const authPasswordLogin: AuthPasswordLogin =
+      await this.authPasswordLoginRepository.createPasswordUser(
+        authCredentialDto,
+        user,
+      );
+
+    return { ...userProfile, ...userImage, ...authPasswordLogin, ...user };
   }
 
   async idDuplicationCheck(id: IdDuplicationCheckDto) {

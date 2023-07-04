@@ -29,11 +29,14 @@ export class UserProfile extends BaseEntity {
   @Column()
   bio?: string;
 
-  @OneToOne(() => User, { onDelete: 'CASCADE' })
+  @OneToOne(() => User, { onDelete: 'CASCADE', cascade: true })
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  userId: number;
 
-  @OneToOne(() => UserImage)
+  @OneToOne(() => UserImage, {
+    cascade: true,
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'user_img' })
-  userImage: UserImage;
+  userImage: number;
 }

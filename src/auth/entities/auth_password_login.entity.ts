@@ -20,5 +20,5 @@ export class AuthPasswordLogin extends BaseEntity {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  userId: number;
 }
