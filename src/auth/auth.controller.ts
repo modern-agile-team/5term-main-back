@@ -158,9 +158,12 @@ export class AuthController {
     return res.json({ accessToken });
   }
 
-  @Get('/social-logout')
-  async socialLogout() {
-    return;
+  @Delete('/social-logout')
+  @UseGuards(JwtAccessGuard)
+  async socialLogout(@GetUserId() userid) {
+    const result = this.authService.socialLogout(userid);
+
+    return result;
   }
 
   @Get('/social-unlink')

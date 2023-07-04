@@ -259,7 +259,7 @@ export class AuthService {
     const { email, sub } = userData;
 
     const isOurUser: AuthSocialLogin =
-      await this.authSocialLoginRepository.getUser(sub);
+      await this.authSocialLoginRepository.getUserById(sub);
 
     if (!isOurUser) {
       const user: User = await this.userRepository.createUser(email, 1);
@@ -292,5 +292,23 @@ export class AuthService {
 
   async socialSingUp() {
     return;
+  }
+  async socialLogout(userId) {
+    const logoutUrl = '	https://kapi.kakao.com/v1/user/logout';
+    const socialUser: AuthSocialLogin =
+      await this.authSocialLoginRepository.getUserByUserId(userId);
+    const { accessToken } = socialUser;
+    const headers = {
+      'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    const logoutResult = await axios.post(logoutUrl, {}, { headers });
+
+    if (!logoutResult) {
+      throw new InternalServerErrorException('소셜로그인 실페');
+    }
+
+    return socialUser;
   }
 }
