@@ -7,7 +7,6 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { StudyModule } from './study/study.module';
 import { RedisModule } from './redis/redis.module';
-import { S3Service } from './s3/s3.service';
 import { S3Module } from './s3/s3.module';
 import { ProfileModule } from './profile/profile.module';
 import typeORMConfig from 'typeorm.config';
@@ -24,6 +23,6 @@ import typeORMConfig from 'typeorm.config';
     ProfileModule,
   ],
   controllers: [AppController],
-  providers: [AppService, S3Service],
+  providers: [AppService],
 })
 export class AppModule {}

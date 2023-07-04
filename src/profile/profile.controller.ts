@@ -18,6 +18,7 @@ import { ChangeBioDto } from './dto/changeBio.dto';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 
 @Controller('profiles')
+@UseGuards(JwtAccessGuard)
 export class ProfileController {
   constructor(private profileService: ProfileService) {}
   @Get('/')
@@ -26,7 +27,6 @@ export class ProfileController {
     summary: '프로필 가져오기',
     description: '프로필 가져오는 api',
   })
-  @UseGuards(JwtAccessGuard)
   async getUserProfile(@GetUserId() userNo) {
     return await this.profileService.getUserProfile(userNo);
   }
@@ -37,7 +37,6 @@ export class ProfileController {
     summary: '프로필 사진 업로드',
     description: '프로필 사진 업로드하는 api',
   })
-  @UseGuards(JwtAccessGuard)
   @UseInterceptors(FileInterceptor('file'))
   async uploadProfileImg(@UploadedFile() file, @GetUserId() userNo) {
     return this.profileService.uploadProfileImg(file, userNo);
@@ -49,7 +48,6 @@ export class ProfileController {
     summary: '비밀번호 변경',
     description: '비밀번호 변경하는 api',
   })
-  @UseGuards(JwtAccessGuard)
   async changePassword(
     @GetUserId() userNo,
     @Body() changePasswordDto: ChangePasswordDto,
@@ -63,7 +61,6 @@ export class ProfileController {
     summary: '이메일 변경',
     description: '이메일 변경하는 api',
   })
-  @UseGuards(JwtAccessGuard)
   async changeEmail(
     @GetUserId() userNo,
     @Body() changeEmailDto: ChangeEmailDto,
@@ -77,7 +74,6 @@ export class ProfileController {
     summary: '전화번호 변경',
     description: '전화번호 변경하는 api',
   })
-  @UseGuards(JwtAccessGuard)
   async changePhoneNumber(
     @GetUserId() userNo,
     @Body() changePhoneDto: ChangePhoneDto,
@@ -91,7 +87,6 @@ export class ProfileController {
     summary: '자기소개 변경',
     description: '자기소개 변경하는 api',
   })
-  @UseGuards(JwtAccessGuard)
   async changeBio(@GetUserId() userNo, @Body() changeBioDto: ChangeBioDto) {
     return this.profileService.changeBio(userNo, changeBioDto);
   }
@@ -102,7 +97,6 @@ export class ProfileController {
     summary: '내가 쓴 글 가져오기',
     description: '내가 쓴 글 가져오는 api',
   })
-  @UseGuards(JwtAccessGuard)
   async getMyPosts(@GetUserId() userNo) {
     return this.profileService.getMyPosts(userNo);
   }
