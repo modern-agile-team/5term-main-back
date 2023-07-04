@@ -56,7 +56,7 @@ export class StudyService {
     else throw new NotFoundException('가입된 스터디가 없음.');
   }
 
-  async createStudy(user, content) {
+  async createStudy(userId, content) {
     //스터디 생성
     try {
       const studyInfo = await this.studyRepository.createStudy(content);
@@ -64,13 +64,13 @@ export class StudyService {
 
       //스터디 생성자 관리자권한 부여
       const adminInfo = await this.studyAdminsRepository.giveAdmin(
-        user.userId,
+        userId,
         studyId,
       );
 
       //생성된 스터디에 멤버로 참여
       const memberInfo = await this.studyMembersRepository.joinStudyForAdmin(
-        user.userId,
+        userId,
         studyId,
       );
 
@@ -85,18 +85,18 @@ export class StudyService {
     }
   }
 
-  async deleteStudy(user, study) {
+  async deleteStudy(userId, study) {
     const checkAdmin = await this.studyAdminsRepository.find({
-      where: { user: user.userId, study: study.studyId },
+      where: { user: userId, study: study.studyId },
     });
     if (!!checkAdmin[0] === false)
       throw new UnauthorizedException('관리자 권한 없음');
     return this.studyRepository.deleteStudy(study.studyId);
   }
 
-  async joinStudy(user, study) {
+  async joinStudy(userId, study) {
     const memberInfo = await this.studyMembersRepository.find({
-      where: { study: study.studyId, user: user.userId },
+      where: { study: study.studyId, user: userId },
     });
     if (!!memberInfo[0]) {
       if (memberInfo[0].isAccept === 0)
@@ -111,28 +111,27 @@ export class StudyService {
 
     if (!!studyInfo[0] === false)
       throw new BadRequestException('유효하지 않은 스터디.');
-    return this.studyMembersRepository.joinStudy(user.userId, study.studyId);
+    return this.studyMembersRepository.joinStudy(userId, study.studyId);
   }
 
-  async exitStudy(user, study) {
+  async exitStudy(userId, study) {
     const studyInfo = await this.studyRepository.find({
       where: { id: study.studyId },
     });
     if (!studyInfo[0]) throw new BadRequestException('존재하지 않는 스터디');
     const memberInfo = await this.studyMembersRepository.find({
-      where: { study: study.studyId, user: user.userId },
+      where: { study: study.studyId, user: userId },
     });
-    if (!memberInfo[0]) throw new BadRequestException('멤버가 아님');
 
-    return await this.studyMembersRepository.exitStudy(
-      user.userId,
-      study.studyId,
-    );
+    if (!memberInfo[0] === true || memberInfo[0].isAccept !== 1)
+      throw new BadRequestException('멤버가 아님');
+
+    return await this.studyMembersRepository.exitStudy(userId, study.studyId);
   }
 
-  async expelStudy(user, req) {
+  async expelStudy(userId, req) {
     const checkAdmin = await this.studyAdminsRepository.find({
-      where: { user: user.userId, study: req.studyId },
+      where: { user: userId, study: req.studyId },
     });
     if (!checkAdmin[0]) throw new UnauthorizedException('관리자 권한 없음');
 
@@ -145,9 +144,9 @@ export class StudyService {
     else return await this.studyMembersRepository.expelStudy(req);
   }
 
-  async acceptStudy(user, req) {
+  async acceptStudy(userId, req) {
     const checkAdmin = await this.studyAdminsRepository.find({
-      where: { user: user.userId, study: req.studyId },
+      where: { user: userId, study: req.studyId },
     });
     if (!checkAdmin[0]) throw new UnauthorizedException('관리자 권한 없음');
     const result = await this.studyMembersRepository.acceptStudy(req);
@@ -155,9 +154,9 @@ export class StudyService {
     else return result;
   }
 
-  async rejectStudy(user, req) {
+  async rejectStudy(userId, req) {
     const checkAdmin = await this.studyAdminsRepository.find({
-      where: { user: user.userId, study: req.studyId },
+      where: { user: userId, study: req.studyId },
     });
     if (!checkAdmin[0]) throw new UnauthorizedException('관리자 권한 없음');
     const result = await this.studyMembersRepository.rejectStudy(req);
@@ -165,9 +164,9 @@ export class StudyService {
     else return result;
   }
 
-  async transferAdmin(user, req) {
+  async transferAdmin(userId, req) {
     const checkAdmin = await this.studyAdminsRepository.find({
-      where: { user: user.userId, study: req.studyId },
+      where: { user: userId, study: req.studyId },
     });
     const memberInfo = await this.studyMembersRepository.find({
       where: { user: req.userId, study: req.studyId },
