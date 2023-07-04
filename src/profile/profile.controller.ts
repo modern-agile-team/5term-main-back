@@ -15,8 +15,9 @@ import { ChangePasswordDto } from 'src/auth/dto/changePassword.dto';
 import { ChangeEmailDto } from './dto/changeEmail.dto';
 import { ChangePhoneDto } from './dto/changePhone.dto';
 import { ChangeBioDto } from './dto/changeBio.dto';
-import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('profile')
 @Controller('profiles')
 @UseGuards(JwtAccessGuard)
 export class ProfileController {
