@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { StudyRecruitBoardRepository } from '../reoisitories/study_recruitment_repository';
 import { CreateStudyBoardDto } from '../dto/create-study-board-dto';
 import { StudyAdminsRepository } from 'src/study/repository/study_admins.repository';
+import { StudyRecruitBoardImgRepository } from '../reoisitories/study_recruitment_IMG_repository';
 
 @Injectable()
 export class StudyRecruitService {
@@ -15,6 +16,8 @@ export class StudyRecruitService {
     private studyRecruitRepository: StudyRecruitBoardRepository,
     @InjectRepository(StudyAdminsRepository)
     private studyAdminsRepository: StudyAdminsRepository,
+    @InjectRepository(StudyRecruitBoardImgRepository)
+    private studyRecruitBoardImgRepository: StudyRecruitBoardImgRepository,
   ) {}
 
   async createStudyRecruitBoard(
@@ -24,7 +27,7 @@ export class StudyRecruitService {
     const req = {
       writer: userId,
       title: createStudyBoardDto.title,
-      study: createStudyBoardDto.studyId,
+      study: Number(createStudyBoardDto.studyId),
       contents: createStudyBoardDto.contents,
     };
     const checkAdmin = await this.studyAdminsRepository.find({
@@ -35,6 +38,9 @@ export class StudyRecruitService {
 
     const result = this.studyRecruitRepository.createStudyRecruitBoard(req);
     return (await result).identifiers;
+  }
+  async uploadImg(url, boardId) {
+    return await this.studyRecruitBoardImgRepository.uploadImg(url, boardId);
   }
 
   async getStudyRecruitBoard(boardId) {

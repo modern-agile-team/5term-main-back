@@ -11,12 +11,14 @@ import {
 @Entity()
 export class AuthSocialLogin extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
   @Column({ name: 'access_token' })
   accessToken: string;
 
-  @OneToOne(() => User, (user) => user.authSocialLogin)
+  @OneToOne(() => User, (user) => user.authSocialLogin, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'user_id' })
   user: User;
 }
