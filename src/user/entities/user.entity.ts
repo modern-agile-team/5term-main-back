@@ -9,6 +9,7 @@ import { StudyToUserEntity } from 'src/study/entities/study.to.user.entity';
 import { StudyAdmins } from 'src/study/entities/study.admins.entity';
 import { StudyRecruitBoard } from 'src/study_recruit/entities/study_recruit_board.entity';
 import { UserImage } from './user_image.entity';
+import { UserProfile } from './user_profile.entity';
 
 @Entity()
 export class User extends CommonEntity {
@@ -63,8 +64,11 @@ export class User extends CommonEntity {
   )
   writer: StudyRecruitBoard[];
 
-  @OneToOne(() => UserImage, (userImage) => userImage.userId, {
+  @OneToOne(() => UserImage, (userImage) => userImage.user, {
     cascade: true,
   })
-  UserImage: UserImage;
+  userImage: UserImage;
+
+  @OneToOne(() => UserProfile, (userProfile) => userProfile.user)
+  userProfile: UserProfile;
 }

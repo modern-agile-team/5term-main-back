@@ -19,7 +19,6 @@ import axios from 'axios';
 import * as config from 'config';
 import * as crypto from 'crypto';
 import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
 import { JwtService } from '@nestjs/jwt';
 import { RedisService } from 'src/redis/redis.service';
 import { LoginDto } from './dto/login.dto';
@@ -28,6 +27,7 @@ import { UserProfile } from 'src/user/entities/user_profile.entity';
 import { UserImage } from 'src/user/entities/user_image.entity';
 import { AuthPasswordLogin } from './entities/auth_password_login.entity';
 import { AuthSocialLogin } from './entities/auth_social_login.entity';
+import { SocialUserProfileDto } from './dto/socialUserProfile.dto';
 
 @Injectable()
 export class AuthService {
@@ -292,9 +292,19 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  async socialSingUp() {
+  async socialSingUp(
+    userId: number,
+    socialUserProfileDto: SocialUserProfileDto,
+  ) {
+    const user: User = await this.userRepository.getUserId({ userId });
+    const profile = await this.userProfileRepository.createSocialUserProfile(
+      user,
+      socialUserProfileDto,
+    );
+    console.log(profile);
     return;
   }
+
   async socialLogout(userId: number) {
     const unlinkUrl = 'https://kapi.kakao.com/v1/user/logout';
     const socialUser: AuthSocialLogin =

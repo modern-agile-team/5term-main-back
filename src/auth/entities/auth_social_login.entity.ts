@@ -1,9 +1,7 @@
-import { Exclude } from 'class-transformer';
 import { User } from 'src/user/entities/user.entity';
 import {
   BaseEntity,
   Column,
-  DeleteDateColumn,
   Entity,
   JoinColumn,
   OneToOne,

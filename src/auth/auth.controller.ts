@@ -11,6 +11,8 @@ import {
   ParseIntPipe,
   Res,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthCredentialDto } from './dto/auth-credential.dto';
@@ -26,6 +28,7 @@ import { GetUserId } from 'src/common/decorator/getUserId.decorator';
 import { JwtAccessGuard } from './guard/jwt-access-token.guard';
 import * as config from 'config';
 import { GetPayload } from 'src/common/decorator/getPayload.decorator';
+import { SocialUserProfileDto } from './dto/socialUserProfile.dto';
 
 const jwtConfig = config.get('jwt');
 
@@ -156,6 +159,16 @@ export class AuthController {
     res.cookie('Refresh', refreshToken, cookieOption);
 
     return res.json({ accessToken });
+  }
+
+  @Post('/social-singup')
+  @UsePipes(ValidationPipe)
+  @UseGuards(JwtAccessGuard)
+  async socialSingup(
+    @GetUserId() userId: number,
+    @Body() socialUserProfileDto: SocialUserProfileDto,
+  ) {
+    return this.authService.socialSingUp(userId, socialUserProfileDto);
   }
 
   @Delete('/social-logout')
