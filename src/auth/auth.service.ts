@@ -234,12 +234,13 @@ export class AuthService {
     return { leftTime };
   }
 
-  async socialLogin(AUTHORIZE_CODE) {
+  async socialLogin(authorizeCode) {
+    authorizeCode;
     const socialConfig = config.get('socialLogin');
     const URL = 'https://kauth.kakao.com/oauth/token';
     const userDataUrl = 'https://kauth.kakao.com/oauth/tokeninfo';
-    const REST_API_KEY = socialConfig.restApiKey;
-    const REDIRECT_URI = socialConfig.redirectUrl;
+    const restApiKey = socialConfig.restApiKey;
+    const redirectUri = socialConfig.redirectUrl;
 
     const headers = {
       'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
@@ -247,12 +248,13 @@ export class AuthService {
 
     const body = {
       grant_type: 'authorization_code',
-      client_id: REST_API_KEY,
-      redirect_uri: REDIRECT_URI,
-      code: AUTHORIZE_CODE,
+      client_id: restApiKey,
+      redirect_uri: redirectUri,
+      code: authorizeCode,
     };
 
     const result = (await axios.post(URL, body, { headers })).data;
+
     const { id_token } = result;
     const userData = (await axios.post(userDataUrl, { id_token }, { headers }))
       .data;
@@ -263,38 +265,38 @@ export class AuthService {
 
     if (!isOurUser) {
       const user: User = await this.userRepository.createUser(email, 1);
-      // 소셜로그인 엔티티 생성
       await this.authSocialLoginRepository.createSocialUser(
         sub,
         result.access_token,
         user,
       );
 
-      // 토큰 생성
-      const accessToken = this.createAccessToken(user);
+      const accessToken = await this.createAccessToken(user);
+      await this.redisService.set(`${user.id}`, result.access_token);
 
-      // access토큰 리턴
       return { accessToken };
     }
 
-    // userNo로 유저정보 가져오기
+    await this.authSocialLoginRepository.updateSocialAccessToken(
+      isOurUser.id,
+      result.access_token,
+    );
+
     const user: User = await this.userRepository.getUserId({
       userId: isOurUser.userId,
     });
 
-    // 유저 정보로 토큰 만들기
     const accessToken = await this.createAccessToken(user);
     const refreshToken = await this.createRefreshToken(user);
 
-    // 토큰 값 리턴하기
     return { accessToken, refreshToken };
   }
 
   async socialSingUp() {
     return;
   }
-  async socialLogout(userId) {
-    const logoutUrl = '	https://kapi.kakao.com/v1/user/logout';
+  async socialLogout(userId: number) {
+    const unlinkUrl = 'https://kapi.kakao.com/v1/user/logout';
     const socialUser: AuthSocialLogin =
       await this.authSocialLoginRepository.getUserByUserId(userId);
     const { accessToken } = socialUser;
@@ -303,12 +305,35 @@ export class AuthService {
       Authorization: `Bearer ${accessToken}`,
     };
 
-    const logoutResult = await axios.post(logoutUrl, {}, { headers });
+    await axios.post(unlinkUrl, {}, { headers });
 
-    if (!logoutResult) {
-      throw new InternalServerErrorException('소셜로그인 실페');
+    await this.authSocialLoginRepository.updateSocialAccessToken(
+      socialUser.id,
+      '',
+    );
+
+    await this.redisService.del(String(userId));
+
+    return { messege: 'social logout success' };
+  }
+
+  async socialUnlick(userId: number) {
+    const unlinkUrl = 'https://kapi.kakao.com/v1/user/unlink';
+    const socialUser: AuthSocialLogin =
+      await this.authSocialLoginRepository.getUserByUserId(userId);
+    const { accessToken } = socialUser;
+    const headers = {
+      'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    await axios.post(unlinkUrl, {}, { headers });
+
+    const deleteResult = await this.userRepository.deleteUser(userId);
+    if (deleteResult.affected) {
+      throw new InternalServerErrorException('소셜로그인 연결끊기 실패');
     }
 
-    return socialUser;
+    return { massege: '로그아웃 성공' };
   }
 }

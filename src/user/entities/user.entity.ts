@@ -39,7 +39,9 @@ export class User extends CommonEntity {
   @OneToMany(() => StudyToUserEntity, (studyToUser) => studyToUser.user)
   studyToUser: StudyToUserEntity[];
 
-  @OneToOne(() => AuthSocialLogin, (authSocialLogin) => authSocialLogin.user)
+  @OneToOne(() => AuthSocialLogin, (authSocialLogin) => authSocialLogin.user, {
+    cascade: true,
+  })
   authSocialLogin: AuthSocialLogin;
 
   @OneToOne(

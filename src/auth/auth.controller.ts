@@ -160,14 +160,13 @@ export class AuthController {
 
   @Delete('/social-logout')
   @UseGuards(JwtAccessGuard)
-  async socialLogout(@GetUserId() userid) {
-    const result = this.authService.socialLogout(userid);
-
-    return result;
+  async socialLogout(@GetUserId() userid: number) {
+    return this.authService.socialLogout(userid);
   }
 
-  @Get('/social-unlink')
-  async socialUnlink() {
-    return;
+  @Delete('/social-unlink')
+  @UseGuards(JwtAccessGuard)
+  async socialUnlink(@GetUserId() userId: number) {
+    return this.authService.socialUnlick(userId);
   }
 }

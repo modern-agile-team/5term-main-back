@@ -32,4 +32,8 @@ export class UserRepository extends Repository<User> {
   async findUserByNo(userId: number) {
     return await this.findOne(userId);
   }
+
+  async deleteUser(userId: number) {
+    return await this.softDelete(userId);
+  }
 }
