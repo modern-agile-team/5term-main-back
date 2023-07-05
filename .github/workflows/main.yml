@@ -29,8 +29,8 @@ jobs:
       - name: Build Docker Image For Spring
         run: |
           docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
-          docker build -t nest
-          docker push nest
+          docker build -t nest .
+          docker push nest .
 
       # Configure AWS Credentials (6) - AWS 접근 권한 취득(IAM)
       - name: Configure AWS Credentials
