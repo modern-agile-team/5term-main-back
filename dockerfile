@@ -13,7 +13,8 @@ WORKDIR /usr/src/app
 COPY --chown=node:node package*.json ./
 
 # Install app dependencies using the `npm ci` command instead of `npm install`
-RUN npm i
+RUN npm ci
+
 
 # Bundle app source
 COPY --chown=node:node . .
@@ -21,7 +22,7 @@ COPY --chown=node:node . .
 # Use the node user from the image (instead of the root user)
 USER node
 
-ENTRYPOINT [ "npm", "run" ,"start:dev" ] 
+RUN npm run start:dev
 # ###################
 # # BUILD FOR PRODUCTION
 # ###################
