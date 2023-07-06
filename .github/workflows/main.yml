@@ -39,6 +39,6 @@ jobs:
           timeout: 60s
           script: |
             cd ~/
-            docker-compose -f ./docker-compose.yml down
-            docker-compose -f ./docker-compose.yml pull
-            docker-compose -f ./docker-compose.yml up -d
+            docker-compose -f /usr/src/app/docker-compose.yml down
+            docker-compose -f /usr/src/app/docker-compose.yml pull
+            docker-compose -f /usr/src/app/docker-compose.yml up -d
