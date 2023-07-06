@@ -48,4 +48,4 @@ jobs:
             sudo docker stop nest-container || true  # 이 줄을 추가하여 컨테이너를 중지하도록 시도하고 에러가 발생해도 계속 실행합니다.
             sudo docker rm nest-container || true    # 이 줄을 추가하여 컨테이너를 제거하도록 시도하고 에러가 발생해도 계속 실행합니다.
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/nest:latest   # 이 줄을 추가하여 최신 이미지를 먼저 가져옵니다.
-            sudo docker run -it -d -p 3000:3000 --name nest-container ${{ secrets.DOCKERHUB_USERNAME }}/nest:latest  # 가져온 이미지로 컨테이너를 실행합니다.
+            sudo docker run -it -d -p 3002:3000 --name nest-container ${{ secrets.DOCKERHUB_USERNAME }}/nest:latest  # 가져온 이미지로 컨테이너를 실행합니다.
