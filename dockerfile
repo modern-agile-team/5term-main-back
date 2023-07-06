@@ -13,7 +13,7 @@ WORKDIR /usr/src/app
 COPY --chown=node:node package*.json ./
 
 # Install app dependencies using the `npm ci` command instead of `npm install`
-RUN npm ci
+RUN npm i
 
 
 # Bundle app source
@@ -22,7 +22,11 @@ COPY --chown=node:node . .
 # Use the node user from the image (instead of the root user)
 USER node
 
-RUN npm run start:dev
+RUN npm i -g @nestjs/cli
+
+RUN npm run build
+
+ENTRYPOINT [ "npm", "run" ,"start:dev" ] 
 # ###################
 # # BUILD FOR PRODUCTION
 # ###################
