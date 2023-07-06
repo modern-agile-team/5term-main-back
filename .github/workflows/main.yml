@@ -38,6 +38,7 @@ jobs:
           port: ${{ secrets.EC2_SSH_PORT }}
           timeout: 60s
           script: |
-            docker-compose down
-            docker-compose pull
-            docker-compose up -d
+            cd /usr/src/app
+            docker-compose -f down
+            docker-compose -f pull
+            docker-compose -f up -d
