@@ -32,6 +32,9 @@ export class UserProfile extends BaseEntity {
   @Column({ name: 'user_id' })
   userId: number;
 
+  @Column({ name: 'user_img' })
+  userImageNo: number;
+
   @OneToOne(() => User, { onDelete: 'CASCADE', cascade: true })
   @JoinColumn({ name: 'user_id' })
   user: User;
@@ -41,5 +44,5 @@ export class UserProfile extends BaseEntity {
     onUpdate: 'CASCADE',
   })
   @JoinColumn({ name: 'user_img' })
-  userImage: number;
+  userImage: UserImage;
 }

@@ -103,7 +103,7 @@ export class AuthController {
       domain: 'localhost',
       maxAge: jwtConfig.refreshExpiresIn,
     };
-    res.cookie('Refresh', refreshToken, cookieOption);
+    res.cookie('refreshToken', refreshToken, cookieOption);
 
     return res.json({ accessToken });
   }
@@ -115,7 +115,8 @@ export class AuthController {
   })
   @UseGuards(JwtRefreshGuard)
   async recreatAccessToken(@GetUserId() userId) {
-    return await this.authService.recreateToken(userId);
+    const accessToken = await this.authService.recreateToken(userId);
+    return { accessToken };
   }
 
   @Delete('/logout')
@@ -156,7 +157,7 @@ export class AuthController {
       domain: 'localhost',
       maxAge: jwtConfig.refreshExpiresIn,
     };
-    res.cookie('Refresh', refreshToken, cookieOption);
+    res.cookie('refreshToken', refreshToken, cookieOption);
 
     return res.json({ accessToken });
   }
@@ -167,8 +168,19 @@ export class AuthController {
   async socialSingup(
     @GetUserId() userId: number,
     @Body() socialUserProfileDto: SocialUserProfileDto,
+    @Res() res: Response,
   ) {
-    return this.authService.socialSingUp(userId, socialUserProfileDto);
+    const { accessToken, refreshToken, profile } =
+      await this.authService.socialSingUp(userId, socialUserProfileDto);
+
+    const cookieOption = {
+      httpOnly: true,
+      domain: 'localhost',
+      maxAge: jwtConfig.refreshExpiresIn,
+    };
+    res.cookie('refreshToken', refreshToken, cookieOption);
+
+    return res.send({ accessToken, profile });
   }
 
   @Delete('/social-logout')

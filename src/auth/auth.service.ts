@@ -78,7 +78,7 @@ export class AuthService {
       await this.userProfileRepository.createUserProfile(
         authCredentialDto,
         user,
-        userImage.id,
+        userImage,
       );
 
     const authPasswordLogin: AuthPasswordLogin =
@@ -297,12 +297,20 @@ export class AuthService {
     socialUserProfileDto: SocialUserProfileDto,
   ) {
     const user: User = await this.userRepository.getUserId({ userId });
+    const userImageData = await this.userImageRepositoy.createUserImg(user);
     const profile = await this.userProfileRepository.createSocialUserProfile(
       user,
       socialUserProfileDto,
+      userImageData,
     );
-    console.log(profile);
-    return;
+    if (!profile) {
+      throw new InternalServerErrorException('프로필 기입 실패');
+    }
+
+    const accessToken = await this.createAccessToken(user);
+    const refreshToken = await this.createRefreshToken(user);
+
+    return { accessToken, refreshToken, profile };
   }
 
   async socialLogout(userId: number) {
@@ -344,6 +352,6 @@ export class AuthService {
       throw new InternalServerErrorException('소셜로그인 연결끊기 실패');
     }
 
-    return { massege: '로그아웃 성공' };
+    return { massege: '회원탈퇴 성공' };
   }
 }

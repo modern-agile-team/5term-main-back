@@ -5,13 +5,14 @@ import { User } from '../entities/user.entity';
 import { NicknameDuplicationCheckDto } from 'src/auth/dto/duplicationCheck.dto';
 import { BadRequestException } from '@nestjs/common';
 import { SocialUserProfileDto } from 'src/auth/dto/socialUserProfile.dto';
+import { UserImage } from '../entities/user_image.entity';
 
 @EntityRepository(UserProfile)
 export class UserProfileRepository extends Repository<UserProfile> {
   async createUserProfile(
     authCredentialDto: AuthCredentialDto,
     user: User,
-    userImage: number,
+    userImage: UserImage,
   ) {
     const { nickname, phone, email, name } = authCredentialDto;
     const userProfile = {
@@ -20,7 +21,7 @@ export class UserProfileRepository extends Repository<UserProfile> {
       email,
       bio: '',
       name,
-      userId: user.id,
+      user,
       userImage,
     };
 
@@ -30,9 +31,18 @@ export class UserProfileRepository extends Repository<UserProfile> {
   async createSocialUserProfile(
     user: User,
     socialUserProfileDto: SocialUserProfileDto,
+    userImage: UserImage,
   ) {
     const { name, nickname, phone, email } = socialUserProfileDto;
-    return this.create({ user, name, nickname, phone, email });
+    return this.save({
+      user,
+      name,
+      nickname,
+      phone,
+      email,
+      bio: '',
+      userImage,
+    });
   }
 
   async nicknameDuplicationCheck({ nickname }: NicknameDuplicationCheckDto) {
