@@ -12,11 +12,9 @@ WORKDIR /usr/src/app
 # Copying this first prevents re-running npm install on every code change.
 COPY --chown=node:node package*.json ./
 
-COPY ./config /usr/src/app/config
 
 # Install app dependencies using the `npm ci` command instead of `npm install`
 RUN npm i
-
 
 # Bundle app source
 COPY --chown=node:node . .

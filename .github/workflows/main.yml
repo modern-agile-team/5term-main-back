@@ -12,19 +12,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Set Image Tag
+        id: tag
+        run: echo "::set-output name=tag::$(date +'%Y%m%d%H%M%S')"
+
       - name: Build Docker Image
         run: |
           docker login ghcr.io -u ${{ secrets.GHCR_ID }} -p ${{ secrets.GHCR_TOKEN }}
-          docker build -t ghcr.io/${{ secrets.GHCR_ID }}/nest .
-          docker push ghcr.io/${{ secrets.GHCR_ID }}/nest
-
-      - name: Clean AWS Credentials
-        run: |
-          unset AWS_DEFAULT_REGION
-          unset AWS_REGION
-          unset AWS_ACCESS_KEY_ID
-          unset AWS_SECRET_ACCESS_KEY
-          unset AWS_SESSION_TOKEN
+          docker build -t ghcr.io/${{ secrets.GHCR_ID }}/nest:${{ steps.tag.outputs.tag }} .
+          docker push ghcr.io/${{ secrets.GHCR_ID }}/nest:${{ steps.tag.outputs.tag }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -44,5 +40,5 @@ jobs:
           script: |
             sudo docker stop nest-container || true  
             sudo docker rm nest-container || true    
-            sudo docker pull ghcr.io/${{ secrets.GHCR_ID }}/nest:latest
-            sudo docker run -it -d -p 3002:3000 --name nest-container ghcr.io/${{ secrets.GHCR_ID }}/nest:latest
+            sudo docker pull ghcr.io/${{ secrets.GHCR_ID }}/nest:${{ steps.tag.outputs.tag }}
+            sudo docker run -it -d -p 3002:3000 --name nest-container ghcr.io/${{ secrets.GHCR_ID }}/nest:${{ steps.tag.outputs.tag }}
