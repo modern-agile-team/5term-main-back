@@ -39,8 +39,13 @@ export class StudyRecruitService {
     const result = this.studyRecruitRepository.createStudyRecruitBoard(req);
     return (await result).identifiers;
   }
+
   async uploadImg(url, boardId) {
     return await this.studyRecruitBoardImgRepository.uploadImg(url, boardId);
+  }
+
+  async deleteImg(boardId) {
+    return await this.studyRecruitBoardImgRepository.deleteImg(boardId);
   }
 
   async getStudyRecruitBoard(boardId) {

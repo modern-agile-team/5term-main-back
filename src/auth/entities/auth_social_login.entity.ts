@@ -5,20 +5,23 @@ import {
   Entity,
   JoinColumn,
   OneToOne,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
 } from 'typeorm';
 
 @Entity()
 export class AuthSocialLogin extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   id: string;
 
   @Column({ name: 'access_token' })
   accessToken: string;
 
+  @Column({ name: 'user_id' })
+  userId: number;
+
   @OneToOne(() => User, (user) => user.authSocialLogin, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'user_id' })
+  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   user: User;
 }

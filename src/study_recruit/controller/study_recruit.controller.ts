@@ -47,9 +47,15 @@ export class StudyRecruitController {
       createStudyBoardDto,
     );
     const boardId = boardInfo[0].id;
+    let fileNo = 0;
     for (const file of files) {
-      const result = await this.s3Service.studyRecruitImgUpload(file, boardId);
+      const result = await this.s3Service.studyRecruitImgUpload(
+        file,
+        boardId,
+        fileNo,
+      );
       const boardImg = this.studyRecruitService.uploadImg(result, boardId);
+      fileNo++;
     }
 
     return { boardInfo };
@@ -82,15 +88,35 @@ export class StudyRecruitController {
   @ApiOperation({
     summary: '스터디 모집글 수정',
   })
+  @UseInterceptors(FilesInterceptor('files'))
   @UseGuards(JwtAccessGuard)
   @Patch('')
-  updateStudyRecruitBoard(
+  async updateStudyRecruitBoard(
     @GetUserId() userId,
-    @Body() updateStudyBoardDto: UpdateStudyBoardDto,
+    @Body() updateStudyRecruitBoardDto,
+    @UploadedFiles() files,
   ) {
+    const empty = await this.studyRecruitService.deleteImg(
+      updateStudyRecruitBoardDto.boardId,
+    );
+
+    let fileNo = 0;
+    for (const file of files) {
+      const result = await this.s3Service.studyRecruitImgUpdate(
+        file,
+        updateStudyRecruitBoardDto.boardId,
+        fileNo,
+      );
+      const boardImg = this.studyRecruitService.uploadImg(
+        result,
+        updateStudyRecruitBoardDto.boardId,
+      );
+      fileNo++;
+    }
+
     return this.studyRecruitService.updateStudyRecruitBoard(
       userId,
-      updateStudyBoardDto,
+      updateStudyRecruitBoardDto,
     );
   }
 

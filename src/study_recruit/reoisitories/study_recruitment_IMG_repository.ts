@@ -13,4 +13,12 @@ export class StudyRecruitBoardImgRepository extends Repository<StudyRecruitBoard
       })
       .execute();
   }
+  async deleteImg(boardId) {
+    return this.createQueryBuilder()
+      .delete()
+      .where({
+        studyRecruitBoardId: boardId,
+      })
+      .execute();
+  }
 }
