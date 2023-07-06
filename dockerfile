@@ -4,8 +4,6 @@
 
 FROM node:18.16.0-alpine As development
 
-USER node
-
 # Create app directory
 WORKDIR /usr/src/app
 
@@ -22,6 +20,8 @@ RUN npm i
 COPY --chown=node:node . .
 
 # Use the node user from the image (instead of the root user)
+USER node
+
 ENTRYPOINT [ "npm", "run" ,"start:dev" ] 
 ###################
 # BUILD FOR PRODUCTION
