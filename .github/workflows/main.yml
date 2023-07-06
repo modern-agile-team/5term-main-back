@@ -58,6 +58,6 @@ jobs:
           port: ${{ secrets.EC2_SSH_PORT }}
           timeout: 60s
           script: |
-            sudo docker stop nest-container 
+            sudo docker stop nest-container
             sudo docker rm nest-container
-            sudo docker run -it -d -p 3000:3000 --name nest-container nest
+            sudo docker run -it -d -p 3000:3000 --name nest-container ${{ secrets.DOCKERHUB_USERNAME}}/nest
