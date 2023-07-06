@@ -26,11 +26,19 @@ jobs:
       # # Docker Hub push (4)
       # - name: docker Hub push
       #   run: docker push nest
-      - name: Build Docker Image For Spring
+      - name: Build Docker Image
         run: |
           docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
           docker build -t ${{ secrets.DOCKERHUB_USERNAME}}/nest .
           docker push ${{ secrets.DOCKERHUB_USERNAME}}/nest
+
+      - name: Clean AWS Credentials
+        run: |
+          unset AWS_DEFAULT_REGION
+          unset AWS_REGION
+          unset AWS_ACCESS_KEY_ID
+          unset AWS_SECRET_ACCESS_KEY
+          unset AWS_SESSION_TOKEN
 
       # Configure AWS Credentials (6) - AWS 접근 권한 취득(IAM)
       - name: Configure AWS Credentials
