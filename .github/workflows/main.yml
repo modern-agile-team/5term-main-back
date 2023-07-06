@@ -14,7 +14,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker login https://ghcr.io -u ${{ secrets.GHCR_ID }} -p ${{ secrets.GHCR_TOKEN }}
+          docker login ghcr.io -u ${{ secrets.GHCR_ID }} -p ${{ secrets.GHCR_TOKEN }}
           docker build -t ghcr.io/${{ secrets.GHCR_ID }}/nest .
           docker push ghcr.io/${{ secrets.GHCR_ID }}/nest
 
@@ -44,5 +44,5 @@ jobs:
           script: |
             sudo docker stop nest-container || true  
             sudo docker rm nest-container || true    
-            sudo docker pull ${{ secrets.GHCR_ID }}/nest:latest
+            sudo docker pull ghcr.io/${{ secrets.GHCR_ID }}/nest:latest
             sudo docker run -it -d -p 3002:3000 --name nest-container ${{ secrets.GHCR_ID }}/nest:latest
