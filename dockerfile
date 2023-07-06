@@ -4,6 +4,8 @@
 
 FROM node:18.16.0-alpine As development
 
+USER node
+
 # Create app directory
 WORKDIR /usr/src/app
 
@@ -20,16 +22,10 @@ RUN npm i
 COPY --chown=node:node . .
 
 # Use the node user from the image (instead of the root user)
-USER node
-
-RUN npm i -g @nestjs/cli
-
-RUN npm run build
-
 ENTRYPOINT [ "npm", "run" ,"start:dev" ] 
-# ###################
-# # BUILD FOR PRODUCTION
-# ###################
+###################
+# BUILD FOR PRODUCTION
+###################
 
 # FROM node:18.16.0-alpine As build
 
@@ -46,7 +42,7 @@ ENTRYPOINT [ "npm", "run" ,"start:dev" ]
 # RUN npm run build
 
 # # Set NODE_ENV environment variable
-# ENV NODE_ENV production
+# # ENV NODE_ENV production
 
 # # Running `npm ci` removes the existing node_modules directory and passing in --only=production ensures that only the production dependencies are installed. This ensures that the node_modules directory is as optimized as possible
 # RUN npm ci --only=production && npm cache clean --force
