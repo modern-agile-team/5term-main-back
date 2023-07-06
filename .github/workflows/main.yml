@@ -12,9 +12,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
       - name: Build Docker Image
         run: |
           docker login https://ghcr.io -u ${{ secrets.GHCR_ID }} -p ${{ secrets.GHCR_TOKEN }}
@@ -47,5 +44,5 @@ jobs:
           script: |
             sudo docker stop nest-container || true  
             sudo docker rm nest-container || true    
-            sudo docker pull ghcr.io/${{ secrets.GHCR_ID }}/nest:latest
-            sudo docker run -it -d -p 3002:3000 --name nest-container ghcr.io/${{ secrets.GHCR_ID }}/nest:latest
+            sudo docker pull ${{ secrets.GHCR_ID }}/nest:latest
+            sudo docker run -it -d -p 3002:3000 --name nest-container ${{ secrets.GHCR_ID }}/nest:latest
