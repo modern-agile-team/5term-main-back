@@ -11,6 +11,8 @@ import { AuthService } from './auth.service';
 import * as config from 'config';
 import { User } from 'src/user/entities/user.entity';
 import { SocialUserProfileDto } from '../dtos/socialUserProfile.dto';
+import { UserImage } from 'src/user/entities/user_image.entity';
+import { UserProfile } from 'src/user/entities/user_profile.entity';
 
 @Injectable()
 export class AuthSocialService {
@@ -88,25 +90,33 @@ export class AuthSocialService {
   async socialSingUp(
     userId: number,
     socialUserProfileDto: SocialUserProfileDto,
-  ) {
+  ): Promise<{
+    accessToken: string;
+    refreshToken: string;
+    profile: UserProfile;
+  }> {
     const user: User = await this.userRepository.getUserId({ userId });
-    const userImageData = await this.userImageRepositoy.createUserImg(user);
-    const profile = await this.userProfileRepository.createSocialUserProfile(
-      user,
-      socialUserProfileDto,
-      userImageData,
-    );
+    const userImageData: UserImage =
+      await this.userImageRepositoy.createUserImg(user);
+    const profile: UserProfile =
+      await this.userProfileRepository.createSocialUserProfile(
+        user,
+        socialUserProfileDto,
+        userImageData,
+      );
     if (!profile) {
       throw new InternalServerErrorException('프로필 기입 실패');
     }
 
-    const accessToken = await this.authService.createAccessToken(user);
-    const refreshToken = await this.authService.createRefreshToken(user);
+    const accessToken: string = await this.authService.createAccessToken(user);
+    const refreshToken: string = await this.authService.createRefreshToken(
+      user,
+    );
 
     return { accessToken, refreshToken, profile };
   }
 
-  async socialLogout(userId: number) {
+  async socialLogout(userId: number): Promise<object> {
     const unlinkUrl = 'https://kapi.kakao.com/v1/user/logout';
     const socialUser: AuthSocialLogin =
       await this.authSocialLoginRepository.getUserByUserId(userId);
@@ -128,7 +138,7 @@ export class AuthSocialService {
     return { messege: 'social logout success' };
   }
 
-  async socialUnlick(userId: number) {
+  async socialUnlick(userId: number): Promise<object> {
     const unlinkUrl = 'https://kapi.kakao.com/v1/user/unlink';
     const socialUser: AuthSocialLogin =
       await this.authSocialLoginRepository.getUserByUserId(userId);

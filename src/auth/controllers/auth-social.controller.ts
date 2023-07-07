@@ -8,8 +8,6 @@ import {
   Query,
   Res,
   UseGuards,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import * as config from 'config';
@@ -44,7 +42,6 @@ export class AuthSocialController {
   }
 
   @Post('/singup')
-  @UsePipes(ValidationPipe)
   @UseGuards(JwtAccessGuard)
   async socialSingup(
     @GetUserId() userId: number,

@@ -13,7 +13,7 @@ export class UserProfileRepository extends Repository<UserProfile> {
     authCredentialDto: AuthCredentialDto,
     user: User,
     userImage: UserImage,
-  ) {
+  ): Promise<UserProfile> {
     const { nickname, phone, email, name } = authCredentialDto;
     const userProfile = {
       nickname,
@@ -32,7 +32,7 @@ export class UserProfileRepository extends Repository<UserProfile> {
     user: User,
     socialUserProfileDto: SocialUserProfileDto,
     userImage: UserImage,
-  ) {
+  ): Promise<UserProfile> {
     const { name, nickname, phone, email } = socialUserProfileDto;
     return this.save({
       user,
@@ -45,19 +45,21 @@ export class UserProfileRepository extends Repository<UserProfile> {
     });
   }
 
-  async nicknameDuplicationCheck({ nickname }: NicknameDuplicationCheckDto) {
+  async nicknameDuplicationCheck({
+    nickname,
+  }: NicknameDuplicationCheckDto): Promise<UserProfile> {
     return await this.createQueryBuilder('userProfile')
       .where('userProfile.nickname = :nickname', { nickname: nickname })
       .getOne();
   }
 
-  async phoneDuplicationCheck(phoneNumber: number) {
+  async phoneDuplicationCheck(phoneNumber: number): Promise<UserProfile> {
     return await this.createQueryBuilder('userProfile')
       .where('userProfile.phone = :phone', { phone: phoneNumber })
       .getOne();
   }
 
-  async getUserProfile(userId: number) {
+  async getUserProfile(userId: number): Promise<UserProfile> {
     const userProfile = await this.createQueryBuilder('userProfile')
       .leftJoinAndSelect('userProfile.userId', 'user')
       .leftJoinAndSelect('userProfile.userImage', 'userImage')
@@ -74,10 +76,10 @@ export class UserProfileRepository extends Repository<UserProfile> {
       return null;
     }
 
-    return { ...userProfile };
+    return userProfile;
   }
 
-  async changeEmail(email: string, userId: number) {
+  async changeEmail(email: string, userId: number): Promise<UserProfile> {
     const userProfile = await this.findOne({
       where: { userId },
     });
@@ -91,7 +93,7 @@ export class UserProfileRepository extends Repository<UserProfile> {
     return this.save(userProfile);
   }
 
-  async changePhoneNumber(phone: string, userId: number) {
+  async changePhoneNumber(phone: string, userId: number): Promise<UserProfile> {
     const userProfile = await this.findOne({
       where: { userId },
     });
@@ -105,7 +107,7 @@ export class UserProfileRepository extends Repository<UserProfile> {
     return this.save(userProfile);
   }
 
-  async changeBio(bio: string, userId: number) {
+  async changeBio(bio: string, userId: number): Promise<UserProfile> {
     const userProfile = await this.findOne({
       where: { userId },
     });
