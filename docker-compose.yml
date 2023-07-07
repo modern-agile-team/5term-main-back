@@ -1,0 +1,9 @@
+services:
+  nest:
+    image: ghcr.io/j-zzi/nest:latest
+    container_name: nest-container
+    ports:
+      - 3000:3000
+    volumes:
+      - ~/config:/home/app/config
+    restart: always
