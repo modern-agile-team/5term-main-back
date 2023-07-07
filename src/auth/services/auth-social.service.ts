@@ -135,7 +135,7 @@ export class AuthSocialService {
 
     await this.redisService.del(String(userId));
 
-    return { messege: 'social logout success' };
+    return { messege: '소셜 로그아웃 성공' };
   }
 
   async socialUnlick(userId: number): Promise<object> {

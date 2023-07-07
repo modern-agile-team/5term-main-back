@@ -9,7 +9,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import * as config from 'config';
 import { JwtAccessGuard } from '../guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorator/getUserId.decorator';
@@ -25,6 +25,11 @@ export class AuthSocialController {
   constructor(private authSocialService: AuthSocialService) {}
 
   @Get('/login')
+  @ApiOperation({
+    summary: '소셜 로그인',
+    description:
+      '소셜로그인 인가코드를 받아 소셜로그인을 진행하고 추가 정보 기입을 위한 토큰 발급',
+  })
   async socialLogin(@Query() { code }, @Res() res: Response) {
     if (!code) {
       throw new BadRequestException('인가코드가 없음');
@@ -42,6 +47,10 @@ export class AuthSocialController {
   }
 
   @Post('/singup')
+  @ApiOperation({
+    summary: '소셜 회원가입',
+    description: '소셜로 회원가입할 시 추가 정보를 위한 api',
+  })
   @UseGuards(JwtAccessGuard)
   async socialSingup(
     @GetUserId() userId: number,
@@ -62,12 +71,20 @@ export class AuthSocialController {
   }
 
   @Delete('/logout')
+  @ApiOperation({
+    summary: '소셜로그아웃',
+    description: '소셜 로그인을 한 회원을 위한 로그아웃 api',
+  })
   @UseGuards(JwtAccessGuard)
   async socialLogout(@GetUserId() userid: number) {
     return this.authSocialService.socialLogout(userid);
   }
 
   @Delete('/unlink')
+  @ApiOperation({
+    summary: '소셜 회원탈퇴',
+    description: '소셜로그인 회원들이 회원탈퇴를 위한 api',
+  })
   @UseGuards(JwtAccessGuard)
   async socialUnlink(@GetUserId() userId: number) {
     return this.authSocialService.socialUnlick(userId);
