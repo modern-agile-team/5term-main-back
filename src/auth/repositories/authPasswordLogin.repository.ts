@@ -1,9 +1,9 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { AuthPasswordLogin } from '../entities/auth_password_login.entity';
-import { AuthCredentialDto } from './../dto/auth-credential.dto';
+import { AuthCredentialDto } from '../dtos/auth-credential.dto';
 import { User } from 'src/user/entities/user.entity';
 import * as bcrypt from 'bcryptjs';
-import { ChangePasswordDto } from '../dto/changePassword.dto';
+import { ChangePasswordDto } from '../dtos/changePassword.dto';
 import { BadRequestException } from '@nestjs/common';
 
 @EntityRepository(AuthPasswordLogin)

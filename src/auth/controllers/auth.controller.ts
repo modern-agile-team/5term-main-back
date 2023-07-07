@@ -10,25 +10,21 @@ import {
   Delete,
   ParseIntPipe,
   Res,
-  Query,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AuthCredentialDto } from './dto/auth-credential.dto';
+import { AuthService } from '../services/auth.service';
+import { AuthCredentialDto } from '../dtos/auth-credential.dto';
 import {
   IdDuplicationCheckDto,
   NicknameDuplicationCheckDto,
-} from './dto/duplicationCheck.dto';
+} from '../dtos/duplicationCheck.dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { LoginDto } from './dto/login.dto';
+import { LoginDto } from '../dtos/login.dto';
 import { Response } from 'express';
-import { JwtRefreshGuard } from './guard/jwt-refresh-token.guard';
+import { JwtRefreshGuard } from '../guards/jwt-refresh-token.guard';
 import { GetUserId } from 'src/common/decorator/getUserId.decorator';
-import { JwtAccessGuard } from './guard/jwt-access-token.guard';
+import { JwtAccessGuard } from '../guards/jwt-access-token.guard';
 import * as config from 'config';
 import { GetPayload } from 'src/common/decorator/getPayload.decorator';
-import { SocialUserProfileDto } from './dto/socialUserProfile.dto';
 
 const jwtConfig = config.get('jwt');
 
@@ -142,56 +138,5 @@ export class AuthController {
   async accessTokenValidation(@GetPayload() payload) {
     const expirationPeriod = payload.exp;
     return this.authService.accessTokenValidation(expirationPeriod);
-  }
-
-  @Get('/social-login')
-  async socialLogin(@Query() { code }, @Res() res: Response) {
-    if (!code) {
-      throw new BadRequestException('인가코드가 없음');
-    }
-    const { accessToken, refreshToken } = await this.authService.socialLogin(
-      code,
-    );
-    const cookieOption = {
-      httpOnly: true,
-      domain: 'localhost',
-      maxAge: jwtConfig.refreshExpiresIn,
-    };
-    res.cookie('refreshToken', refreshToken, cookieOption);
-
-    return res.json({ accessToken });
-  }
-
-  @Post('/social-singup')
-  @UsePipes(ValidationPipe)
-  @UseGuards(JwtAccessGuard)
-  async socialSingup(
-    @GetUserId() userId: number,
-    @Body() socialUserProfileDto: SocialUserProfileDto,
-    @Res() res: Response,
-  ) {
-    const { accessToken, refreshToken, profile } =
-      await this.authService.socialSingUp(userId, socialUserProfileDto);
-
-    const cookieOption = {
-      httpOnly: true,
-      domain: 'localhost',
-      maxAge: jwtConfig.refreshExpiresIn,
-    };
-    res.cookie('refreshToken', refreshToken, cookieOption);
-
-    return res.send({ accessToken, profile });
-  }
-
-  @Delete('/social-logout')
-  @UseGuards(JwtAccessGuard)
-  async socialLogout(@GetUserId() userid: number) {
-    return this.authService.socialLogout(userid);
-  }
-
-  @Delete('/social-unlink')
-  @UseGuards(JwtAccessGuard)
-  async socialUnlink(@GetUserId() userId: number) {
-    return this.authService.socialUnlick(userId);
   }
 }
