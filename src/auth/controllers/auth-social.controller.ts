@@ -61,7 +61,7 @@ export class AuthSocialController {
     };
     res.cookie('refreshToken', refreshToken, cookieOption);
 
-    return res.send({ accessToken, profile });
+    return res.json({ accessToken, profile });
   }
 
   @Delete('/logout')
