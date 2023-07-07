@@ -17,7 +17,6 @@ import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor'
 import { StudyRecruitService } from '../service/study_recruit.service';
 import { JwtAccessGuard } from 'src/auth/guard/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorator/getUserId.decorator';
-import { UpdateStudyBoardDto } from '../dto/update-study-board-dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { S3Service } from 'src/s3/s3.service';
 
@@ -65,12 +64,12 @@ export class StudyRecruitController {
     summary: '스터디 모집글 조회',
   })
   @Get('/:id')
-  getStudyRecruitBoard(@Param() board) {
-    try {
-      return this.studyRecruitService.getStudyRecruitBoard(board.id);
-    } catch (error) {
-      throw new error('스터디 모집글 조회 실패');
-    }
+  async getStudyRecruitBoard(@Param() board) {
+    const boardInfo = await this.studyRecruitService.getStudyRecruitBoard(
+      board.id,
+    );
+    const boardImg = await this.studyRecruitService.getImg(board.id);
+    return [boardInfo, boardImg];
   }
 
   @ApiOperation({

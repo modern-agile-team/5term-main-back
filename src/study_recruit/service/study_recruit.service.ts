@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { StudyRecruitBoardRepository } from '../reoisitories/study_recruitment_repository';
-import { CreateStudyBoardDto } from '../dto/create-study-board-dto';
 import { StudyAdminsRepository } from 'src/study/repository/study_admins.repository';
 import { StudyRecruitBoardImgRepository } from '../reoisitories/study_recruitment_IMG_repository';
 
@@ -20,10 +19,7 @@ export class StudyRecruitService {
     private studyRecruitBoardImgRepository: StudyRecruitBoardImgRepository,
   ) {}
 
-  async createStudyRecruitBoard(
-    userId,
-    createStudyBoardDto: CreateStudyBoardDto,
-  ) {
+  async createStudyRecruitBoard(userId, createStudyBoardDto) {
     const req = {
       writer: userId,
       title: createStudyBoardDto.title,
@@ -48,12 +44,19 @@ export class StudyRecruitService {
     return await this.studyRecruitBoardImgRepository.deleteImg(boardId);
   }
 
+  async getImg(boardId) {
+    return await this.studyRecruitBoardImgRepository.find({
+      where: { studyRecruitBoardId: boardId },
+    });
+  }
+
   async getStudyRecruitBoard(boardId) {
     const boardInfo = await this.studyRecruitRepository.getStudyRecruitBoard(
       boardId,
     );
-    if (!!boardInfo === false)
+    if (!!boardInfo === false) {
       throw new BadRequestException('존재하지 않는 게시글');
+    }
     return boardInfo;
   }
 
