@@ -53,6 +53,6 @@ jobs:
           password: ${{ secrets.GHCR_TOKEN }}
       - name: Docker run
         run: |
-          docker-compose down
           docker-compose pull
+          docker-compose down
           docker-compose up --force-recreate --build -d
