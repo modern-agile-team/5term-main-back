@@ -1,28 +1,40 @@
-###################
-# BUILD FOR LOCAL DEVELOPMENT
-###################
-
 FROM node:18.16.0-alpine As development
 
-# Create app directory
-WORKDIR /usr/src/app
+WORKDIR /home/app
 
-# Copy application dependency manifests to the container image.
-# A wildcard is used to ensure copying both package.json AND package-lock.json (when available).
-# Copying this first prevents re-running npm install on every code change.
-COPY --chown=node:node package*.json ./
+COPY . .
+
+RUN npm ci
+RUN npm i -g @nestjs/cli@8.2.6
+RUN npm run build
+
+CMD ["npm", "run", "start:dev"]
+
+# ###################
+# # BUILD FOR LOCAL DEVELOPMENT
+# ###################
+
+# FROM node:18.16.0-alpine As development
+
+# # Create app directory
+# WORKDIR /usr/src/app
+
+# # Copy application dependency manifests to the container image.
+# # A wildcard is used to ensure copying both package.json AND package-lock.json (when available).
+# # Copying this first prevents re-running npm install on every code change.
+# COPY --chown=node:node package*.json ./
 
 
-# Install app dependencies using the `npm ci` command instead of `npm install`
-RUN npm i
+# # Install app dependencies using the `npm ci` command instead of `npm install`
+# RUN npm i
 
-# Bundle app source
-COPY --chown=node:node . .
+# # Bundle app source
+# COPY --chown=node:node . .
 
-# Use the node user from the image (instead of the root user)
-USER node
+# # Use the node user from the image (instead of the root user)
+# USER node
 
-ENTRYPOINT [ "npm", "run" ,"start:dev" ] 
+# ENTRYPOINT [ "npm", "run" ,"start:dev" ] 
 ###################
 # BUILD FOR PRODUCTION
 ###################
