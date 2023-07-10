@@ -25,13 +25,18 @@ import { GetUserId } from 'src/common/decorator/getUserId.decorator';
 import { JwtAccessGuard } from '../guards/jwt-access-token.guard';
 import * as config from 'config';
 import { GetPayload } from 'src/common/decorator/getPayload.decorator';
+import { GetLoginType } from 'src/common/decorator/getLoginType.decorator';
+import { AuthSocialService } from '../services/auth-social.service';
 
 const jwtConfig = config.get('jwt');
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private authSocialService: AuthSocialService,
+  ) {}
   @Post('/signup')
   @ApiOperation({ summary: '회원가입', description: '회원가입' })
   @ApiBody({ type: AuthCredentialDto })
@@ -122,9 +127,12 @@ export class AuthController {
     description: '로그아웃',
   })
   @UseGuards(JwtAccessGuard)
-  async logout(@GetUserId() userId) {
-    await this.authService.logout(userId);
-
+  async logout(@GetUserId() userId, @GetLoginType() loginType) {
+    if (loginType) {
+      await this.authService.logout(userId);
+    } else {
+      await this.authSocialService.socialLogout(userId);
+    }
     return { msg: '로그아웃 완료' };
   }
 

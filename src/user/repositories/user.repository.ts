@@ -21,10 +21,11 @@ export class UserRepository extends Repository<User> {
 
   async login(id: string) {
     return await this.createQueryBuilder('user')
-      .leftJoinAndSelect('user.authPasswordLogin', 'authPasswordLogin')
+      .leftJoinAndSelect('user.authPasswordLogin', 'p')
       .select('user.id', 'id')
       .addSelect('user.user_id', 'userId')
-      .addSelect('authPasswordLogin.password', 'password')
+      .addSelect('p.password', 'password')
+      .addSelect('user.loginType', 'loginType')
       .where('user.user_id = :userId', { userId: id })
       .getRawOne();
   }
