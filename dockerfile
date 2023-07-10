@@ -8,7 +8,7 @@ RUN npm ci
 RUN npm i -g @nestjs/cli@8.2.6
 RUN npm run build
 
-CMD ["npm", "run", "start:dev"]
+CMD ["npm", "run", "start:prod"]
 
 # ###################
 # # BUILD FOR LOCAL DEVELOPMENT
