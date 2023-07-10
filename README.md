@@ -1,7 +1,7 @@
-##5term-main-bakc
+## 5term-main-back
 40 백엔드 레포
 
-##**기술스택**🕹️
+## **기술스택**🕹️
 
 <p align="center">  
   <img class="img" src="https://img.shields.io/badge/Node.js-339933?style=flat&logo=Node.js&logoColor=white" height="40"/>
@@ -22,6 +22,7 @@
   <img src="https://img.shields.io/badge/Docker-2496ED?style=flat&logo=Docker&logoColor=white" height="40"/>
   <img src="https://img.shields.io/badge/Github Actions-2088FF?style=flat&logo=githubactions&logoColor=white" height="40"/>
 </p>
+
 ## ERD
 
 ![erd (1)](https://github.com/modern-agile-team/5term-main-back/assets/121776954/4aae4a40-1398-4650-9a4e-8f8d3b2cd777)
