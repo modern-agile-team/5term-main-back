@@ -5,5 +5,5 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ~/config:/app/config
+      - ~/config:/home/app/config
     restart: always

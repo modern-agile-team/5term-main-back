@@ -2,7 +2,7 @@ name: 5term-main
 
 on:
   push:
-    branches: [feature/docker]
+    branches: [develop]
 
 env:
   DOCKER_IMAGE: ghcr.io/${{ secrets.GHCR_ID }}/nest
