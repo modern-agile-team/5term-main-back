@@ -1,3 +1,4 @@
+![example branch parameter](https://github.com/modern-agile-team/5term-main-back/actions/workflows/main.yml/badge.svg?branch=develop)
 ## 5term-main-back
 40 백엔드 레포
 
