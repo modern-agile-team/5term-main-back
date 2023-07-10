@@ -23,6 +23,7 @@
   <img src="https://img.shields.io/badge/Github Actions-2088FF?style=flat&logo=githubactions&logoColor=white" height="40"/>
 </p>
 ## ERD
+
 ![erd (1)](https://github.com/modern-agile-team/5term-main-back/assets/121776954/4aae4a40-1398-4650-9a4e-8f8d3b2cd777)
 ![mongoERD](https://github.com/modern-agile-team/5term-main-back/assets/121776954/0557afe9-7781-461e-8ac8-1b29a42c944b)
 
