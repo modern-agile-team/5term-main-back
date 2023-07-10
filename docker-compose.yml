@@ -5,7 +5,7 @@ services:
     ports:
       - 3000:3000
     env_file:
-      - ~/config/default.yml
-      - ~/config/development.yml
-      - ~/config/production.yml
+      - ~/app/config/default.yml
+      - ~/app/config/development.yml
+      - ~/app/config/production.yml
     restart: always
