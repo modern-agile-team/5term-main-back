@@ -2,6 +2,7 @@ import { CommonEntity } from 'src/common/entities/common.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Study } from '../../study/entities/study.entity';
 import { User } from 'src/user/entities/user.entity';
+import { StudyToolsBoardsImg } from './study.boardIMG.entity';
 
 @Entity({
   name: 'study_board',
@@ -22,8 +23,8 @@ export class StudyToolsBoards extends CommonEntity {
   contents: string;
 
   @OneToMany(
-    () => StudyToolsBoards,
-    (studyToolsBoards) => studyToolsBoards.studyToolsBoards,
+    () => StudyToolsBoardsImg,
+    (studyToolsBoardsImg) => studyToolsBoardsImg.studyToolsBoarsdId,
   )
-  studyToolsBoards: StudyToolsBoards[];
+  studyToolsBoardsImg: StudyToolsBoardsImg[];
 }

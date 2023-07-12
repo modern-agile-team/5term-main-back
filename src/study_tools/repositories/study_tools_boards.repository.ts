@@ -10,4 +10,12 @@ export class StudyToolsBoardsRepository extends Repository<StudyToolsBoards> {
       .values(studyToolsBoards)
       .execute();
   }
+
+  async getStudyToolsBoard(studyId, boardId) {
+    return await this.createQueryBuilder('studyToolsBoards')
+      .leftJoinAndSelect('studyToolsBoards.studyToolsBoardsImg', 'img')
+      .where('studyToolsBoards.study = :studyId', { studyId })
+      .andWhere('studyToolsBoards.id = :boardId', { boardId })
+      .getOne();
+  }
 }

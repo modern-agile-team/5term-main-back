@@ -35,4 +35,17 @@ export class StudyToolsBoardsService {
   async uploadImg(url, boardId) {
     return await this.studyToolsBoardsImgRepository.uploadImg(url, boardId);
   }
+
+  async getStudyToolsBoard(userId, studyId, boardId) {
+    const checkAccess = await this.studyMembersRepository.find({
+      where: { user: userId, study: studyId },
+    });
+    if (!!checkAccess[0] === false)
+      throw new UnauthorizedException('열람 권한 없음');
+
+    return await this.studyToolsBoardsRepository.getStudyToolsBoard(
+      studyId,
+      boardId,
+    );
+  }
 }

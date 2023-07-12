@@ -1,6 +1,8 @@
 import {
   Body,
   Controller,
+  Get,
+  Param,
   Post,
   UploadedFiles,
   UseFilters,
@@ -54,5 +56,14 @@ export class StudyToolsBoardsController {
     }
 
     return { boardInfo };
+  }
+  @UseGuards(JwtAccessGuard)
+  @Get('/:studyId/:boardId')
+  async getStudyToolsBoard(@GetUserId() userId, @Param() id) {
+    return await this.studyToolsBoardsService.getStudyToolsBoard(
+      userId,
+      id.studyId,
+      id.boardId,
+    );
   }
 }
