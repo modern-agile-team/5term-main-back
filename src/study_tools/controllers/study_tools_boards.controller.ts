@@ -57,6 +57,10 @@ export class StudyToolsBoardsController {
 
     return { boardInfo };
   }
+
+  @ApiOperation({
+    summary: '스터디 게시판 게시물 조회',
+  })
   @UseGuards(JwtAccessGuard)
   @Get('/:studyId/:boardId')
   async getStudyToolsBoard(@GetUserId() userId, @Param() id) {
@@ -64,6 +68,18 @@ export class StudyToolsBoardsController {
       userId,
       id.studyId,
       id.boardId,
+    );
+  }
+
+  @ApiOperation({
+    summary: '스터디 게시판 게시물 목록 조회',
+  })
+  @UseGuards(JwtAccessGuard)
+  @Get('/:studyId')
+  async getStudyToolsBoardList(@GetUserId() userId, @Param() id) {
+    return await this.studyToolsBoardsService.getStudyToolsBoardList(
+      userId,
+      id.studyId,
     );
   }
 }

@@ -48,4 +48,16 @@ export class StudyToolsBoardsService {
       boardId,
     );
   }
+
+  async getStudyToolsBoardList(userId, studyId) {
+    const checkAccess = await this.studyMembersRepository.find({
+      where: { user: userId, study: studyId },
+    });
+    if (!!checkAccess[0] === false)
+      throw new UnauthorizedException('열람 권한 없음');
+
+    return await this.studyToolsBoardsRepository.getStudyToolsBoardList(
+      studyId,
+    );
+  }
 }

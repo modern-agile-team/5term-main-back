@@ -18,4 +18,10 @@ export class StudyToolsBoardsRepository extends Repository<StudyToolsBoards> {
       .andWhere('studyToolsBoards.id = :boardId', { boardId })
       .getOne();
   }
+  async getStudyToolsBoardList(studyId) {
+    return await this.createQueryBuilder('studyToolsBoards')
+      .select()
+      .where('studyToolsBoards.study = :studyId', { studyId })
+      .getMany();
+  }
 }
