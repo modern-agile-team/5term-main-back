@@ -101,7 +101,7 @@ export class StudyRecruitController {
 
     let fileNo = 0;
     for (const file of files) {
-      const result = await this.s3Service.studyRecruitImgUpdate(
+      const result = await this.s3Service.studyRecruitImgUpload(
         file,
         updateStudyRecruitBoardDto.boardId,
         fileNo,
