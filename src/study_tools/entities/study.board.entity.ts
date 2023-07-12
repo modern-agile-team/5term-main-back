@@ -19,7 +19,7 @@ export class StudyToolsBoards extends CommonEntity {
   title: string;
 
   @Column()
-  content: string;
+  contents: string;
 
   @OneToMany(
     () => StudyToolsBoards,

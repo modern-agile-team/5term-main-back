@@ -49,4 +49,25 @@ export class S3Service {
 
     return isDone ? { url: url, key: params.Key } : false;
   }
+  async studyToolsBoardsImgUpload(file, boardId, fileNo) {
+    const s3Config = config.get('s3');
+
+    const s3 = new S3({
+      credentials: {
+        accessKeyId: s3Config.accessKeyId,
+        secretAccessKey: s3Config.secretAccessKey,
+      },
+    });
+    const params = {
+      Key: `main-studyToolsBoards/boardId:${boardId}/${fileNo}`,
+      Body: file.buffer,
+      Bucket: s3Config.bucket,
+    };
+
+    const isDone = await s3.putObject(params).promise();
+
+    const url = this.s3Adress + params.Key;
+
+    return isDone ? { url: url, key: params.Key } : false;
+  }
 }
