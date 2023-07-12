@@ -32,8 +32,10 @@ export class StudyRecruitService {
     if (!!checkAdmin[0] === false)
       throw new UnauthorizedException('관리자 권한 없음');
 
-    const result = this.studyRecruitRepository.createStudyRecruitBoard(req);
-    return (await result).identifiers;
+    const result = await this.studyRecruitRepository.createStudyRecruitBoard(
+      req,
+    );
+    return result.identifiers;
   }
 
   async uploadImg(url, boardId) {
