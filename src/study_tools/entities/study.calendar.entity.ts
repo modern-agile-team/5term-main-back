@@ -1,6 +1,6 @@
 import { CommonEntity } from 'src/common/entities/common.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { Study } from './study.entity';
+import { Study } from '../../study/entities/study.entity';
 
 @Entity({
   name: 'study_calandar',
