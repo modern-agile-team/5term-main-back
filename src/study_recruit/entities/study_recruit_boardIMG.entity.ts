@@ -1,9 +1,17 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { StudyRecruitBoard } from './study_recruit_board.entity';
 
 @Entity({
   name: 'study_recruit_board_img',
 })
-export class RecruitboardIMG extends BaseEntity {
+export class StudyRecruitBoardImg extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -12,4 +20,11 @@ export class RecruitboardIMG extends BaseEntity {
 
   @Column()
   imgKey: string;
+
+  @ManyToOne(
+    () => StudyRecruitBoard,
+    (studyRecruitBoard) => studyRecruitBoard.id,
+  )
+  @JoinColumn({ name: 'studyRecruitBoardId_id' })
+  studyRecruitBoardId: StudyRecruitBoard;
 }
