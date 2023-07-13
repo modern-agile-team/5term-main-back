@@ -24,7 +24,7 @@ import { GetUserId } from 'src/common/decorator/getUserId.decorator';
 @ApiTags('study-tools-boards')
 @UseFilters(HttpExceptionFilter)
 @UseInterceptors(SuccessInterceptor)
-@Controller('study-tools-boards')
+@Controller('study-tools/board')
 export class StudyToolsBoardsController {
   constructor(
     private readonly studyToolsBoardsService: StudyToolsBoardsService,

@@ -19,6 +19,7 @@ import { StudyAdmins } from 'src/study/entities/study.admins.entity';
 import { StudyRecruitBoard } from 'src/study_recruit/entities/study_recruit_board.entity';
 import { UserImage } from './user_image.entity';
 import { StudyTimetable } from 'src/study_tools/entities/study.timetable.entity';
+import { StudyCalendar } from 'src/study_tools/entities/study.calendar.entity';
 
 @Entity()
 export class User extends CommonEntity {
@@ -78,4 +79,7 @@ export class User extends CommonEntity {
 
   @OneToMany(() => StudyTimetable, (studyTimetable) => studyTimetable.writer)
   timetable: StudyTimetable[];
+
+  @OneToMany(() => StudyCalendar, (studyCanlendar) => studyCanlendar.writer)
+  calendar: StudyCalendar[];
 }
