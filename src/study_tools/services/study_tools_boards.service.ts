@@ -65,15 +65,23 @@ export class StudyToolsBoardsService {
     );
   }
 
-  async updateStudyToolsBoard(userId, updateStudyBoardDto) {
+  async updateStudyToolsBoard(userId, body) {
     const checkAccess = await this.studyToolsBoardsRepository.getWriter(
-      updateStudyBoardDto.boardId,
+      body.boardId,
     );
     if (checkAccess.writer.id !== userId) {
       throw new UnauthorizedException('수정 권한 없음');
     }
-    return await this.studyToolsBoardsRepository.updateStudyRecruitBoard(
-      updateStudyBoardDto,
+    return await this.studyToolsBoardsRepository.updateStudyToolsBoard(body);
+  }
+
+  async deleteStudyToolsBoard(userId, boardId) {
+    const checkAccess = await this.studyToolsBoardsRepository.getWriter(
+      boardId,
     );
+    if (checkAccess.writer.id !== userId) {
+      throw new UnauthorizedException('수정 권한 없음');
+    }
+    return await this.studyToolsBoardsRepository.deleteStudyToolsBoard(boardId);
   }
 }

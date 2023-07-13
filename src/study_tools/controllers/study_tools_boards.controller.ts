@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -112,5 +113,14 @@ export class StudyToolsBoardsController {
     }
 
     return this.studyToolsBoardsService.updateStudyToolsBoard(userId, body);
+  }
+
+  @ApiOperation({
+    summary: '스터디 모집글 삭제',
+  })
+  @UseGuards(JwtAccessGuard)
+  @Delete('/:id')
+  deleteStudyToolsBoard(@GetUserId() userId, @Param('id') boardId) {
+    return this.studyToolsBoardsService.deleteStudyToolsBoard(userId, boardId);
   }
 }

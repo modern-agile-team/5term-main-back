@@ -33,7 +33,7 @@ export class StudyToolsBoardsRepository extends Repository<StudyToolsBoards> {
       .where('studyToolsBoards.id = :boardId', { boardId })
       .getOne();
   }
-  async updateStudyRecruitBoard(body) {
+  async updateStudyToolsBoard(body) {
     const boardId = body.boardId;
     return await this.createQueryBuilder('study_board')
       .update(StudyToolsBoards)
@@ -42,6 +42,12 @@ export class StudyToolsBoardsRepository extends Repository<StudyToolsBoards> {
         contents: body.contents,
       })
       .where('study_board.id = :boardId', { boardId })
+      .execute();
+  }
+  async deleteStudyToolsBoard(boardId) {
+    return await this.createQueryBuilder()
+      .softDelete()
+      .where({ id: boardId })
       .execute();
   }
 }
