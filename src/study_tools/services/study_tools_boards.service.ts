@@ -84,4 +84,12 @@ export class StudyToolsBoardsService {
     }
     return await this.studyToolsBoardsRepository.deleteStudyToolsBoard(boardId);
   }
+
+  async checkBoard(studyId, boardId) {
+    const result = await this.studyToolsBoardsRepository.checkBoard(
+      studyId,
+      boardId,
+    );
+    return !!result;
+  }
 }

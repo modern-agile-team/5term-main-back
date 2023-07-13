@@ -50,4 +50,12 @@ export class StudyToolsBoardsRepository extends Repository<StudyToolsBoards> {
       .where({ id: boardId })
       .execute();
   }
+
+  async checkBoard(studyId, boardId) {
+    return await this.createQueryBuilder('studyToolsBoards')
+      .select('studyToolsBoards')
+      .where('studyToolsBoards.study = :studyId', { studyId })
+      .andWhere('studyToolsBoards.id = :boardId', { boardId })
+      .getOne();
+  }
 }

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -66,6 +67,12 @@ export class StudyToolsBoardsController {
   @UseGuards(JwtAccessGuard)
   @Get('/:studyId/:boardId')
   async getStudyToolsBoard(@GetUserId() userId, @Param() id) {
+    const checkBoard = await this.studyToolsBoardsService.checkBoard(
+      id.studyId,
+      id.boardId,
+    );
+    if (checkBoard === false)
+      throw new BadRequestException('존재하지않는 게시글');
     return await this.studyToolsBoardsService.getStudyToolsBoard(
       userId,
       id.studyId,
@@ -96,6 +103,12 @@ export class StudyToolsBoardsController {
     @Body() body,
     @UploadedFiles() files,
   ) {
+    const checkBoard = await this.studyToolsBoardsService.checkBoard(
+      body.studyId,
+      body.boardId,
+    );
+    if (checkBoard === false)
+      throw new BadRequestException('존재하지않는 게시글');
     const empty = await this.studyToolsBoardsService.deleteImg(body.boardId);
 
     let fileNo = 0;
@@ -119,8 +132,22 @@ export class StudyToolsBoardsController {
     summary: '스터디 모집글 삭제',
   })
   @UseGuards(JwtAccessGuard)
-  @Delete('/:id')
-  deleteStudyToolsBoard(@GetUserId() userId, @Param('id') boardId) {
-    return this.studyToolsBoardsService.deleteStudyToolsBoard(userId, boardId);
+  @Delete('/:studyId/:boardid')
+  async deleteStudyToolsBoard(@GetUserId() userId, @Param() id) {
+    const checkBoard = await this.studyToolsBoardsService.checkBoard(
+      id.studyId,
+      id.boardId,
+    );
+    if (checkBoard === false)
+      throw new BadRequestException('존재하지않는 게시글');
+    return this.studyToolsBoardsService.deleteStudyToolsBoard(
+      userId,
+      id.boardId,
+    );
+  }
+
+  @Post('test')
+  test(@Body() id) {
+    return this.studyToolsBoardsService.checkBoard(id.studyId, id.boardId);
   }
 }
