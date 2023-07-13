@@ -9,7 +9,16 @@ export class StudyToolsBoardsImgRepository extends Repository<StudyToolsBoardsIm
       .values({
         imgUrl: result.url,
         imgKey: result.key,
-        studyToolsBoarsdId: boardId,
+        studyToolsBoards: boardId,
+      })
+      .execute();
+  }
+
+  async deleteImg(boardId) {
+    return this.createQueryBuilder()
+      .delete()
+      .where({
+        studyToolsBoards: boardId,
       })
       .execute();
   }

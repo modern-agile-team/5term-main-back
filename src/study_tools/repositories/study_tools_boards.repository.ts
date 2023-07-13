@@ -18,10 +18,30 @@ export class StudyToolsBoardsRepository extends Repository<StudyToolsBoards> {
       .andWhere('studyToolsBoards.id = :boardId', { boardId })
       .getOne();
   }
+
   async getStudyToolsBoardList(studyId) {
     return await this.createQueryBuilder('studyToolsBoards')
       .select()
       .where('studyToolsBoards.study = :studyId', { studyId })
       .getMany();
+  }
+
+  async getWriter(boardId) {
+    return await this.createQueryBuilder('studyToolsBoards')
+      .select()
+      .leftJoinAndSelect('studyToolsBoards.writer', 'writer')
+      .where('studyToolsBoards.id = :boardId', { boardId })
+      .getOne();
+  }
+  async updateStudyRecruitBoard(body) {
+    const boardId = body.boardId;
+    return await this.createQueryBuilder('study_board')
+      .update(StudyToolsBoards)
+      .set({
+        title: body.title,
+        contents: body.contents,
+      })
+      .where('study_board.id = :boardId', { boardId })
+      .execute();
   }
 }

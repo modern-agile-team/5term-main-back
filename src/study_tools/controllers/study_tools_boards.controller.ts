@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Post,
   UploadedFiles,
   UseFilters,
@@ -34,7 +35,7 @@ export class StudyToolsBoardsController {
   @UseGuards(JwtAccessGuard)
   @UseInterceptors(FilesInterceptor('files'))
   @Post()
-  async createStudyBoard(
+  async createStudyToolsBoard(
     @GetUserId() userId: number,
     @UploadedFiles() files,
     @Body() body,
@@ -81,5 +82,35 @@ export class StudyToolsBoardsController {
       userId,
       id.studyId,
     );
+  }
+
+  @ApiOperation({
+    summary: '스터디 게시판 수정',
+  })
+  @UseInterceptors(FilesInterceptor('files'))
+  @UseGuards(JwtAccessGuard)
+  @Patch('')
+  async updateStudyToolsBoard(
+    @GetUserId() userId,
+    @Body() body,
+    @UploadedFiles() files,
+  ) {
+    const empty = await this.studyToolsBoardsService.deleteImg(body.boardId);
+
+    let fileNo = 0;
+    for (const file of files) {
+      const result = await this.s3Service.studyToolsBoardsImgUpload(
+        file,
+        body.boardId,
+        fileNo,
+      );
+      const boardImg = this.studyToolsBoardsService.uploadImg(
+        result,
+        body.boardId,
+      );
+      fileNo++;
+    }
+
+    return this.studyToolsBoardsService.updateStudyToolsBoard(userId, body);
   }
 }

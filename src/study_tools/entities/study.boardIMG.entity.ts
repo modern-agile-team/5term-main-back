@@ -22,6 +22,6 @@ export class StudyToolsBoardsImg extends BaseEntity {
   imgKey: string;
 
   @ManyToOne(() => StudyToolsBoards, (studyToolsBoard) => studyToolsBoard.id)
-  @JoinColumn({ name: 'studyToolstBoardId_id' })
-  studyToolsBoarsdId: StudyToolsBoards;
+  @JoinColumn({ name: 'studyToolstBoard_id' })
+  studyToolsBoards: StudyToolsBoards;
 }

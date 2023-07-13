@@ -24,7 +24,7 @@ export class StudyToolsBoards extends CommonEntity {
 
   @OneToMany(
     () => StudyToolsBoardsImg,
-    (studyToolsBoardsImg) => studyToolsBoardsImg.studyToolsBoarsdId,
+    (studyToolsBoardsImg) => studyToolsBoardsImg.studyToolsBoards,
   )
   studyToolsBoardsImg: StudyToolsBoardsImg[];
 }

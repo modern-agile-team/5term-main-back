@@ -36,6 +36,10 @@ export class StudyToolsBoardsService {
     return await this.studyToolsBoardsImgRepository.uploadImg(url, boardId);
   }
 
+  async deleteImg(boardId) {
+    return await this.studyToolsBoardsImgRepository.deleteImg(boardId);
+  }
+
   async getStudyToolsBoard(userId, studyId, boardId) {
     const checkAccess = await this.studyMembersRepository.find({
       where: { user: userId, study: studyId },
@@ -58,6 +62,18 @@ export class StudyToolsBoardsService {
 
     return await this.studyToolsBoardsRepository.getStudyToolsBoardList(
       studyId,
+    );
+  }
+
+  async updateStudyToolsBoard(userId, updateStudyBoardDto) {
+    const checkAccess = await this.studyToolsBoardsRepository.getWriter(
+      updateStudyBoardDto.boardId,
+    );
+    if (checkAccess.writer.id !== userId) {
+      throw new UnauthorizedException('수정 권한 없음');
+    }
+    return await this.studyToolsBoardsRepository.updateStudyRecruitBoard(
+      updateStudyBoardDto,
     );
   }
 }
