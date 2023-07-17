@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -93,6 +94,26 @@ export class StudyToolsTimetableController {
 
     return await this.studyToolsTimetableService.updateTimetable(
       updateTimetableDto,
+    );
+  }
+
+  @ApiOperation({
+    summary: ' 시간표 삭제',
+  })
+  @UseGuards(JwtAccessGuard)
+  @UsePipes(ValidationPipe)
+  @Delete('/:timetableId')
+  async deleteTimetable(@GetUserId() userId: number, @Param() param) {
+    const checkWriter = await this.studyToolsTimetableService.checkWriter(
+      userId,
+      param.timetableId,
+    );
+
+    if (!!checkWriter[0] === false)
+      throw new BadRequestException('수정 권한 없음');
+
+    return await this.studyToolsTimetableService.deleteTimetable(
+      param.timetableId,
     );
   }
 }

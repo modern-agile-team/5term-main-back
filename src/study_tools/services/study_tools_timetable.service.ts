@@ -39,4 +39,8 @@ export class StudyToolsTimetableService {
       updateTimetableDto,
     );
   }
+
+  async deleteTimetable(timetableId) {
+    return this.studyToolsTimetableRepository.deleteTimetable(timetableId);
+  }
 }

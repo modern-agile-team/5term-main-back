@@ -21,4 +21,11 @@ export class StudyToolsTimetableRepository extends Repository<StudyTimetable> {
       .where({ id: updateTimetableDto.id })
       .execute();
   }
+
+  async deleteTimetable(timetableId) {
+    return this.createQueryBuilder()
+      .softDelete()
+      .where({ id: timetableId })
+      .execute();
+  }
 }
