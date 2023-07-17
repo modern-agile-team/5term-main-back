@@ -101,7 +101,7 @@ export class AuthController {
 
     const cookieOption = {
       httpOnly: true,
-      domain: 'localhost',
+      domain: 'sagong.kro.kr',
       maxAge: jwtConfig.refreshExpiresIn,
     };
     res.cookie('refreshToken', refreshToken, cookieOption);

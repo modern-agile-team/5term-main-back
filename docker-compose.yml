@@ -1,16 +1,9 @@
-version: '3.8'
-
 services:
-  redis:
-    image: redis
-    command: redis-server --port 6379
-    container_name: redis-dev
-    ports:
-      - 6379:6379
-
   nest:
-    image: nest-dev
-    command: npm run start:dev
-    container_name: nest-dev
+    image: ghcr.io/j-zzi/nest:latest
+    container_name: nest-container
     ports:
       - 3000:3000
+    volumes:
+      - ~/config:/home/app/config
+    restart: always

@@ -14,6 +14,7 @@ import { ProfileModule } from './profile/profile.module';
 import { ChatsModule } from './chats/chats.module';
 import { EventsModule } from './events/events.module';
 
+import { StudyRecruitModule } from './study_recruit/study_recruit.module';
 import typeORMConfig from 'typeorm.config';
 import * as config from 'config';
 
@@ -33,6 +34,7 @@ import * as config from 'config';
     ProfileModule,
     ChatsModule,
     EventsModule,
+    StudyRecruitModule,
   ],
   controllers: [AppController],
   providers: [AppService],
