@@ -95,7 +95,7 @@ export class AuthController {
     );
 
     const cookieOption = {
-      httpOnly: true,
+      // httpOnly: true,
       maxAge: jwtConfig.refreshExpiresIn,
     };
     res.cookie('Refresh', refreshToken, cookieOption);
