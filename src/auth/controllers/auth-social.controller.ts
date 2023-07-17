@@ -70,16 +70,6 @@ export class AuthSocialController {
     return res.json({ accessToken, profile });
   }
 
-  @Delete('/logout')
-  @ApiOperation({
-    summary: '소셜로그아웃',
-    description: '소셜 로그인을 한 회원을 위한 로그아웃 api',
-  })
-  @UseGuards(JwtAccessGuard)
-  async socialLogout(@GetUserId() userid: number) {
-    return this.authSocialService.socialLogout(userid);
-  }
-
   @Delete('/unlink')
   @ApiOperation({
     summary: '소셜 회원탈퇴',

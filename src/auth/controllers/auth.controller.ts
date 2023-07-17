@@ -109,7 +109,7 @@ export class AuthController {
     return res.json({ accessToken });
   }
 
-  @Get('/get-access-token')
+  @Get('/access-token')
   @ApiOperation({
     summary: 'Access Token 재발급',
     description: 'Access Token 재발급한다.',
