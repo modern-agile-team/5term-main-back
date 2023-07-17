@@ -10,4 +10,15 @@ export class StudyToolsTimetableRepository extends Repository<StudyTimetable> {
       .values(timetable)
       .execute();
   }
+
+  async updateTimetable(updateTimetableDto) {
+    return this.createQueryBuilder()
+      .update(StudyTimetable)
+      .set({
+        schedule: updateTimetableDto.schedule,
+        content: updateTimetableDto.content,
+      })
+      .where({ id: updateTimetableDto.id })
+      .execute();
+  }
 }

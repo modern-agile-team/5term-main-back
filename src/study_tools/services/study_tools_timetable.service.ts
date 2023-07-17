@@ -18,6 +18,12 @@ export class StudyToolsTimetableService {
     });
   }
 
+  async checkWriter(userId, timetableId) {
+    return this.studyToolsTimetableRepository.find({
+      where: { writer: userId, id: timetableId },
+    });
+  }
+
   async createTimetable(timetable) {
     return this.studyToolsTimetableRepository.createTimetable(timetable);
   }
@@ -26,5 +32,11 @@ export class StudyToolsTimetableService {
     return this.studyToolsTimetableRepository.find({
       where: { study: studyId },
     });
+  }
+
+  async updateTimetable(updateTimetableDto) {
+    return this.studyToolsTimetableRepository.updateTimetable(
+      updateTimetableDto,
+    );
   }
 }

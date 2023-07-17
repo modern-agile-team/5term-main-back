@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Post,
   UseFilters,
   UseGuards,
@@ -18,6 +19,7 @@ import { StudyToolsTimetableService } from '../services/study_tools_timetable.se
 import { GetUserId } from 'src/common/decorator/getUserId.decorator';
 import { JwtAccessGuard } from 'src/auth/guard/jwt-access-token.guard';
 import { CreateTimetableDto } from '../dtos/create-timetable.dto';
+import { UpdateTimetableDto } from '../dtos/update-timetable.dto';
 
 @ApiTags('study-tools/timetable')
 @UseFilters(HttpExceptionFilter)
@@ -69,5 +71,28 @@ export class StudyToolsTimetableController {
       throw new BadRequestException('조회권한 없음');
 
     return await this.studyToolsTimetableService.getTimetable(studyId.studyId);
+  }
+
+  @ApiOperation({
+    summary: ' 시간표 수정',
+  })
+  @UseGuards(JwtAccessGuard)
+  @UsePipes(ValidationPipe)
+  @Patch()
+  async updateTimetable(
+    @GetUserId() userId: number,
+    @Body() updateTimetableDto: UpdateTimetableDto,
+  ) {
+    const checkWriter = await this.studyToolsTimetableService.checkWriter(
+      userId,
+      updateTimetableDto.id,
+    );
+
+    if (!!checkWriter[0] === false)
+      throw new BadRequestException('수정 권한 없음');
+
+    return await this.studyToolsTimetableService.updateTimetable(
+      updateTimetableDto,
+    );
   }
 }
