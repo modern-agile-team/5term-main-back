@@ -2,6 +2,8 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
+  Param,
   Post,
   UseFilters,
   UseGuards,
@@ -51,5 +53,21 @@ export class StudyToolsTimetableController {
       throw new BadRequestException('작성권한 없음');
 
     return await this.studyToolsTimetableService.createTimetable(req);
+  }
+
+  @ApiOperation({
+    summary: '스터디 시간표 조회',
+  })
+  @UseGuards(JwtAccessGuard)
+  @Get('/:studyId')
+  async getTimetable(@GetUserId() userId: number, @Param() studyId) {
+    const checkAccess = await this.studyToolsTimetableService.checkAccess(
+      userId,
+      studyId.studyId,
+    );
+    if (!!checkAccess[0] === false)
+      throw new BadRequestException('조회권한 없음');
+
+    return await this.studyToolsTimetableService.getTimetable(studyId.studyId);
   }
 }

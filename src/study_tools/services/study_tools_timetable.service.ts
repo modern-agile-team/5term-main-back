@@ -21,4 +21,10 @@ export class StudyToolsTimetableService {
   async createTimetable(timetable) {
     return this.studyToolsTimetableRepository.createTimetable(timetable);
   }
+
+  async getTimetable(studyId) {
+    return this.studyToolsTimetableRepository.find({
+      where: { study: studyId },
+    });
+  }
 }
