@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -94,5 +95,23 @@ export class StudyToolsCalendarController {
     return await this.studyToolsCalendarService.updateCalendar(
       updateCalendarDto,
     );
+  }
+
+  @ApiOperation({
+    summary: '일정 삭제',
+  })
+  @UseGuards(JwtAccessGuard)
+  @UsePipes(ValidationPipe)
+  @Delete('/:id')
+  async deleteCalendar(@GetUserId() userId: number, @Param() calendar) {
+    const checkWriter = await this.studyToolsCalendarService.checkWriter(
+      userId,
+      calendar.id,
+    );
+
+    if (!!checkWriter[0] === false)
+      throw new BadRequestException('수정 권한 없음');
+
+    return await this.studyToolsCalendarService.deleteCalendar(calendar.id);
   }
 }

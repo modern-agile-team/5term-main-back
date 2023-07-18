@@ -21,4 +21,11 @@ export class StudyToolsCalendarsRepository extends Repository<StudyCalendar> {
       .where({ id: updateCalendarDto.id })
       .execute();
   }
+
+  deleteCalendar(calendarId) {
+    return this.createQueryBuilder()
+      .softDelete()
+      .where({ id: calendarId })
+      .execute();
+  }
 }

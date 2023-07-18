@@ -28,4 +28,8 @@ export class StudyToolsCalendarService {
   async updateCalendar(updateCalendarDto) {
     return this.studyToolsCalendarReposiotry.updateCalendar(updateCalendarDto);
   }
+
+  async deleteCalendar(calendarId) {
+    return this.studyToolsCalendarReposiotry.deleteCalendar(calendarId);
+  }
 }
