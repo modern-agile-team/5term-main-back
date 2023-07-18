@@ -18,4 +18,14 @@ export class StudyToolsCalendarService {
       where: { study: studyId },
     });
   }
+
+  async checkWriter(userId, timetableId) {
+    return this.studyToolsCalendarReposiotry.find({
+      where: { writer: userId, id: timetableId },
+    });
+  }
+
+  async updateCalendar(updateCalendarDto) {
+    return this.studyToolsCalendarReposiotry.updateCalendar(updateCalendarDto);
+  }
 }

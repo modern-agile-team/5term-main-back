@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Post,
   UseFilters,
   UseGuards,
@@ -19,6 +20,7 @@ import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor'
 import { CreateCalendarDto } from '../dtos/create-calendar.dto';
 import { StudyToolsCalendarService } from '../services/study_tools_calendar.service';
 import { StudyToolsTimetableService } from '../services/study_tools_timetable.service';
+import { UpdateCalendarDto } from '../dtos/update-calendar.dto';
 
 @ApiTags('study-calendar')
 @UseFilters(HttpExceptionFilter)
@@ -69,5 +71,28 @@ export class StudyToolsCalendarController {
       throw new BadRequestException('작성권한 없음');
 
     return await this.studyToolsCalendarService.getCalendar(id.studyId);
+  }
+
+  @ApiOperation({
+    summary: '일정 수정',
+  })
+  @UseGuards(JwtAccessGuard)
+  @UsePipes(ValidationPipe)
+  @Patch()
+  async updateCalendar(
+    @GetUserId() userId: number,
+    @Body() updateCalendarDto: UpdateCalendarDto,
+  ) {
+    const checkWriter = await this.studyToolsCalendarService.checkWriter(
+      userId,
+      updateCalendarDto.id,
+    );
+
+    if (!!checkWriter[0] === false)
+      throw new BadRequestException('수정 권한 없음');
+
+    return await this.studyToolsCalendarService.updateCalendar(
+      updateCalendarDto,
+    );
   }
 }

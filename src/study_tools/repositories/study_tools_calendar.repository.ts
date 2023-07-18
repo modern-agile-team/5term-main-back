@@ -10,4 +10,15 @@ export class StudyToolsCalendarsRepository extends Repository<StudyCalendar> {
       .values(createCalendar)
       .execute();
   }
+
+  updateCalendar(updateCalendarDto) {
+    return this.createQueryBuilder()
+      .update(StudyCalendar)
+      .set({
+        date: updateCalendarDto.date,
+        content: updateCalendarDto.content,
+      })
+      .where({ id: updateCalendarDto.id })
+      .execute();
+  }
 }
