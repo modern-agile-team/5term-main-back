@@ -21,10 +21,10 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { JwtAccessGuard } from 'src/auth/guard/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorator/getUserId.decorator';
 
-@ApiTags('study-tools-boards')
+@ApiTags('study-boards')
 @UseFilters(HttpExceptionFilter)
 @UseInterceptors(SuccessInterceptor)
-@Controller('study-tools/board')
+@Controller('study-board')
 export class StudyToolsBoardsController {
   constructor(
     private readonly studyToolsBoardsService: StudyToolsBoardsService,

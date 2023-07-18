@@ -22,10 +22,14 @@ import { JwtAccessGuard } from 'src/auth/guard/jwt-access-token.guard';
 import { CreateTimetableDto } from '../dtos/create-timetable.dto';
 import { UpdateTimetableDto } from '../dtos/update-timetable.dto';
 
-@ApiTags('study-tools/timetable')
+// study-tools/timetable
+// POST studies/:studyId/timetable
+// POST study-timetable
+
+@ApiTags('study-timetable')
 @UseFilters(HttpExceptionFilter)
 @UseInterceptors(SuccessInterceptor)
-@Controller('study-tools/timetable')
+@Controller('study-timetable')
 export class StudyToolsTimetableController {
   constructor(
     private readonly studyToolsTimetableService: StudyToolsTimetableService,
