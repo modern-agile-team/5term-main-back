@@ -101,7 +101,6 @@ export class AuthController {
 
     const cookieOption = {
       httpOnly: true,
-      domain: 'sagong.kro.kr',
       maxAge: jwtConfig.refreshExpiresIn,
     };
     res.cookie('refreshToken', refreshToken, cookieOption);
@@ -129,9 +128,9 @@ export class AuthController {
   @UseGuards(JwtAccessGuard)
   async logout(@GetUserId() userId, @GetLoginType() loginType) {
     if (loginType) {
-      await this.authService.logout(userId);
-    } else {
       await this.authSocialService.socialLogout(userId);
+    } else {
+      await this.authService.logout(userId);
     }
     return { msg: '로그아웃 완료' };
   }
