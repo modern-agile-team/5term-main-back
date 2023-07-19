@@ -19,7 +19,7 @@ import {
 } from '../dtos/duplicationCheck.dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LoginDto } from '../dtos/login.dto';
-import { Response } from 'express';
+import { CookieOptions, Response } from 'express';
 import { JwtRefreshGuard } from '../guards/jwt-refresh-token.guard';
 import { GetUserId } from 'src/common/decorator/getUserId.decorator';
 import { JwtAccessGuard } from '../guards/jwt-access-token.guard';
@@ -99,9 +99,10 @@ export class AuthController {
       loginDto,
     );
 
-    const cookieOption = {
+    const cookieOption: CookieOptions = {
       httpOnly: true,
       maxAge: jwtConfig.refreshExpiresIn,
+      sameSite: 'lax',
     };
     res.cookie('refreshToken', refreshToken, cookieOption);
 
