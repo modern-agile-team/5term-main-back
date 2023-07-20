@@ -11,27 +11,32 @@ import {
   ParseIntPipe,
   Res,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AuthCredentialDto } from './dto/auth-credential.dto';
+import { AuthService } from '../services/auth.service';
+import { AuthCredentialDto } from '../dtos/auth-credential.dto';
 import {
   IdDuplicationCheckDto,
   NicknameDuplicationCheckDto,
-} from './dto/duplicationCheck.dto';
+} from '../dtos/duplicationCheck.dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { LoginDto } from './dto/login.dto';
+import { LoginDto } from '../dtos/login.dto';
 import { CookieOptions, Response } from 'express';
-import { JwtRefreshGuard } from './guard/jwt-refresh-token.guard';
+import { JwtRefreshGuard } from '../guards/jwt-refresh-token.guard';
 import { GetUserId } from 'src/common/decorator/getUserId.decorator';
-import { JwtAccessGuard } from './guard/jwt-access-token.guard';
+import { JwtAccessGuard } from '../guards/jwt-access-token.guard';
 import * as config from 'config';
 import { GetPayload } from 'src/common/decorator/getPayload.decorator';
+import { GetLoginType } from 'src/common/decorator/getLoginType.decorator';
+import { AuthSocialService } from '../services/auth-social.service';
 
 const jwtConfig = config.get('jwt');
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private authSocialService: AuthSocialService,
+  ) {}
   @Post('/signup')
   @ApiOperation({ summary: '회원가입', description: '회원가입' })
   @ApiBody({ type: AuthCredentialDto })
@@ -99,21 +104,20 @@ export class AuthController {
       maxAge: jwtConfig.refreshExpiresIn,
       sameSite: 'lax',
     };
-    res.cookie('Refresh', refreshToken, cookieOption);
+    res.cookie('refreshToken', refreshToken, cookieOption);
 
-    return res.send({
-      accessToken,
-    });
+    return res.json({ accessToken });
   }
 
-  @Get('/get-access-token')
+  @Get('/access-token')
   @ApiOperation({
     summary: 'Access Token 재발급',
     description: 'Access Token 재발급한다.',
   })
   @UseGuards(JwtRefreshGuard)
   async recreatAccessToken(@GetUserId() userId) {
-    return await this.authService.recreateToken(userId);
+    const accessToken = await this.authService.recreateToken(userId);
+    return { accessToken };
   }
 
   @Delete('/logout')
@@ -123,9 +127,12 @@ export class AuthController {
     description: '로그아웃',
   })
   @UseGuards(JwtAccessGuard)
-  async logout(@GetUserId() userId) {
-    await this.authService.logout(userId);
-
+  async logout(@GetUserId() userId, @GetLoginType() loginType) {
+    if (loginType) {
+      await this.authSocialService.socialLogout(userId);
+    } else {
+      await this.authService.logout(userId);
+    }
     return { msg: '로그아웃 완료' };
   }
 

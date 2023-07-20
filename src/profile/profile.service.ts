@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserProfileRepository } from '../user/repositories/userProfile.repository';
 import { UserRepository } from 'src/user/repositories/user.repository';
 import { UserImageRepository } from 'src/user/repositories/userImage.repository';
-import { ChangePasswordDto } from 'src/auth/dto/changePassword.dto';
+import { ChangePasswordDto } from 'src/auth/dtos/changePassword.dto';
 import { AuthPasswordLoginRepository } from 'src/auth/repositories/authPasswordLogin.repository';
 import { ChangeEmailDto } from './dto/changeEmail.dto';
 import { ChangePhoneDto } from './dto/changePhone.dto';

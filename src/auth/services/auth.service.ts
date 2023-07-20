@@ -4,35 +4,31 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { AuthCredentialDto } from './dto/auth-credential.dto';
+import { AuthCredentialDto } from '../dtos/auth-credential.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuthSocialLoginRepository } from './repositories/authSocialLogin.repository';
-import { AuthPasswordLoginRepository } from './repositories/authPasswordLogin.repository';
-import { UserRepository } from './../user/repositories/user.repository';
+import { AuthPasswordLoginRepository } from '../repositories/authPasswordLogin.repository';
+import { UserRepository } from '../../user/repositories/user.repository';
 import { User } from 'src/user/entities/user.entity';
 import { UserProfileRepository } from 'src/user/repositories/userProfile.repository';
 import {
   IdDuplicationCheckDto,
   NicknameDuplicationCheckDto,
-} from './dto/duplicationCheck.dto';
+} from '../dtos/duplicationCheck.dto';
 import axios from 'axios';
 import * as config from 'config';
 import * as crypto from 'crypto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { RedisService } from 'src/redis/redis.service';
-import { LoginDto } from './dto/login.dto';
+import { LoginDto } from '../dtos/login.dto';
 import { UserImageRepository } from 'src/user/repositories/userImage.repository';
 import { UserProfile } from 'src/user/entities/user_profile.entity';
 import { UserImage } from 'src/user/entities/user_image.entity';
-import { AuthPasswordLogin } from './entities/auth_password_login.entity';
-import { log } from 'console';
+import { AuthPasswordLogin } from '../entities/auth_password_login.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(AuthSocialLoginRepository)
-    private authSocialLoginRepository: AuthSocialLoginRepository,
     @InjectRepository(AuthPasswordLoginRepository)
     private authPasswordLoginRepository: AuthPasswordLoginRepository,
     @InjectRepository(UserRepository)
@@ -65,7 +61,7 @@ export class AuthService {
     }
 
     const user: User = await this.userRepository.createUser(
-      authCredentialDto,
+      authCredentialDto.id,
       0,
     );
 
@@ -77,7 +73,7 @@ export class AuthService {
       await this.userProfileRepository.createUserProfile(
         authCredentialDto,
         user,
-        userImage.id,
+        userImage,
       );
 
     const authPasswordLogin: AuthPasswordLogin =
@@ -167,7 +163,6 @@ export class AuthService {
 
   async login(loginDto: LoginDto) {
     const { id, password } = loginDto;
-    const jwtConfig = config.get('jwt');
     const user = await this.userRepository.login(id);
     if (!user) {
       throw new BadRequestException('없는 아이디');
@@ -175,18 +170,8 @@ export class AuthService {
     const isPasswordOk = await bcrypt.compare(password, user.password);
 
     if (isPasswordOk) {
-      const accessPayload = { userId: user.id, type: 'ACCESS' };
-      const refreshPayload = { userId: user.id, type: 'REFRESH' };
-
-      const accessToken = await this.jwtService.sign(accessPayload);
-      const refreshToken = await this.jwtService.sign(refreshPayload, {
-        secret: jwtConfig.secretKey,
-        expiresIn: jwtConfig.refreshExpiresIn,
-      });
-
-      await this.redisService.set(String(user.id), refreshToken, {
-        ttl: jwtConfig.refreshExpiresIn,
-      });
+      const accessToken = await this.createAccessToken(user);
+      const refreshToken = await this.createRefreshToken(user);
 
       return { accessToken, refreshToken };
     }
@@ -194,12 +179,40 @@ export class AuthService {
     throw new BadRequestException('비밀번호가 틀렸습니다.');
   }
 
+  async createAccessToken(user: User) {
+    const accessPayload = {
+      userId: user.id,
+      type: 'ACCESS',
+      loginType: user.loginType,
+    };
+
+    const accessToken = await this.jwtService.sign(accessPayload);
+
+    return accessToken;
+  }
+
+  async createRefreshToken(user: User) {
+    const jwtConfig = config.get('jwt');
+    const refreshPayload = { userId: user.id, type: 'REFRESH' };
+
+    const refreshToken = await this.jwtService.sign(refreshPayload, {
+      secret: jwtConfig.secretKey,
+      expiresIn: jwtConfig.refreshExpiresIn,
+    });
+
+    await this.redisService.set(String(user.id), refreshToken, {
+      ttl: jwtConfig.refreshExpiresIn,
+    });
+
+    return refreshToken;
+  }
+
   async recreateToken(userId: number) {
     const payload = { userId: userId, type: 'ACCESS' };
 
     const accessToken = await this.jwtService.sign(payload);
 
-    return { accessToken };
+    return accessToken;
   }
 
   async logout(userId: number) {
