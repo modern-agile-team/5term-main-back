@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { AuthSocialLogin } from '../entities/auth_social_login.entity';
+import { AuthSocialLogin } from '../entities/auth-social-login.entity';
 import { User } from 'src/user/entities/user.entity';
 
 @EntityRepository(AuthSocialLogin)

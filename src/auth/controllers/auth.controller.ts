@@ -21,11 +21,11 @@ import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LoginDto } from '../dtos/login.dto';
 import { CookieOptions, Response } from 'express';
 import { JwtRefreshGuard } from '../../config/guards/jwt-refresh-token.guard';
-import { GetUserId } from 'src/common/decorators/getUserId.decorator';
+import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { JwtAccessGuard } from '../../config/guards/jwt-access-token.guard';
 import * as config from 'config';
-import { GetPayload } from 'src/common/decorators/getPayload.decorator';
-import { GetLoginType } from 'src/common/decorators/getLoginType.decorator';
+import { GetPayload } from 'src/common/decorators/get-payload.decorator';
+import { GetLoginType } from 'src/common/decorators/get-login-type.decorator';
 import { AuthSocialService } from '../services/auth-social.service';
 
 const jwtConfig = config.get('jwt');

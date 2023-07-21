@@ -10,11 +10,11 @@ const typeORMConfig: TypeOrmModuleOptions = {
   username: dbConfig.username,
   password: dbConfig.password,
   database: dbConfig.database,
-  entities: [__dirname + '/**/**/**/*.entity.{js,ts}'],
+  entities: [__dirname + '../../**/**/*.entity.{js,ts}'],
   synchronize: dbConfig.synchronize,
-  migrations: [__dirname + '/src/migrations/*.ts'],
+  migrations: [__dirname + '/migrations/*.ts'],
   cli: {
-    migrationsDir: __dirname + '/dist/src/migrations',
+    migrationsDir: __dirname + '../../dist/src/migrations',
   },
   logging: false,
 };

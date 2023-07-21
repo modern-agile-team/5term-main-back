@@ -12,7 +12,7 @@ import {
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import * as config from 'config';
 import { JwtAccessGuard } from '../../config/guards/jwt-access-token.guard';
-import { GetUserId } from 'src/common/decorators/getUserId.decorator';
+import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { SocialUserProfileDto } from '../dtos/social-user-profile.dto';
 import { Response } from 'express';
 import { AuthSocialService } from '../services/auth-social.service';

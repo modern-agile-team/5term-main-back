@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { StudyService } from '../service/study.service';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { GetUserId } from 'src/common/decorators/getUserId.decorator';
+import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { JwtAccessGuard } from 'src/config/guards/jwt-access-token.guard';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';

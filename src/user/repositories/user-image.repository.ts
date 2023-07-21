@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { UserImage } from '../entities/user_image.entity';
+import { UserImage } from '../entities/user-image.entity';
 import { User } from '../entities/user.entity';
 
 @EntityRepository(UserImage)

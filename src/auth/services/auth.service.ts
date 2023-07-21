@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AuthPasswordLoginRepository } from '../repositories/auth-password-login.repository';
 import { UserRepository } from '../../user/repositories/user.repository';
 import { User } from 'src/user/entities/user.entity';
-import { UserProfileRepository } from 'src/user/repositories/userProfile.repository';
+import { UserProfileRepository } from 'src/user/repositories/user-profile.repository';
 import {
   IdDuplicationCheckDto,
   NicknameDuplicationCheckDto,
@@ -19,12 +19,12 @@ import * as config from 'config';
 import * as crypto from 'crypto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { RedisService } from 'src/redis/redis.service';
+import { RedisService } from 'src/common/redis/redis.service';
 import { LoginDto } from '../dtos/login.dto';
-import { UserImageRepository } from 'src/user/repositories/userImage.repository';
-import { UserProfile } from 'src/user/entities/user_profile.entity';
-import { UserImage } from 'src/user/entities/user_image.entity';
-import { AuthPasswordLogin } from '../entities/auth_password_login.entity';
+import { UserImageRepository } from 'src/user/repositories/user-image.repository';
+import { UserProfile } from 'src/user/entities/user-profile.entity';
+import { UserImage } from 'src/user/entities/user-image.entity';
+import { AuthPasswordLogin } from '../entities/auth-password-login.entity';
 
 @Injectable()
 export class AuthService {

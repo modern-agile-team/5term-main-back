@@ -2,17 +2,17 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { AuthSocialLoginRepository } from '../repositories/auth-social-login.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from 'src/user/repositories/user.repository';
-import { UserProfileRepository } from 'src/user/repositories/userProfile.repository';
-import { UserImageRepository } from 'src/user/repositories/userImage.repository';
-import { RedisService } from 'src/redis/redis.service';
+import { UserProfileRepository } from 'src/user/repositories/user-profile.repository';
+import { UserImageRepository } from 'src/user/repositories/user-image.repository';
+import { RedisService } from 'src/common/redis/redis.service';
 import axios from 'axios';
-import { AuthSocialLogin } from '../entities/auth_social_login.entity';
+import { AuthSocialLogin } from '../entities/auth-social-login.entity';
 import { AuthService } from './auth.service';
 import * as config from 'config';
 import { User } from 'src/user/entities/user.entity';
 import { SocialUserProfileDto } from '../dtos/social-user-profile.dto';
-import { UserImage } from 'src/user/entities/user_image.entity';
-import { UserProfile } from 'src/user/entities/user_profile.entity';
+import { UserImage } from 'src/user/entities/user-image.entity';
+import { UserProfile } from 'src/user/entities/user-profile.entity';
 
 @Injectable()
 export class AuthSocialService {

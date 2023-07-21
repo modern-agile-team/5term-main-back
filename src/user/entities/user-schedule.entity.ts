@@ -6,7 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Schedule } from '../type/schedule.enum';
+import { Schedule } from '../types/schedule.enum';
 import { User } from './user.entity';
 
 @Entity()

@@ -19,6 +19,7 @@ async function bootstrap() {
   );
 
   setupSwagger(app);
+
   app.enableCors({
     origin: true,
     credentials: true,

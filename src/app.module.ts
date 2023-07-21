@@ -5,9 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { StudyModule } from './study/study.module';
-import { RedisModule } from './redis/redis.module';
-import { S3Module } from './s3/s3.module';
-import { ProfileModule } from './profile/profile.module';
+import { RedisModule } from './common/redis/redis.module';
+import { S3Module } from './common/s3/s3.module';
 import { ChatsModule } from './chats/chats.module';
 import { EventsModule } from './events/events.module';
 import { StudyRecruitModule } from './study_recruit/study_recruit.module';
@@ -27,7 +26,6 @@ import * as config from 'config';
     LightningModule,
     RedisModule,
     S3Module,
-    ProfileModule,
     ChatsModule,
     EventsModule,
     StudyRecruitModule,

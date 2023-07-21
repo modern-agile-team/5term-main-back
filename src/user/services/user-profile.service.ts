@@ -1,18 +1,18 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { S3Service } from '../s3/s3.service';
+import { S3Service } from '../../common/s3/s3.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserProfileRepository } from '../user/repositories/userProfile.repository';
+import { UserProfileRepository } from '../repositories/user-profile.repository';
 import { UserRepository } from 'src/user/repositories/user.repository';
-import { UserImageRepository } from 'src/user/repositories/userImage.repository';
+import { UserImageRepository } from 'src/user/repositories/user-image.repository';
 import { ChangePasswordDto } from 'src/auth/dtos/change-password.dto';
 import { AuthPasswordLoginRepository } from 'src/auth/repositories/auth-password-login.repository';
-import { ChangeEmailDto } from './dto/changeEmail.dto';
-import { ChangePhoneDto } from './dto/changePhone.dto';
-import { ChangeBioDto } from './dto/changeBio.dto';
+import { ChangeEmailDto } from '../dtos/change-email.dto';
+import { ChangePhoneDto } from '../dtos/change-phone.dto';
+import { ChangeBioDto } from '../dtos/change-bio.dto';
 import { LightningBoardRepository } from 'src/lightning/repositories/lightning_recruitment_boards.repository';
 
 @Injectable()
-export class ProfileService {
+export class UserProfileService {
   constructor(
     private s3Service: S3Service,
     @InjectRepository(UserProfileRepository)

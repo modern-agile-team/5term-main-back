@@ -9,19 +9,19 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAccessGuard } from 'src/config/guards/jwt-access-token.guard';
-import { GetUserId } from 'src/common/decorators/getUserId.decorator';
-import { ProfileService } from './profile.service';
+import { GetUserId } from 'src/common/decorators/get-userId.decorator';
+import { UserProfileService } from '../services/user-profile.service';
 import { ChangePasswordDto } from 'src/auth/dtos/change-password.dto';
-import { ChangeEmailDto } from './dto/changeEmail.dto';
-import { ChangePhoneDto } from './dto/changePhone.dto';
-import { ChangeBioDto } from './dto/changeBio.dto';
+import { ChangeEmailDto } from '../dtos/change-email.dto';
+import { ChangePhoneDto } from '../dtos/change-phone.dto';
+import { ChangeBioDto } from '../dtos/change-bio.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('profile')
 @Controller('profiles')
 @UseGuards(JwtAccessGuard)
-export class ProfileController {
-  constructor(private profileService: ProfileService) {}
+export class UserProfileController {
+  constructor(private profileService: UserProfileService) {}
   @Get('/')
   @ApiBearerAuth('access-token')
   @ApiOperation({

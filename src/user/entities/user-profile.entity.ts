@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './user.entity';
-import { UserImage } from './user_image.entity';
+import { UserImage } from './user-image.entity';
 
 @Entity()
 export class UserProfile extends BaseEntity {

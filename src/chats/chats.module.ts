@@ -21,7 +21,7 @@ import {
   StudyChattingRoomSchema,
 } from './schemas/study-chats-rooms.schema';
 import { ParseObjectIdPipe } from './parse-object-id.pipe';
-import { RedisModule } from 'src/redis/redis.module';
+import { RedisModule } from 'src/common/redis/redis.module';
 import { EventsModule } from 'src/events/events.module';
 
 @Module({
