@@ -6,14 +6,14 @@ import {
 } from '@nestjs/common';
 import { AuthCredentialDto } from '../dtos/auth-credential.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuthPasswordLoginRepository } from '../repositories/authPasswordLogin.repository';
+import { AuthPasswordLoginRepository } from '../repositories/auth-password-login.repository';
 import { UserRepository } from '../../user/repositories/user.repository';
 import { User } from 'src/user/entities/user.entity';
 import { UserProfileRepository } from 'src/user/repositories/userProfile.repository';
 import {
   IdDuplicationCheckDto,
   NicknameDuplicationCheckDto,
-} from '../dtos/duplicationCheck.dto';
+} from '../dtos/duplication-check.dto';
 import axios from 'axios';
 import * as config from 'config';
 import * as crypto from 'crypto';

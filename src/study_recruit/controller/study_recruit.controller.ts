@@ -15,8 +15,8 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 import { StudyRecruitService } from '../service/study_recruit.service';
-import { JwtAccessGuard } from 'src/auth/guards/jwt-access-token.guard';
-import { GetUserId } from 'src/common/decorator/getUserId.decorator';
+import { JwtAccessGuard } from 'src/config/guards/jwt-access-token.guard';
+import { GetUserId } from 'src/common/decorators/getUserId.decorator';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { S3Service } from 'src/s3/s3.service';
 

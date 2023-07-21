@@ -16,8 +16,8 @@ import { UpdateLightningInfoDto } from '../dtos/update-lightning-info.dto';
 import { UpdateLightningToUserDto } from '../dtos/update-lightning-to-user.dto';
 import { RequestLightningDto } from '../dtos/request-lightning.dto';
 import { UpdateAcceptLightningDto } from '../dtos/update-accept-lightning.dto';
-import { JwtAccessGuard } from 'src/auth/guards/jwt-access-token.guard';
-import { GetUserId } from 'src/common/decorator/getUserId.decorator';
+import { JwtAccessGuard } from 'src/config/guards/jwt-access-token.guard';
+import { GetUserId } from 'src/common/decorators/getUserId.decorator';
 
 @ApiTags('lightning')
 @Controller('lightnings')

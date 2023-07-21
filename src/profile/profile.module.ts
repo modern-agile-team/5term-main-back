@@ -7,7 +7,7 @@ import { LightningBoardRepository } from 'src/lightning/repositories/lightning_r
 import { UserProfileRepository } from 'src/user/repositories/userProfile.repository';
 import { UserRepository } from 'src/user/repositories/user.repository';
 import { UserImageRepository } from 'src/user/repositories/userImage.repository';
-import { AuthPasswordLoginRepository } from 'src/auth/repositories/authPasswordLogin.repository';
+import { AuthPasswordLoginRepository } from 'src/auth/repositories/auth-password-login.repository';
 
 @Module({
   imports: [

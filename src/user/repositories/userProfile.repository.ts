@@ -2,9 +2,9 @@ import { EntityRepository, Repository } from 'typeorm';
 import { UserProfile } from '../entities/user_profile.entity';
 import { AuthCredentialDto } from '../../auth/dtos/auth-credential.dto';
 import { User } from '../entities/user.entity';
-import { NicknameDuplicationCheckDto } from 'src/auth/dtos/duplicationCheck.dto';
+import { NicknameDuplicationCheckDto } from 'src/auth/dtos/duplication-check.dto';
 import { BadRequestException } from '@nestjs/common';
-import { SocialUserProfileDto } from 'src/auth/dtos/socialUserProfile.dto';
+import { SocialUserProfileDto } from 'src/auth/dtos/social-user-profile.dto';
 import { UserImage } from '../entities/user_image.entity';
 
 @EntityRepository(UserProfile)

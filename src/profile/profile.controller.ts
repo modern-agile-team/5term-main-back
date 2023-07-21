@@ -8,10 +8,10 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { JwtAccessGuard } from 'src/auth/guards/jwt-access-token.guard';
-import { GetUserId } from 'src/common/decorator/getUserId.decorator';
+import { JwtAccessGuard } from 'src/config/guards/jwt-access-token.guard';
+import { GetUserId } from 'src/common/decorators/getUserId.decorator';
 import { ProfileService } from './profile.service';
-import { ChangePasswordDto } from 'src/auth/dtos/changePassword.dto';
+import { ChangePasswordDto } from 'src/auth/dtos/change-password.dto';
 import { ChangeEmailDto } from './dto/changeEmail.dto';
 import { ChangePhoneDto } from './dto/changePhone.dto';
 import { ChangeBioDto } from './dto/changeBio.dto';

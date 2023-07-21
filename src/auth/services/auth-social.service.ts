@@ -1,5 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { AuthSocialLoginRepository } from '../repositories/authSocialLogin.repository';
+import { AuthSocialLoginRepository } from '../repositories/auth-social-login.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from 'src/user/repositories/user.repository';
 import { UserProfileRepository } from 'src/user/repositories/userProfile.repository';
@@ -10,7 +10,7 @@ import { AuthSocialLogin } from '../entities/auth_social_login.entity';
 import { AuthService } from './auth.service';
 import * as config from 'config';
 import { User } from 'src/user/entities/user.entity';
-import { SocialUserProfileDto } from '../dtos/socialUserProfile.dto';
+import { SocialUserProfileDto } from '../dtos/social-user-profile.dto';
 import { UserImage } from 'src/user/entities/user_image.entity';
 import { UserProfile } from 'src/user/entities/user_profile.entity';
 

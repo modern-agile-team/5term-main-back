@@ -16,16 +16,16 @@ import { AuthCredentialDto } from '../dtos/auth-credential.dto';
 import {
   IdDuplicationCheckDto,
   NicknameDuplicationCheckDto,
-} from '../dtos/duplicationCheck.dto';
+} from '../dtos/duplication-check.dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LoginDto } from '../dtos/login.dto';
 import { CookieOptions, Response } from 'express';
-import { JwtRefreshGuard } from '../guards/jwt-refresh-token.guard';
-import { GetUserId } from 'src/common/decorator/getUserId.decorator';
-import { JwtAccessGuard } from '../guards/jwt-access-token.guard';
+import { JwtRefreshGuard } from '../../config/guards/jwt-refresh-token.guard';
+import { GetUserId } from 'src/common/decorators/getUserId.decorator';
+import { JwtAccessGuard } from '../../config/guards/jwt-access-token.guard';
 import * as config from 'config';
-import { GetPayload } from 'src/common/decorator/getPayload.decorator';
-import { GetLoginType } from 'src/common/decorator/getLoginType.decorator';
+import { GetPayload } from 'src/common/decorators/getPayload.decorator';
+import { GetLoginType } from 'src/common/decorators/getLoginType.decorator';
 import { AuthSocialService } from '../services/auth-social.service';
 
 const jwtConfig = config.get('jwt');

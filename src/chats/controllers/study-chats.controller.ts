@@ -19,8 +19,8 @@ import mongoose from 'mongoose';
 import { CreateStuidyChattingDto } from '../dtos/create-study-chattings.dto';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
-import { JwtAccessGuard } from 'src/auth/guards/jwt-access-token.guard';
-import { GetUserId } from 'src/common/decorator/getUserId.decorator';
+import { JwtAccessGuard } from 'src/config/guards/jwt-access-token.guard';
+import { GetUserId } from 'src/common/decorators/getUserId.decorator';
 
 @ApiTags('study-chats')
 @Controller('study-chats')

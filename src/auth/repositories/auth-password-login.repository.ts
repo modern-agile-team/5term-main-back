@@ -3,7 +3,7 @@ import { AuthPasswordLogin } from '../entities/auth_password_login.entity';
 import { AuthCredentialDto } from '../dtos/auth-credential.dto';
 import { User } from 'src/user/entities/user.entity';
 import * as bcrypt from 'bcryptjs';
-import { ChangePasswordDto } from '../dtos/changePassword.dto';
+import { ChangePasswordDto } from '../dtos/change-password.dto';
 import { BadRequestException } from '@nestjs/common';
 
 @EntityRepository(AuthPasswordLogin)

@@ -11,9 +11,9 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import * as config from 'config';
-import { JwtAccessGuard } from '../guards/jwt-access-token.guard';
-import { GetUserId } from 'src/common/decorator/getUserId.decorator';
-import { SocialUserProfileDto } from '../dtos/socialUserProfile.dto';
+import { JwtAccessGuard } from '../../config/guards/jwt-access-token.guard';
+import { GetUserId } from 'src/common/decorators/getUserId.decorator';
+import { SocialUserProfileDto } from '../dtos/social-user-profile.dto';
 import { Response } from 'express';
 import { AuthSocialService } from '../services/auth-social.service';
 
