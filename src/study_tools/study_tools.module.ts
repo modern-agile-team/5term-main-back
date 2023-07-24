@@ -12,6 +12,11 @@ import { StudyToolsBoardsImgRepository } from './repositories/study_tools_boards
 import { StudyToolsCalendarController } from './controllers/study_tools_calendar.controller';
 import { StudyToolsTimetableController } from './controllers/study_tools_timetable.controller';
 import { StudyToolsTimetableService } from './services/study_tools_timetable.service';
+import { StudyService } from 'src/study/service/study.service';
+import { StudyRepository } from 'src/study/repository/study.repository';
+import { StudyAdminsRepository } from 'src/study/repository/study_admins.repository';
+import { UserRepository } from 'src/user/repositories/user.repository';
+import { S3Module } from 'src/s3/s3.module';
 
 @Module({
   imports: [
@@ -21,7 +26,11 @@ import { StudyToolsTimetableService } from './services/study_tools_timetable.ser
       StudyToolsTimetableRepository,
       StudyMembersRepository,
       StudyToolsBoardsImgRepository,
+      StudyRepository,
+      StudyAdminsRepository,
+      UserRepository,
     ]),
+    S3Module,
   ],
   controllers: [
     StudyToolsCalendarController,
@@ -32,7 +41,7 @@ import { StudyToolsTimetableService } from './services/study_tools_timetable.ser
     StudyToolsCalendarService,
     StudyToolsTimetableService,
     StudyToolsBoardsService,
-    S3Service,
+    StudyService,
   ],
 })
 export class StudyToolsModule {}

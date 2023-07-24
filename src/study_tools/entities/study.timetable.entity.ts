@@ -10,7 +10,7 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 export class StudyTimetable extends CommonEntity {
   @ManyToOne(() => Study)
   @JoinColumn({ name: 'study_id' })
-  study: Study;
+  study: number;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'writer_id' })

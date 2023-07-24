@@ -49,7 +49,7 @@ export class S3Service {
 
     return isDone ? { url: url, key: params.Key } : false;
   }
-  async studyToolsBoardsImgUpload(file, boardId, fileNo) {
+  async imgUpload(file, param) {
     const s3Config = config.get('s3');
 
     const s3 = new S3({
@@ -59,11 +59,10 @@ export class S3Service {
       },
     });
     const params = {
-      Key: `main-studyToolsBoards/boardId:${boardId}/${fileNo}`,
+      Key: param,
       Body: file.buffer,
       Bucket: s3Config.bucket,
     };
-
     const isDone = await s3.putObject(params).promise();
 
     const url = this.s3Adress + params.Key;

@@ -28,4 +28,12 @@ export class StudyToolsCalendarsRepository extends Repository<StudyCalendar> {
       .where({ id: calendarId })
       .execute();
   }
+
+  checkWriter(userId, calendarId) {
+    return this.find({ writer: userId, id: calendarId });
+  }
+
+  checkCalendar(calendarId) {
+    return this.find({ id: calendarId });
+  }
 }

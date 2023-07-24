@@ -39,7 +39,7 @@ export class StudyToolsBoardsRepository extends Repository<StudyToolsBoards> {
       .update(StudyToolsBoards)
       .set({
         title: body.title,
-        contents: body.contents,
+        content: body.content,
       })
       .where('study_board.id = :boardId', { boardId })
       .execute();
@@ -51,11 +51,7 @@ export class StudyToolsBoardsRepository extends Repository<StudyToolsBoards> {
       .execute();
   }
 
-  async checkBoard(studyId, boardId) {
-    return await this.createQueryBuilder('studyToolsBoards')
-      .select('studyToolsBoards')
-      .where('studyToolsBoards.study = :studyId', { studyId })
-      .andWhere('studyToolsBoards.id = :boardId', { boardId })
-      .getOne();
+  async checkBoard(boardId) {
+    return await this.find({ id: boardId });
   }
 }

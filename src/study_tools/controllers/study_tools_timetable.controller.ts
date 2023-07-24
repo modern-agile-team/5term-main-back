@@ -1,10 +1,10 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   UseFilters,
@@ -21,17 +21,15 @@ import { GetUserId } from 'src/common/decorator/getUserId.decorator';
 import { JwtAccessGuard } from 'src/auth/guard/jwt-access-token.guard';
 import { CreateTimetableDto } from '../dtos/create-timetable.dto';
 import { UpdateTimetableDto } from '../dtos/update-timetable.dto';
+import { StudyService } from 'src/study/service/study.service';
 
-// study-tools/timetable
-// POST studies/:studyId/timetable
-// POST study-timetable
-
-@ApiTags('study-timetable')
+@ApiTags('study-timetables')
 @UseFilters(HttpExceptionFilter)
 @UseInterceptors(SuccessInterceptor)
-@Controller('study-timetable')
+@Controller('study-timetables')
 export class StudyToolsTimetableController {
   constructor(
+    private readonly studyService: StudyService,
     private readonly studyToolsTimetableService: StudyToolsTimetableService,
   ) {}
 
@@ -43,22 +41,16 @@ export class StudyToolsTimetableController {
   @Post()
   async createTimetable(
     @GetUserId() userId: number,
-    @Body() body: CreateTimetableDto,
+    @Body() createTimetableDto: CreateTimetableDto,
   ) {
     const req = {
-      study: body.study,
+      study: createTimetableDto.study,
       writer: userId,
-      schedule: body.schedule,
-      content: body.content,
+      schedule: createTimetableDto.schedule,
+      content: createTimetableDto.content,
     };
 
-    const checkAccess = await this.studyToolsTimetableService.checkAccess(
-      req.writer,
-      req.study,
-    );
-    if (!!checkAccess[0] === false)
-      throw new BadRequestException('작성권한 없음');
-
+    await this.studyService.checkAccess(req.writer, req.study);
     return await this.studyToolsTimetableService.createTimetable(req);
   }
 
@@ -67,15 +59,12 @@ export class StudyToolsTimetableController {
   })
   @UseGuards(JwtAccessGuard)
   @Get('/:studyId')
-  async getTimetable(@GetUserId() userId: number, @Param() studyId) {
-    const checkAccess = await this.studyToolsTimetableService.checkAccess(
-      userId,
-      studyId.studyId,
-    );
-    if (!!checkAccess[0] === false)
-      throw new BadRequestException('조회권한 없음');
-
-    return await this.studyToolsTimetableService.getTimetable(studyId.studyId);
+  async getTimetable(
+    @GetUserId() userId: number,
+    @Param('studyId', ParseIntPipe) studyId: number,
+  ) {
+    await this.studyService.checkAccess(userId, studyId);
+    return await this.studyToolsTimetableService.getTimetable(studyId);
   }
 
   @ApiOperation({
@@ -88,13 +77,10 @@ export class StudyToolsTimetableController {
     @GetUserId() userId: number,
     @Body() updateTimetableDto: UpdateTimetableDto,
   ) {
-    const checkWriter = await this.studyToolsTimetableService.checkWriter(
+    await this.studyToolsTimetableService.checkWriter(
       userId,
       updateTimetableDto.id,
     );
-
-    if (!!checkWriter[0] === false)
-      throw new BadRequestException('수정 권한 없음');
 
     return await this.studyToolsTimetableService.updateTimetable(
       updateTimetableDto,
@@ -107,17 +93,12 @@ export class StudyToolsTimetableController {
   @UseGuards(JwtAccessGuard)
   @UsePipes(ValidationPipe)
   @Delete('/:timetableId')
-  async deleteTimetable(@GetUserId() userId: number, @Param() param) {
-    const checkWriter = await this.studyToolsTimetableService.checkWriter(
-      userId,
-      param.timetableId,
-    );
-
-    if (!!checkWriter[0] === false)
-      throw new BadRequestException('수정 권한 없음');
-
-    return await this.studyToolsTimetableService.deleteTimetable(
-      param.timetableId,
-    );
+  async deleteTimetable(
+    @GetUserId() userId: number,
+    @Param('timetableId', ParseIntPipe) timetableId: number,
+  ) {
+    await this.studyToolsTimetableService.checkWriter(userId, timetableId);
+    await this.studyToolsTimetableService.checkTimetable(timetableId);
+    return await this.studyToolsTimetableService.deleteTimetable(timetableId);
   }
 }

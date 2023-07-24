@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { StudyToolsCalendarsRepository } from '../repositories/study_tools_calendar.repository';
 
@@ -19,10 +19,21 @@ export class StudyToolsCalendarService {
     });
   }
 
-  async checkWriter(userId, timetableId) {
-    return this.studyToolsCalendarReposiotry.find({
-      where: { writer: userId, id: timetableId },
-    });
+  async checkWriter(userId, calendarId) {
+    const checkWriter = await this.studyToolsCalendarReposiotry.checkWriter(
+      userId,
+      calendarId,
+    );
+    if (!checkWriter[0]) throw new ForbiddenException('수정 권한 없음');
+    return true;
+  }
+
+  async checkCalendar(calendarId) {
+    const checkCalendar = await this.studyToolsCalendarReposiotry.checkCalendar(
+      calendarId,
+    );
+    if (!checkCalendar[0]) throw new ForbiddenException('존재하지 않는 일정');
+    return true;
   }
 
   async updateCalendar(updateCalendarDto) {

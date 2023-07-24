@@ -3,7 +3,7 @@ import { StudyTimetable } from '../entities/study.timetable.entity';
 
 @EntityRepository(StudyTimetable)
 export class StudyToolsTimetableRepository extends Repository<StudyTimetable> {
-  async createTimetable(timetable) {
+  createTimetable(timetable) {
     return this.createQueryBuilder()
       .insert()
       .into(StudyTimetable)
@@ -11,7 +11,7 @@ export class StudyToolsTimetableRepository extends Repository<StudyTimetable> {
       .execute();
   }
 
-  async updateTimetable(updateTimetableDto) {
+  updateTimetable(updateTimetableDto) {
     return this.createQueryBuilder()
       .update(StudyTimetable)
       .set({
@@ -22,10 +22,18 @@ export class StudyToolsTimetableRepository extends Repository<StudyTimetable> {
       .execute();
   }
 
-  async deleteTimetable(timetableId) {
+  deleteTimetable(timetableId) {
     return this.createQueryBuilder()
       .softDelete()
       .where({ id: timetableId })
       .execute();
+  }
+
+  checkTimetable(timetableId) {
+    return this.find({ id: timetableId });
+  }
+
+  getTimetable(studyId) {
+    return this.find({ study: studyId });
   }
 }

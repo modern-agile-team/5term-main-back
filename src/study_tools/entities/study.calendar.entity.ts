@@ -9,7 +9,7 @@ import { User } from 'src/user/entities/user.entity';
 export class StudyCalendar extends CommonEntity {
   @ManyToOne(() => Study)
   @JoinColumn({ name: 'study_id' })
-  study: Study;
+  study: number;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'writer_id' })

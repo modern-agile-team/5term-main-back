@@ -1,37 +1,24 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { StudyMembersRepository } from 'src/study/repository/study_members.repository';
 import { StudyToolsTimetableRepository } from '../repositories/study_tools_timetable.repository';
 
 @Injectable()
 export class StudyToolsTimetableService {
   constructor(
-    @InjectRepository(StudyMembersRepository)
-    private studyMembersRepository: StudyMembersRepository,
     @InjectRepository(StudyToolsTimetableRepository)
     private studyToolsTimetableRepository: StudyToolsTimetableRepository,
   ) {}
-
-  async checkAccess(userId, studyId) {
-    return this.studyMembersRepository.find({
-      where: { user: userId, study: studyId },
-    });
-  }
-
-  async checkWriter(userId, timetableId) {
-    return this.studyToolsTimetableRepository.find({
-      where: { writer: userId, id: timetableId },
-    });
-  }
 
   async createTimetable(timetable) {
     return this.studyToolsTimetableRepository.createTimetable(timetable);
   }
 
   async getTimetable(studyId) {
-    return this.studyToolsTimetableRepository.find({
-      where: { study: studyId },
-    });
+    return this.studyToolsTimetableRepository.getTimetable(studyId);
   }
 
   async updateTimetable(updateTimetableDto) {
@@ -42,5 +29,21 @@ export class StudyToolsTimetableService {
 
   async deleteTimetable(timetableId) {
     return this.studyToolsTimetableRepository.deleteTimetable(timetableId);
+  }
+
+  async checkWriter(userId, timetableId) {
+    const checkWriter = await this.studyToolsTimetableRepository.find({
+      where: { id: timetableId, writer: userId },
+    });
+    if (!checkWriter[0]) throw new ForbiddenException('권한 없음');
+    return true;
+  }
+
+  async checkTimetable(timetableId) {
+    const checkTimetable =
+      await this.studyToolsTimetableRepository.checkTimetable(timetableId);
+    if (!checkTimetable[0])
+      throw new BadRequestException('존재하지 않는 시간표');
+    return checkTimetable;
   }
 }

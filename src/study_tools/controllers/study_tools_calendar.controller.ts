@@ -1,10 +1,10 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   UseFilters,
@@ -20,17 +20,17 @@ import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 import { CreateCalendarDto } from '../dtos/create-calendar.dto';
 import { StudyToolsCalendarService } from '../services/study_tools_calendar.service';
-import { StudyToolsTimetableService } from '../services/study_tools_timetable.service';
 import { UpdateCalendarDto } from '../dtos/update-calendar.dto';
+import { StudyService } from 'src/study/service/study.service';
 
-@ApiTags('study-calendar')
+@ApiTags('study-calendars')
 @UseFilters(HttpExceptionFilter)
 @UseInterceptors(SuccessInterceptor)
-@Controller('study-calendar')
+@Controller('study-calendars')
 export class StudyToolsCalendarController {
   constructor(
-    private readonly studyToolsTimetableService: StudyToolsTimetableService,
     private readonly studyToolsCalendarService: StudyToolsCalendarService,
+    private readonly studyService: StudyService,
   ) {}
   @ApiOperation({
     summary: '일정 생성',
@@ -40,21 +40,13 @@ export class StudyToolsCalendarController {
   @Post()
   async createCalendar(
     @GetUserId() userId: number,
-    @Body() createCalendar: CreateCalendarDto,
+    @Body() createCalendarDto: CreateCalendarDto,
   ) {
     const req = {
-      study: Number(createCalendar.study),
+      ...createCalendarDto,
       writer: userId,
-      date: createCalendar.date,
-      content: createCalendar.content,
     };
-    const checkAccess = await this.studyToolsTimetableService.checkAccess(
-      req.writer,
-      req.study,
-    );
-    if (!!checkAccess[0] === false)
-      throw new BadRequestException('작성권한 없음');
-
+    await this.studyService.checkAccess(req.writer, req.study);
     return await this.studyToolsCalendarService.createCalendar(req);
   }
 
@@ -63,15 +55,13 @@ export class StudyToolsCalendarController {
   })
   @UseGuards(JwtAccessGuard)
   @Get('/:studyId')
-  async getCalendar(@GetUserId() userId: number, @Param() id) {
-    const checkAccess = await this.studyToolsTimetableService.checkAccess(
-      userId,
-      id.studyId,
-    );
-    if (!!checkAccess[0] === false)
-      throw new BadRequestException('작성권한 없음');
+  async getCalendar(
+    @GetUserId() userId: number,
+    @Param('studyId', ParseIntPipe) studyId: number,
+  ) {
+    await this.studyService.checkAccess(userId, studyId);
 
-    return await this.studyToolsCalendarService.getCalendar(id.studyId);
+    return await this.studyToolsCalendarService.getCalendar(studyId);
   }
 
   @ApiOperation({
@@ -84,14 +74,10 @@ export class StudyToolsCalendarController {
     @GetUserId() userId: number,
     @Body() updateCalendarDto: UpdateCalendarDto,
   ) {
-    const checkWriter = await this.studyToolsCalendarService.checkWriter(
+    await this.studyToolsCalendarService.checkWriter(
       userId,
       updateCalendarDto.id,
     );
-
-    if (!!checkWriter[0] === false)
-      throw new BadRequestException('수정 권한 없음');
-
     return await this.studyToolsCalendarService.updateCalendar(
       updateCalendarDto,
     );
@@ -102,16 +88,14 @@ export class StudyToolsCalendarController {
   })
   @UseGuards(JwtAccessGuard)
   @UsePipes(ValidationPipe)
-  @Delete('/:id')
-  async deleteCalendar(@GetUserId() userId: number, @Param() calendar) {
-    const checkWriter = await this.studyToolsCalendarService.checkWriter(
-      userId,
-      calendar.id,
-    );
+  @Delete('/:calendarId')
+  async deleteCalendar(
+    @GetUserId() userId: number,
+    @Param('calendarId', ParseIntPipe) calendarId: number,
+  ) {
+    await this.studyToolsCalendarService.checkCalendar(calendarId);
+    await this.studyToolsCalendarService.checkWriter(userId, calendarId);
 
-    if (!!checkWriter[0] === false)
-      throw new BadRequestException('수정 권한 없음');
-
-    return await this.studyToolsCalendarService.deleteCalendar(calendar.id);
+    return await this.studyToolsCalendarService.deleteCalendar(calendarId);
   }
 }

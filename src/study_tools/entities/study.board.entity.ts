@@ -10,7 +10,7 @@ import { StudyToolsBoardsImg } from './study.boardIMG.entity';
 export class StudyToolsBoards extends CommonEntity {
   @ManyToOne((type) => Study)
   @JoinColumn({ name: 'study_id' })
-  study: Study;
+  study: number;
 
   @ManyToOne((type) => User)
   @JoinColumn({ name: 'writer_id' })
@@ -20,7 +20,7 @@ export class StudyToolsBoards extends CommonEntity {
   title: string;
 
   @Column()
-  contents: string;
+  content: string;
 
   @OneToMany(
     () => StudyToolsBoardsImg,
