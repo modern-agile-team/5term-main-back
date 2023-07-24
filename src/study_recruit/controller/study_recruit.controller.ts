@@ -19,6 +19,8 @@ import { JwtAccessGuard } from 'src/auth/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorator/getUserId.decorator';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { S3Service } from 'src/s3/s3.service';
+import { CreateStudyRecruitBoardDto } from '../dtos/create-recruit-board.dto';
+import { UpdateStudyRecruitBoardDto } from '../dtos/update-recruit-board.dto';
 
 @ApiTags('study-recruitment')
 @Controller('study-recruit')
@@ -39,7 +41,7 @@ export class StudyRecruitController {
   async createStudyRecruitBoard(
     @GetUserId() userId: number,
     @UploadedFiles() files,
-    @Body() createStudyBoardDto,
+    @Body() createStudyBoardDto: CreateStudyRecruitBoardDto,
   ) {
     const boardInfo = await this.studyRecruitService.createStudyRecruitBoard(
       userId,
@@ -48,12 +50,9 @@ export class StudyRecruitController {
     const boardId = boardInfo[0].id;
     let fileNo = 0;
     for (const file of files) {
-      const result = await this.s3Service.studyRecruitImgUpload(
-        file,
-        boardId,
-        fileNo,
-      );
-      const boardImg = this.studyRecruitService.uploadImg(result, boardId);
+      const param = `main-studyRecruitBoard/boardId:${boardId}/${fileNo}`;
+      const result = await this.s3Service.imgUpload(file, param);
+      this.studyRecruitService.uploadImg(result, boardId);
       fileNo++;
     }
 
@@ -89,27 +88,22 @@ export class StudyRecruitController {
   })
   @UseInterceptors(FilesInterceptor('files'))
   @UseGuards(JwtAccessGuard)
-  @Patch('')
+  @Patch()
   async updateStudyRecruitBoard(
     @GetUserId() userId,
-    @Body() updateStudyRecruitBoardDto,
+    @Body() updateStudyRecruitBoardDto: UpdateStudyRecruitBoardDto,
     @UploadedFiles() files,
   ) {
-    const empty = await this.studyRecruitService.deleteImg(
+    await this.studyRecruitService.deleteImg(
       updateStudyRecruitBoardDto.boardId,
     );
 
+    const boardId = updateStudyRecruitBoardDto.boardId;
     let fileNo = 0;
     for (const file of files) {
-      const result = await this.s3Service.studyRecruitImgUpload(
-        file,
-        updateStudyRecruitBoardDto.boardId,
-        fileNo,
-      );
-      const boardImg = this.studyRecruitService.uploadImg(
-        result,
-        updateStudyRecruitBoardDto.boardId,
-      );
+      const param = `main-studyRecruitBoard/boardId:${boardId}/${fileNo}`;
+      const result = await this.s3Service.imgUpload(file, param);
+      this.studyRecruitService.uploadImg(result, boardId);
       fileNo++;
     }
 

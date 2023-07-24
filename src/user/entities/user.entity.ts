@@ -9,7 +9,10 @@ import { StudyToUserEntity } from 'src/study/entities/study.to.user.entity';
 import { StudyAdmins } from 'src/study/entities/study.admins.entity';
 import { StudyRecruitBoard } from 'src/study_recruit/entities/study_recruit_board.entity';
 import { UserImage } from './user_image.entity';
+import { StudyTimetable } from 'src/study_tools/entities/study.timetable.entity';
+import { StudyCalendar } from 'src/study_tools/entities/study.calendar.entity';
 import { UserProfile } from './user_profile.entity';
+
 
 @Entity()
 export class User extends CommonEntity {
@@ -67,8 +70,15 @@ export class User extends CommonEntity {
   @OneToOne(() => UserImage, (userImage) => userImage.user, {
     cascade: true,
   })
-  userImage: UserImage;
+ userImage: UserImage;
+
+  @OneToMany(() => StudyTimetable, (studyTimetable) => studyTimetable.writer)
+  timetable: StudyTimetable[];
+
+  @OneToMany(() => StudyCalendar, (studyCanlendar) => studyCanlendar.writer)
+  calendar: StudyCalendar[];
 
   @OneToOne(() => UserProfile, (userProfile) => userProfile.user)
   userProfile: UserProfile;
+
 }
