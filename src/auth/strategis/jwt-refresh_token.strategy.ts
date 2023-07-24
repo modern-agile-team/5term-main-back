@@ -19,7 +19,7 @@ export default class JwtRefreshStrategy extends PassportStrategy(
             throw new UnauthorizedException('header에 refresh 토큰이 없음');
           }
 
-          return request?.headers.cookie.substring(8);
+          return request?.headers.cookie.substring(13);
         },
       ]),
       secretOrKey: jwtConfig.secretKey,
@@ -28,13 +28,14 @@ export default class JwtRefreshStrategy extends PassportStrategy(
   }
   async validate(req, payload: any) {
     const { userId } = payload;
-    const token = req.headers.cookie.substring(8);
+
+    const token = req.headers.cookie.substring(13);
     const result = await this.redisService.get(String(userId));
 
     if (token !== result) {
       throw new UnauthorizedException('확인 안된 리프레시 토큰');
     }
 
-    return userId;
+    return payload;
   }
 }

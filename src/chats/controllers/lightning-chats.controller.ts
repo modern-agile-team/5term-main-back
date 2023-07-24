@@ -19,7 +19,7 @@ import mongoose from 'mongoose';
 import { CreateLightningChattingDto } from '../dtos/create-lightning-chattings.dto';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
-import { JwtAccessGuard } from 'src/auth/guard/jwt-access-token.guard';
+import { JwtAccessGuard } from 'src/auth/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorator/getUserId.decorator';
 
 @ApiTags('lightning-chats')

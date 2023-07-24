@@ -2,7 +2,6 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import * as config from 'config';
-import { UserRepository } from 'src/user/repositories/user.repository';
 import { RedisService } from 'src/redis/redis.service';
 
 const jwtConfig = config.get('jwt');
