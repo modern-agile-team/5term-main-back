@@ -13,14 +13,14 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { StudyChatsService } from '../services/study-chats.service';
-import { ParseObjectIdPipe } from '../parse-object-id.pipe';
+import { StudyChatsService } from '@src/chats/services/study-chats.service';
+import { ParseObjectIdPipe } from '@src/chats/parse-object-id.pipe';
 import mongoose from 'mongoose';
-import { CreateStuidyChattingDto } from '../dtos/create-study-chattings.dto';
-import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
-import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
-import { JwtAccessGuard } from 'src/auth/guards/jwt-access-token.guard';
-import { GetUserId } from 'src/common/decorator/getUserId.decorator';
+import { CreateStuidyChattingDto } from '@src/chats/dtos/create-study-chattings.dto';
+import { HttpExceptionFilter } from '@src/common/exceptions/http-exception.filter';
+import { SuccessInterceptor } from '@src/common/interceptors/success.interceptor';
+import { JwtAccessGuard } from '@src/config/guards/jwt-access-token.guard';
+import { GetUserId } from '@src/common/decorators/get-userId.decorator';
 
 @ApiTags('study-chats')
 @Controller('study-chats')

@@ -1,11 +1,11 @@
-import { UpdateLightningBoardDto } from '../dtos/update-lightning-board.dto';
-import { LightningBoardRepository } from './../repositories/lightning_recruitment_boards.repository';
+import { UpdateLightningBoardDto } from '@src/lightning/dtos/update-lightning-board.dto';
+import { LightningBoardRepository } from '@src/lightning/repositories/lightning_recruitment_boards.repository';
 import {
   Injectable,
   InternalServerErrorException,
   BadRequestException,
 } from '@nestjs/common';
-import { CreateLightningBoardDto } from '../dtos/create-lightning-board.dto';
+import { CreateLightningBoardDto } from '@src/lightning/dtos/create-lightning-board.dto';
 
 @Injectable()
 export class LightningRecruitmentService {

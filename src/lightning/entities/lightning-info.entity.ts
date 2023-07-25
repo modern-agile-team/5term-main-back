@@ -1,7 +1,7 @@
-import { CommonEntity } from 'src/common/entities/common.entity';
+import { CommonEntity } from '@src/common/entities/common.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
-import { LightningBoardEntity } from './lightning-boards.entity';
-import { LightningToUserEntity } from './lightning-to-user.entity';
+import { LightningBoardEntity } from '@src/lightning/entities/lightning-boards.entity';
+import { LightningToUserEntity } from '@src/lightning/entities/lightning-to-user.entity';
 
 @Entity({
   name: 'lightning_info',

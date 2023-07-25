@@ -1,5 +1,5 @@
-import { LightningToUserEntity } from '../entities/lightning-to-user.entity';
-import { LightningInfoEntity } from './../entities/lightning-info.entity';
+import { LightningToUserEntity } from '@src/lightning/entities/lightning-to-user.entity';
+import { LightningInfoEntity } from '@src/lightning/entities/lightning-info.entity';
 import { EntityRepository, InsertResult, Repository } from 'typeorm';
 
 @EntityRepository(LightningInfoEntity)

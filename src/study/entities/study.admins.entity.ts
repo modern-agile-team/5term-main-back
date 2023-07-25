@@ -1,4 +1,4 @@
-import { User } from 'src/user/entities/user.entity';
+import { User } from '@src/user/entities/user.entity';
 import {
   BaseEntity,
   Entity,
@@ -7,7 +7,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Study } from './study.entity';
+import { Study } from '@src/study/entities/study.entity';
 
 @Entity({
   name: 'study_admins',

@@ -4,9 +4,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { StudyRecruitBoardRepository } from '../reoisitories/study_recruitment_repository';
-import { StudyAdminsRepository } from 'src/study/repository/study_admins.repository';
-import { StudyRecruitBoardImgRepository } from '../reoisitories/study_recruitment_IMG_repository';
+import { StudyRecruitBoardRepository } from '@src/study_recruit/reoisitories/study_recruitment_repository';
+import { StudyAdminsRepository } from '@src/study/repository/study_admins.repository';
+import { StudyRecruitBoardImgRepository } from '@src/study_recruit/reoisitories/study_recruitment_IMG_repository';
 
 @Injectable()
 export class StudyRecruitService {

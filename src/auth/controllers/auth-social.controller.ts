@@ -11,11 +11,11 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import * as config from 'config';
-import { JwtAccessGuard } from '../guards/jwt-access-token.guard';
-import { GetUserId } from 'src/common/decorator/getUserId.decorator';
-import { SocialUserProfileDto } from '../dtos/socialUserProfile.dto';
+import { JwtAccessGuard } from '@src/config/guards/jwt-access-token.guard';
+import { GetUserId } from '@src/common/decorators/get-userId.decorator';
+import { SocialUserProfileDto } from '@src/auth/dtos/social-user-profile.dto';
 import { Response } from 'express';
-import { AuthSocialService } from '../services/auth-social.service';
+import { AuthSocialService } from '@src/auth/services/auth-social.service';
 
 const jwtConfig = config.get('jwt');
 

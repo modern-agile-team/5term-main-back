@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Schema, SchemaFactory, Prop } from '@nestjs/mongoose';
 import mongoose, { SchemaOptions, Document } from 'mongoose';
-import { LightningChattingRoom } from './lightning-chats-rooms.schema';
+import { LightningChattingRoom } from '@src/chats/schemas/lightning-chats-rooms.schema';
 
 const options: SchemaOptions = {
   collection: 'lightning_chats',

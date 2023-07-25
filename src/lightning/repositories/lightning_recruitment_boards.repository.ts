@@ -1,6 +1,6 @@
 import { EntityRepository, InsertResult, Repository } from 'typeorm';
-import { LightningBoardEntity } from '../entities/lightning-boards.entity';
-import { User } from 'src/user/entities/user.entity';
+import { LightningBoardEntity } from '@src/lightning/entities/lightning-boards.entity';
+import { User } from '@src/user/entities/user.entity';
 
 @EntityRepository(LightningBoardEntity)
 export class LightningBoardRepository extends Repository<LightningBoardEntity> {

@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { StudyRecruitBoard } from '../entities/study_recruit_board.entity';
+import { StudyRecruitBoard } from '@src/study_recruit/entities/study_recruit_board.entity';
 
 @EntityRepository(StudyRecruitBoard)
 export class StudyRecruitBoardRepository extends Repository<StudyRecruitBoard> {

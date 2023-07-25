@@ -11,22 +11,22 @@ import {
   ParseIntPipe,
   Res,
 } from '@nestjs/common';
-import { AuthService } from '../services/auth.service';
-import { AuthCredentialDto } from '../dtos/auth-credential.dto';
+import { AuthService } from '@src/auth/services/auth.service';
+import { AuthCredentialDto } from '@src/auth/dtos/auth-credential.dto';
 import {
   IdDuplicationCheckDto,
   NicknameDuplicationCheckDto,
-} from '../dtos/duplicationCheck.dto';
+} from '@src/auth/dtos/duplication-check.dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { LoginDto } from '../dtos/login.dto';
+import { LoginDto } from '@src/auth/dtos/login.dto';
 import { CookieOptions, Response } from 'express';
-import { JwtRefreshGuard } from '../guards/jwt-refresh-token.guard';
-import { GetUserId } from 'src/common/decorator/getUserId.decorator';
-import { JwtAccessGuard } from '../guards/jwt-access-token.guard';
+import { JwtRefreshGuard } from '@src/config/guards/jwt-refresh-token.guard';
+import { GetUserId } from '@src/common/decorators/get-userId.decorator';
+import { JwtAccessGuard } from '@src/config/guards/jwt-access-token.guard';
+import { GetPayload } from '@src/common/decorators/get-payload.decorator';
+import { GetLoginType } from '@src/common/decorators/get-login-type.decorator';
+import { AuthSocialService } from '@src/auth/services/auth-social.service';
 import * as config from 'config';
-import { GetPayload } from 'src/common/decorator/getPayload.decorator';
-import { GetLoginType } from 'src/common/decorator/getLoginType.decorator';
-import { AuthSocialService } from '../services/auth-social.service';
 
 const jwtConfig = config.get('jwt');
 

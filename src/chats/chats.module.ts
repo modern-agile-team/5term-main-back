@@ -1,28 +1,28 @@
 import {
   LightningChatting,
   LightningChattingSchema,
-} from './schemas/lightning-chats.schema';
+} from '@src/chats/schemas/lightning-chats.schema';
 import { Module } from '@nestjs/common';
-import { LightningChatsController } from './controllers/lightning-chats.controller';
+import { LightningChatsController } from '@src/chats/controllers/lightning-chats.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import {
   StudyChatting,
   StudyChattingSchema,
-} from './schemas/study-chats.schema';
-import { StudyChatsService } from './services/study-chats.service';
-import { LightningChatsService } from './services/lightning-chats.service';
-import { StudyChatsController } from './controllers/study-chats.controller';
+} from '@src/chats/schemas/study-chats.schema';
+import { StudyChatsService } from '@src/chats/services/study-chats.service';
+import { LightningChatsService } from '@src/chats/services/lightning-chats.service';
+import { StudyChatsController } from '@src/chats/controllers/study-chats.controller';
 import {
   LightningChattingRoom,
   LightningChattingRoomSchema,
-} from './schemas/lightning-chats-rooms.schema';
+} from '@src/chats/schemas/lightning-chats-rooms.schema';
 import {
   StudyChattingRoom,
   StudyChattingRoomSchema,
-} from './schemas/study-chats-rooms.schema';
-import { ParseObjectIdPipe } from './parse-object-id.pipe';
-import { RedisModule } from 'src/redis/redis.module';
-import { EventsModule } from 'src/events/events.module';
+} from '@src/chats/schemas/study-chats-rooms.schema';
+import { ParseObjectIdPipe } from '@src/chats/parse-object-id.pipe';
+import { RedisModule } from '@src/common/redis/redis.module';
+import { EventsModule } from '@src/events/events.module';
 
 @Module({
   imports: [

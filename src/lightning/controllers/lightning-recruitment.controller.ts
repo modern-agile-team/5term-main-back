@@ -9,11 +9,11 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common/decorators';
-import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
-import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
+import { SuccessInterceptor } from '@src/common/interceptors/success.interceptor';
+import { HttpExceptionFilter } from '@src/common/exceptions/http-exception.filter';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { LightningRecruitmentService } from '../services/lightning-recruitment.service';
-import { JwtAccessGuard } from 'src/auth/guards/jwt-access-token.guard';
+import { LightningRecruitmentService } from '@src/lightning/services/lightning-recruitment.service';
+import { JwtAccessGuard } from '@src/config/guards/jwt-access-token.guard';
 
 @ApiTags('lightning-recruitment')
 @Controller('lightning-boards')

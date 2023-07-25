@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Schema, SchemaFactory, Prop } from '@nestjs/mongoose';
 import mongoose, { SchemaOptions, Document } from 'mongoose';
-import { StudyChattingRoom } from './study-chats-rooms.schema';
+import { StudyChattingRoom } from '@src/chats/schemas/study-chats-rooms.schema';
 
 const options: SchemaOptions = {
   collection: 'study_chats',
