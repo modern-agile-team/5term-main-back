@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -29,8 +30,7 @@ export class StudyService {
 
   async getStudy(studyId) {
     const studyInfo = await this.studyRepository.getStudy(studyId);
-    if (!!studyInfo[0] === false)
-      throw new BadRequestException('존재하지 않는 스터디');
+    if (!studyInfo[0]) throw new BadRequestException('존재하지 않는 스터디');
     return studyInfo;
   }
 
@@ -38,8 +38,7 @@ export class StudyService {
     const studyInfo = await this.studyRepository.find({
       where: { id: studyId },
     });
-    if (!!studyInfo[0] === false)
-      throw new BadRequestException('존재하지 않는 스터디');
+    if (!studyInfo[0]) throw new BadRequestException('존재하지 않는 스터디');
 
     return await this.studyMembersRepository.find({
       where: { study: studyId },
@@ -89,8 +88,7 @@ export class StudyService {
     const checkAdmin = await this.studyAdminsRepository.find({
       where: { user: userId, study: study.studyId },
     });
-    if (!!checkAdmin[0] === false)
-      throw new UnauthorizedException('관리자 권한 없음');
+    if (!checkAdmin[0]) throw new UnauthorizedException('관리자 권한 없음');
     return this.studyRepository.deleteStudy(study.studyId);
   }
 
@@ -109,8 +107,7 @@ export class StudyService {
       where: { id: study.studyId },
     });
 
-    if (!!studyInfo[0] === false)
-      throw new BadRequestException('유효하지 않은 스터디.');
+    if (!studyInfo[0]) throw new BadRequestException('유효하지 않은 스터디.');
     return this.studyMembersRepository.joinStudy(userId, study.studyId);
   }
 
@@ -123,7 +120,7 @@ export class StudyService {
       where: { study: study.studyId, user: userId },
     });
 
-    if (!memberInfo[0] === true || memberInfo[0].isAccept !== 1)
+    if (!memberInfo[0] || memberInfo[0].isAccept !== 1)
       throw new BadRequestException('멤버가 아님');
 
     return await this.studyMembersRepository.exitStudy(userId, study.studyId);
@@ -139,7 +136,7 @@ export class StudyService {
       where: { study: req.studyId, user: req.userId },
     });
 
-    if (!!memberInfo[0] === false || memberInfo[0].isAccept !== 1)
+    if (!memberInfo[0] || memberInfo[0].isAccept !== 1)
       throw new BadRequestException('멤버가 아님');
     else return await this.studyMembersRepository.expelStudy(req);
   }
@@ -171,11 +168,18 @@ export class StudyService {
     const memberInfo = await this.studyMembersRepository.find({
       where: { user: req.userId, study: req.studyId },
     });
-    if (!!checkAdmin[0] === false)
-      throw new UnauthorizedException('관리자 권한 없음');
-    if (!!memberInfo[0] === false || memberInfo[0].isAccept !== 1)
+    if (!checkAdmin[0]) throw new UnauthorizedException('관리자 권한 없음');
+    if (!memberInfo[0] || memberInfo[0].isAccept !== 1)
       throw new BadRequestException('멤버가 아님');
 
     return this.studyAdminsRepository.transferAdmin(req);
+  }
+
+  async checkAccess(userId, studyId) {
+    const checkAccess = await this.studyMembersRepository.find({
+      where: { user: userId, study: studyId },
+    });
+    if (!checkAccess[0]) throw new ForbiddenException('권한 없음');
+    return true;
   }
 }

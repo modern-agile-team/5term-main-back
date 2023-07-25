@@ -18,8 +18,8 @@ import { SuccessInterceptor } from '@src/common/interceptors/success.interceptor
 import { HttpExceptionFilter } from '@src/common/exceptions/http-exception.filter';
 import { StudyCreateDto } from '@src/study/dto/study.create.dto';
 
-@ApiTags('studies')
-@Controller('studies')
+@ApiTags('study-management')
+@Controller('study-management')
 @UseFilters(HttpExceptionFilter)
 @UseInterceptors(SuccessInterceptor)
 export class StudyController {
