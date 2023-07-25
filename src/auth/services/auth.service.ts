@@ -74,11 +74,12 @@ export class AuthService {
         userImage,
       );
 
+    const { password } = authCredentialDto;
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const authUser = { password: hashedPassword, user };
     const authPasswordLogin: AuthPasswordLogin =
-      await this.authPasswordLoginRepository.createPasswordUser(
-        authCredentialDto,
-        user,
-      );
+      await this.authPasswordLoginRepository.createPasswordUser(authUser);
 
     return { ...userProfile, ...userImage, ...authPasswordLogin, ...user };
   }
