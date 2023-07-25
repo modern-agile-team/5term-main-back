@@ -74,8 +74,8 @@ export class AuthSocialController {
     summary: '소셜 회원탈퇴',
     description: '소셜로그인 회원들이 회원탈퇴를 위한 api',
   })
-  @Delete('/unlink')
   @UseGuards(JwtAccessGuard)
+  @Delete('/unlink')
   async socialUnlink(@GetUserId() userId: number) {
     return this.authSocialService.socialUnlick(userId);
   }
