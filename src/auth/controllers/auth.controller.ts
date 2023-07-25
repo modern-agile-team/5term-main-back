@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Post,
-  HttpCode,
   BadRequestException,
   Get,
   Param,
@@ -10,6 +9,7 @@ import {
   Delete,
   ParseIntPipe,
   Res,
+  Patch,
 } from '@nestjs/common';
 import { AuthService } from '@src/auth/services/auth.service';
 import { AuthCredentialDto } from '@src/auth/dtos/auth-credential.dto';
@@ -26,6 +26,7 @@ import { JwtAccessGuard } from '@src/config/guards/jwt-access-token.guard';
 import { GetPayload } from '@src/common/decorators/get-payload.decorator';
 import { GetLoginType } from '@src/common/decorators/get-login-type.decorator';
 import { AuthSocialService } from '@src/auth/services/auth-social.service';
+import { ChangePasswordDto } from '@src/auth/dtos/change-password.dto';
 import * as config from 'config';
 
 const jwtConfig = config.get('jwt');
@@ -143,5 +144,18 @@ export class AuthController {
   async accessTokenValidation(@GetPayload() payload) {
     const expirationPeriod = payload.exp;
     return this.authService.accessTokenValidation(expirationPeriod);
+  }
+
+  @ApiBearerAuth('access-token')
+  @ApiOperation({
+    summary: '비밀번호 변경',
+    description: '비밀번호 변경하는 api',
+  })
+  @Patch('/password')
+  async changePassword(
+    @GetUserId() userNo,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ) {
+    return this.authService.changPassword(userNo, changePasswordDto);
   }
 }

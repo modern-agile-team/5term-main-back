@@ -45,19 +45,6 @@ export class UserProfileController {
 
   @ApiBearerAuth('access-token')
   @ApiOperation({
-    summary: '비밀번호 변경',
-    description: '비밀번호 변경하는 api',
-  })
-  @Patch('/password')
-  async changePassword(
-    @GetUserId() userNo,
-    @Body() changePasswordDto: ChangePasswordDto,
-  ) {
-    return this.profileService.changPassword(userNo, changePasswordDto);
-  }
-
-  @ApiBearerAuth('access-token')
-  @ApiOperation({
     summary: '이메일 변경',
     description: '이메일 변경하는 api',
   })

@@ -25,6 +25,7 @@ import axios from 'axios';
 import * as config from 'config';
 import * as crypto from 'crypto';
 import * as bcrypt from 'bcrypt';
+import { ChangePasswordDto } from '@src/auth/dtos/change-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -227,5 +228,12 @@ export class AuthService {
       throw new UnauthorizedException('유효 시간 10분 미만');
     }
     return { leftTime };
+  }
+
+  async changPassword(userNo: number, changePasswordDto: ChangePasswordDto) {
+    return this.authPasswordLoginRepository.changePassword(
+      userNo,
+      changePasswordDto,
+    );
   }
 }
