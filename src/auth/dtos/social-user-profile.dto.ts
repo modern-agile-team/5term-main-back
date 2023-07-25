@@ -9,7 +9,7 @@ export class SocialUserProfileDto {
     description: '전화번호',
     example: '01012345678',
   })
-  phone: string;
+  phone?: string;
 
   @IsString()
   @MinLength(4)
@@ -19,7 +19,7 @@ export class SocialUserProfileDto {
     description: '닉네임',
     example: '닉네임123',
   })
-  nickname: string;
+  nickname?: string;
 
   @IsString()
   @ApiProperty({
@@ -42,5 +42,5 @@ export class SocialUserProfileDto {
     description: '이름',
     example: '홍길동',
   })
-  name: string;
+  name?: string;
 }

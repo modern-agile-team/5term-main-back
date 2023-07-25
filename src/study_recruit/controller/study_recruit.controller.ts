@@ -12,13 +12,13 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
-import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
-import { StudyRecruitService } from '../service/study_recruit.service';
-import { JwtAccessGuard } from 'src/config/guards/jwt-access-token.guard';
-import { GetUserId } from 'src/common/decorators/get-userId.decorator';
+import { HttpExceptionFilter } from '@src/common/exceptions/http-exception.filter';
+import { SuccessInterceptor } from '@src/common/interceptors/success.interceptor';
+import { StudyRecruitService } from '@src/study_recruit/service/study_recruit.service';
+import { JwtAccessGuard } from '@src/config/guards/jwt-access-token.guard';
+import { GetUserId } from '@src/common/decorators/get-userId.decorator';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { S3Service } from 'src/common/s3/s3.service';
+import { S3Service } from '@src/common/s3/s3.service';
 
 @ApiTags('study-recruitment')
 @Controller('study-recruit')

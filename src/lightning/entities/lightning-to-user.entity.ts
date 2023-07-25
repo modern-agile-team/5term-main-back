@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { CommonEntity } from 'src/common/entities/common.entity';
-import { LightningInfoEntity } from './lightning-info.entity';
-import { User } from 'src/user/entities/user.entity';
+import { CommonEntity } from '@src/common/entities/common.entity';
+import { LightningInfoEntity } from '@src/lightning/entities/lightning-info.entity';
+import { User } from '@src/user/entities/user.entity';
 
 @Entity({
   name: 'lightning_to_user',

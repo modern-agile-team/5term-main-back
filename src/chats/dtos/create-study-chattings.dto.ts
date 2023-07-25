@@ -1,5 +1,5 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
-import { StudyChatting } from '../schemas/study-chats.schema';
+import { StudyChatting } from '@src/chats/schemas/study-chats.schema';
 import mongoose from 'mongoose';
 
 export class CreateStuidyChattingDto extends PickType(StudyChatting, [

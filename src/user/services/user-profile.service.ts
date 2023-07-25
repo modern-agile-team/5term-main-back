@@ -1,15 +1,15 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { S3Service } from '../../common/s3/s3.service';
+import { S3Service } from '@src/common/s3/s3.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserProfileRepository } from '../repositories/user-profile.repository';
-import { UserRepository } from 'src/user/repositories/user.repository';
-import { UserImageRepository } from 'src/user/repositories/user-image.repository';
-import { ChangePasswordDto } from 'src/auth/dtos/change-password.dto';
-import { AuthPasswordLoginRepository } from 'src/auth/repositories/auth-password-login.repository';
-import { ChangeEmailDto } from '../dtos/change-email.dto';
-import { ChangePhoneDto } from '../dtos/change-phone.dto';
-import { ChangeBioDto } from '../dtos/change-bio.dto';
-import { LightningBoardRepository } from 'src/lightning/repositories/lightning_recruitment_boards.repository';
+import { UserProfileRepository } from '@src/user/repositories/user-profile.repository';
+import { UserRepository } from '@src/user/repositories/user.repository';
+import { UserImageRepository } from '@src/user/repositories/user-image.repository';
+import { ChangePasswordDto } from '@src/auth/dtos/change-password.dto';
+import { AuthPasswordLoginRepository } from '@src/auth/repositories/auth-password-login.repository';
+import { ChangeEmailDto } from '@src/user/dtos/change-email.dto';
+import { ChangePhoneDto } from '@src/user/dtos/change-phone.dto';
+import { ChangeBioDto } from '@src/user/dtos/change-bio.dto';
+import { LightningBoardRepository } from '@src/lightning/repositories/lightning_recruitment_boards.repository';
 
 @Injectable()
 export class UserProfileService {

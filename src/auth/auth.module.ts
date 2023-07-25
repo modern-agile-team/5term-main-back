@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './services/auth.service';
+import { AuthService } from '@src/auth/services/auth.service';
 import { AuthController } from './controllers/auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthSocialLoginRepository } from './repositories/auth-social-login.repository';
@@ -9,12 +9,12 @@ import { UserProfileRepository } from 'src/user/repositories/user-profile.reposi
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import * as config from 'config';
-import { JwtStrategy } from '../config/strategis/jwt-access-token.strategy';
-import { RedisModule } from 'src/common/redis/redis.module';
-import JwtRefreshStrategy from '../config/strategis/jwt-refresh-token.strategy';
+import { JwtStrategy } from '@src/config/strategis/jwt-access-token.strategy';
+import { RedisModule } from '@src/common/redis/redis.module';
+import JwtRefreshStrategy from '@src/config/strategis/jwt-refresh-token.strategy';
 import { UserImageRepository } from 'src/user/repositories/user-image.repository';
-import { AuthSocialService } from './services/auth-social.service';
-import { AuthSocialController } from './controllers/auth-social.controller';
+import { AuthSocialService } from '@src/auth/services/auth-social.service';
+import { AuthSocialController } from '@src/auth/controllers/auth-social.controller';
 
 const jwtConfig = config.get('jwt');
 

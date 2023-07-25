@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { AuthSocialLogin } from '../entities/auth-social-login.entity';
-import { User } from 'src/user/entities/user.entity';
+import { AuthSocialLogin } from '@src/auth/entities/auth-social-login.entity';
+import { User } from '@src/user/entities/user.entity';
 
 @EntityRepository(AuthSocialLogin)
 export class AuthSocialLoginRepository extends Repository<AuthSocialLogin> {

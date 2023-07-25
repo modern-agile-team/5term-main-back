@@ -8,16 +8,16 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common/decorators';
-import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
-import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
-import { CreateLightningInfoDto } from '../dtos/create-lightning-info.dto';
+import { SuccessInterceptor } from '@src/common/interceptors/success.interceptor';
+import { HttpExceptionFilter } from '@src/common/exceptions/http-exception.filter';
+import { CreateLightningInfoDto } from '@src/lightning/dtos/create-lightning-info.dto';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { UpdateLightningInfoDto } from '../dtos/update-lightning-info.dto';
-import { UpdateLightningToUserDto } from '../dtos/update-lightning-to-user.dto';
-import { RequestLightningDto } from '../dtos/request-lightning.dto';
-import { UpdateAcceptLightningDto } from '../dtos/update-accept-lightning.dto';
-import { JwtAccessGuard } from 'src/config/guards/jwt-access-token.guard';
-import { GetUserId } from 'src/common/decorators/get-userId.decorator';
+import { UpdateLightningInfoDto } from '@src/lightning/dtos/update-lightning-info.dto';
+import { UpdateLightningToUserDto } from '@src/lightning/dtos/update-lightning-to-user.dto';
+import { RequestLightningDto } from '@src/lightning/dtos/request-lightning.dto';
+import { UpdateAcceptLightningDto } from '@src/lightning/dtos/update-accept-lightning.dto';
+import { JwtAccessGuard } from '@src/config/guards/jwt-access-token.guard';
+import { GetUserId } from '@src/common/decorators/get-userId.decorator';
 
 @ApiTags('lightning')
 @Controller('lightnings')

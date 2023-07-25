@@ -16,11 +16,11 @@ import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { LightningChatsService } from '../services/lightning-chats.service';
 import { ParseObjectIdPipe } from '../parse-object-id.pipe';
 import mongoose from 'mongoose';
-import { CreateLightningChattingDto } from '../dtos/create-lightning-chattings.dto';
-import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
-import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
-import { JwtAccessGuard } from 'src/config/guards/jwt-access-token.guard';
-import { GetUserId } from 'src/common/decorators/get-userId.decorator';
+import { CreateLightningChattingDto } from '@src/chats/dtos/create-lightning-chattings.dto';
+import { HttpExceptionFilter } from '@src/common/exceptions/http-exception.filter';
+import { SuccessInterceptor } from '@src/common/interceptors/success.interceptor';
+import { JwtAccessGuard } from '@src/config/guards/jwt-access-token.guard';
+import { GetUserId } from '@src/common/decorators/get-userId.decorator';
 
 @ApiTags('lightning-chats')
 @Controller('lightning-chats')

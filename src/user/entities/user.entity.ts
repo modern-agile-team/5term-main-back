@@ -1,15 +1,15 @@
-import { AuthPasswordLogin } from 'src/auth/entities/auth-password-login.entity';
-import { AuthSocialLogin } from 'src/auth/entities/auth-social-login.entity';
-import { CommonEntity } from 'src/common/entities/common.entity';
-import { LightningBoardEntity } from 'src/lightning/entities/lightning-boards.entity';
+import { AuthPasswordLogin } from '@src/auth/entities/auth-password-login.entity';
+import { AuthSocialLogin } from '@src/auth/entities/auth-social-login.entity';
+import { CommonEntity } from '@src/common/entities/common.entity';
+import { LightningBoardEntity } from '@src/lightning/entities/lightning-boards.entity';
 import { Column, Entity, OneToOne, OneToMany } from 'typeorm';
-import { UserScheldule } from './user-schedule.entity';
-import { LightningToUserEntity } from 'src/lightning/entities/lightning-to-user.entity';
-import { StudyToUserEntity } from 'src/study/entities/study.to.user.entity';
-import { StudyAdmins } from 'src/study/entities/study.admins.entity';
-import { StudyRecruitBoard } from 'src/study_recruit/entities/study_recruit_board.entity';
-import { UserImage } from './user-image.entity';
-import { UserProfile } from './user-profile.entity';
+import { UserScheldule } from '@src/user/entities/user-schedule.entity';
+import { LightningToUserEntity } from '@src/lightning/entities/lightning-to-user.entity';
+import { StudyToUserEntity } from '@src/study/entities/study.to.user.entity';
+import { StudyAdmins } from '@src/study/entities/study.admins.entity';
+import { StudyRecruitBoard } from '@src/study_recruit/entities/study_recruit_board.entity';
+import { UserImage } from '@src/user/entities/user-image.entity';
+import { UserProfile } from '@src/user/entities/user-profile.entity';
 
 @Entity()
 export class User extends CommonEntity {

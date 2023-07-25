@@ -5,10 +5,10 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { StudyRepository } from '../repository/study.repository';
-import { StudyMembersRepository } from '../repository/study_members.repository';
-import { StudyAdminsRepository } from '../repository/study_admins.repository';
-import { UserRepository } from 'src/user/repositories/user.repository';
+import { StudyRepository } from '@src/study/repository/study.repository';
+import { StudyMembersRepository } from '@src/study/repository/study_members.repository';
+import { StudyAdminsRepository } from '@src/study/repository/study_admins.repository';
+import { UserRepository } from '@src/user/repositories/user.repository';
 
 @Injectable()
 export class StudyService {

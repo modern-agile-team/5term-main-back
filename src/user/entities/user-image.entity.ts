@@ -1,6 +1,6 @@
-import { CommonEntity } from 'src/common/entities/common.entity';
+import { CommonEntity } from '@src/common/entities/common.entity';
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
-import { User } from './user.entity';
+import { User } from '@src/user/entities/user.entity';
 
 @Entity()
 export class UserImage extends CommonEntity {

@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { User } from '../entities/user.entity';
-import { IdDuplicationCheckDto } from 'src/auth/dtos/duplication-check.dto';
+import { User } from '@src/user/entities/user.entity';
+import { IdDuplicationCheckDto } from '@src/auth/dtos/duplication-check.dto';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {

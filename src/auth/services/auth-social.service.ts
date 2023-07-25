@@ -1,18 +1,18 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { AuthSocialLoginRepository } from '../repositories/auth-social-login.repository';
+import { AuthSocialLoginRepository } from '@src/auth/repositories/auth-social-login.repository';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserRepository } from 'src/user/repositories/user.repository';
-import { UserProfileRepository } from 'src/user/repositories/user-profile.repository';
-import { UserImageRepository } from 'src/user/repositories/user-image.repository';
-import { RedisService } from 'src/common/redis/redis.service';
+import { UserRepository } from '@src/user/repositories/user.repository';
+import { UserProfileRepository } from '@src/user/repositories/user-profile.repository';
+import { UserImageRepository } from '@src/user/repositories/user-image.repository';
+import { RedisService } from '@src/common/redis/redis.service';
 import axios from 'axios';
-import { AuthSocialLogin } from '../entities/auth-social-login.entity';
-import { AuthService } from './auth.service';
+import { AuthSocialLogin } from '@src/auth/entities/auth-social-login.entity';
+import { AuthService } from '@src/auth/services/auth.service';
+import { User } from '@src/user/entities/user.entity';
+import { SocialUserProfileDto } from '@src/auth/dtos/social-user-profile.dto';
+import { UserImage } from '@src/user/entities/user-image.entity';
+import { UserProfile } from '@src/user/entities/user-profile.entity';
 import * as config from 'config';
-import { User } from 'src/user/entities/user.entity';
-import { SocialUserProfileDto } from '../dtos/social-user-profile.dto';
-import { UserImage } from 'src/user/entities/user-image.entity';
-import { UserProfile } from 'src/user/entities/user-profile.entity';
 
 @Injectable()
 export class AuthSocialService {

@@ -6,8 +6,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Schedule } from '../types/schedule.enum';
-import { User } from './user.entity';
+import { Schedule } from '@src/user/types/schedule.enum';
+import { User } from '@src/user/entities/user.entity';
 
 @Entity()
 export class UserScheldule extends BaseEntity {

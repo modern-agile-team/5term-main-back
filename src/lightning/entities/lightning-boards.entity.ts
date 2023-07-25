@@ -1,7 +1,7 @@
-import { User } from 'src/user/entities/user.entity';
+import { User } from '@src/user/entities/user.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { LightningInfoEntity } from './lightning-info.entity';
-import { CommonEntity } from 'src/common/entities/common.entity';
+import { LightningInfoEntity } from '@src/lightning/entities/lightning-info.entity';
+import { CommonEntity } from '@src/common/entities/common.entity';
 
 @Entity({
   name: 'lightning_recruitment_boards',

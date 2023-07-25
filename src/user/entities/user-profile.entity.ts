@@ -6,8 +6,8 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from './user.entity';
-import { UserImage } from './user-image.entity';
+import { User } from '@src/user/entities/user.entity';
+import { UserImage } from '@src/user/entities/user-image.entity';
 
 @Entity()
 export class UserProfile extends BaseEntity {

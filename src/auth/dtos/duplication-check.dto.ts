@@ -8,14 +8,18 @@ import {
 } from 'class-validator';
 
 export class IdDuplicationCheckDto {
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(4)
-  @MaxLength(20)
   @ApiProperty({
     name: 'id',
     description: '아이디',
     example: 'id123',
+  })
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(4, {
+    message: '길이는 4자 이상으로 부탁드립니다.',
+  })
+  @MaxLength(20, {
+    message: '길이는 20자 이하로 부탁드립니다..',
   })
   @Matches(/^[a-zA-Z0-9]*$/, {
     message: '아이디 규격을 확인하세요',

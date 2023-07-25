@@ -8,13 +8,13 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { JwtAccessGuard } from 'src/config/guards/jwt-access-token.guard';
-import { GetUserId } from 'src/common/decorators/get-userId.decorator';
-import { UserProfileService } from '../services/user-profile.service';
-import { ChangePasswordDto } from 'src/auth/dtos/change-password.dto';
-import { ChangeEmailDto } from '../dtos/change-email.dto';
-import { ChangePhoneDto } from '../dtos/change-phone.dto';
-import { ChangeBioDto } from '../dtos/change-bio.dto';
+import { JwtAccessGuard } from '@src/config/guards/jwt-access-token.guard';
+import { GetUserId } from '@src/common/decorators/get-userId.decorator';
+import { UserProfileService } from '@src/user/services/user-profile.service';
+import { ChangePasswordDto } from '@src/auth/dtos/change-password.dto';
+import { ChangeEmailDto } from '@src/user/dtos/change-email.dto';
+import { ChangePhoneDto } from '@src/user/dtos/change-phone.dto';
+import { ChangeBioDto } from '@src/user/dtos/change-bio.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('profile')
