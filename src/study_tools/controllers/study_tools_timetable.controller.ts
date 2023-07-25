@@ -14,14 +14,14 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
-import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
-import { StudyToolsTimetableService } from '../services/study_tools_timetable.service';
-import { GetUserId } from 'src/common/decorator/getUserId.decorator';
-import { JwtAccessGuard } from 'src/auth/guard/jwt-access-token.guard';
-import { CreateTimetableDto } from '../dtos/create-timetable.dto';
-import { UpdateTimetableDto } from '../dtos/update-timetable.dto';
-import { StudyService } from 'src/study/service/study.service';
+import { HttpExceptionFilter } from '@src/common/exceptions/http-exception.filter';
+import { SuccessInterceptor } from '@src/common/interceptors/success.interceptor';
+import { StudyToolsTimetableService } from '@src/study_tools/services/study_tools_timetable.service';
+import { GetUserId } from '@src/common/decorators/get-userId.decorator';
+import { JwtAccessGuard } from '@src/config/guards/jwt-access-token.guard';
+import { CreateTimetableDto } from '@src/study_tools/dtos/create-timetable.dto';
+import { UpdateTimetableDto } from '@src/study_tools/dtos/update-timetable.dto';
+import { StudyService } from '@src/study/service/study.service';
 
 @ApiTags('study-timetables')
 @UseFilters(HttpExceptionFilter)

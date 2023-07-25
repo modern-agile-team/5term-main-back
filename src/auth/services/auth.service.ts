@@ -25,6 +25,7 @@ import axios from 'axios';
 import * as config from 'config';
 import * as crypto from 'crypto';
 import * as bcrypt from 'bcrypt';
+import { ChangePasswordDto } from '@src/auth/dtos/change-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -42,21 +43,18 @@ export class AuthService {
   ) {}
 
   async singUp(authCredentialDto: AuthCredentialDto) {
-    const id: IdDuplicationCheckDto = { id: authCredentialDto.id };
-    const nickname: NicknameDuplicationCheckDto = {
-      nickname: authCredentialDto.nickname,
-    };
+    const { id, nickname } = authCredentialDto;
 
-    const idDuplicationCheckingResult = await this.idDuplicationCheck(id);
+    const isIdDuplication = await this.userRepository.idDuplicationCheck(id);
 
-    const nicknameDuplicationCheckingResult =
-      await this.nicknameDuplicationCheck(nickname);
+    const isNicknameDuplication =
+      await this.userProfileRepository.nicknameDuplicationCheck(nickname);
 
-    if (idDuplicationCheckingResult) {
+    if (isIdDuplication) {
       throw new BadRequestException('아이디 중복');
     }
 
-    if (nicknameDuplicationCheckingResult) {
+    if (isNicknameDuplication) {
       throw new BadRequestException('닉네임 중복');
     }
 
@@ -84,12 +82,13 @@ export class AuthService {
 
     return { ...userProfile, ...userImage, ...authPasswordLogin, ...user };
   }
-
-  async idDuplicationCheck(id: IdDuplicationCheckDto) {
+  async idDuplicationCheck(idDuplicationCheckDto: IdDuplicationCheckDto) {
+    const { id } = idDuplicationCheckDto;
     return await this.userRepository.idDuplicationCheck(id);
   }
 
-  async nicknameDuplicationCheck(nickname: NicknameDuplicationCheckDto) {
+  async nicknameDuplicationCheck(nicknameDto: NicknameDuplicationCheckDto) {
+    const { nickname } = nicknameDto;
     return await this.userProfileRepository.nicknameDuplicationCheck(nickname);
   }
 
@@ -227,5 +226,12 @@ export class AuthService {
       throw new UnauthorizedException('유효 시간 10분 미만');
     }
     return { leftTime };
+  }
+
+  async changPassword(userNo: number, changePasswordDto: ChangePasswordDto) {
+    return this.authPasswordLoginRepository.changePassword(
+      userNo,
+      changePasswordDto,
+    );
   }
 }

@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Post,
-  HttpCode,
   BadRequestException,
   Get,
   Param,
@@ -10,6 +9,7 @@ import {
   Delete,
   ParseIntPipe,
   Res,
+  Patch,
 } from '@nestjs/common';
 import { AuthService } from '@src/auth/services/auth.service';
 import { AuthCredentialDto } from '@src/auth/dtos/auth-credential.dto';
@@ -26,6 +26,7 @@ import { JwtAccessGuard } from '@src/config/guards/jwt-access-token.guard';
 import { GetPayload } from '@src/common/decorators/get-payload.decorator';
 import { GetLoginType } from '@src/common/decorators/get-login-type.decorator';
 import { AuthSocialService } from '@src/auth/services/auth-social.service';
+import { ChangePasswordDto } from '@src/auth/dtos/change-password.dto';
 import * as config from 'config';
 
 const jwtConfig = config.get('jwt');
@@ -37,16 +38,15 @@ export class AuthController {
     private authService: AuthService,
     private authSocialService: AuthSocialService,
   ) {}
-  @Post('/signup')
   @ApiOperation({ summary: '회원가입', description: '회원가입' })
   @ApiBody({ type: AuthCredentialDto })
-  @HttpCode(200)
+  @Post('/sign-up')
   singUp(@Body() authCredentialDto: AuthCredentialDto) {
     return this.authService.singUp(authCredentialDto);
   }
 
-  @Get('/id-duplication-ckecking/:id')
   @ApiOperation({ summary: 'id중복체크', description: 'id를 중복체크한다.' })
+  @Get('/id-duplication-ckecking/:id')
   async idDuplicationChekc(@Param() id: IdDuplicationCheckDto) {
     const result = await this.authService.idDuplicationCheck(id);
 
@@ -57,12 +57,11 @@ export class AuthController {
     return { msg: '아이디 중복 없음' };
   }
 
-  @Get('/nickname-duplication-ckecking/:nickname')
   @ApiOperation({
     summary: '닉네임 중복체크',
     description: '닉네임 중복체크한다.',
   })
-  @HttpCode(200)
+  @Get('/nickname-duplication-ckecking/:nickname')
   async nicknameDuplicationChekc(
     @Param() nickname: NicknameDuplicationCheckDto,
   ) {
@@ -93,7 +92,6 @@ export class AuthController {
     description: '로그인을 하면 access과 refresh토큰을 같이 발급해 준다.',
   })
   @Post('/login')
-  @HttpCode(200)
   async login(@Body() loginDto: LoginDto, @Res() res: Response) {
     const { accessToken, refreshToken } = await this.authService.login(
       loginDto,
@@ -109,23 +107,23 @@ export class AuthController {
     return res.json({ accessToken });
   }
 
-  @Get('/access-token')
   @ApiOperation({
     summary: 'Access Token 재발급',
     description: 'Access Token 재발급한다.',
   })
   @UseGuards(JwtRefreshGuard)
+  @Get('/access-token')
   async recreatAccessToken(@GetUserId() userId) {
     const accessToken = await this.authService.recreateToken(userId);
     return { accessToken };
   }
 
-  @Delete('/logout')
   @ApiBearerAuth('access-token')
   @ApiOperation({
     summary: '로그아웃',
     description: '로그아웃',
   })
+  @Delete('/logout')
   @UseGuards(JwtAccessGuard)
   async logout(@GetUserId() userId, @GetLoginType() loginType) {
     if (loginType) {
@@ -136,15 +134,28 @@ export class AuthController {
     return { msg: '로그아웃 완료' };
   }
 
-  @Get('/access-token-validation')
   @ApiBearerAuth('access-token')
   @UseGuards(JwtAccessGuard)
   @ApiOperation({
     summary: 'AccessToken 유효성 검사',
     description: 'AccessToken의 유효 기간이 10분 밑이면 401',
   })
+  @Get('/access-token-validation')
   async accessTokenValidation(@GetPayload() payload) {
     const expirationPeriod = payload.exp;
     return this.authService.accessTokenValidation(expirationPeriod);
+  }
+
+  @ApiBearerAuth('access-token')
+  @ApiOperation({
+    summary: '비밀번호 변경',
+    description: '비밀번호 변경하는 api',
+  })
+  @Patch('/password')
+  async changePassword(
+    @GetUserId() userNo,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ) {
+    return this.authService.changPassword(userNo, changePasswordDto);
   }
 }
