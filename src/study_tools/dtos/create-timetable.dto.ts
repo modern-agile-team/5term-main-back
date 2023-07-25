@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { Schedule } from 'src/user/type/schedule.enum';
+import { Schedule } from '@src/user/types/schedule.enum';
 
 export class CreateTimetableDto {
   @ApiProperty({

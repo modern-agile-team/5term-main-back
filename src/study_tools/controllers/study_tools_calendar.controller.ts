@@ -14,14 +14,14 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { JwtAccessGuard } from 'src/auth/guard/jwt-access-token.guard';
-import { GetUserId } from 'src/common/decorator/getUserId.decorator';
-import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
-import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
-import { CreateCalendarDto } from '../dtos/create-calendar.dto';
-import { StudyToolsCalendarService } from '../services/study_tools_calendar.service';
-import { UpdateCalendarDto } from '../dtos/update-calendar.dto';
-import { StudyService } from 'src/study/service/study.service';
+import { HttpExceptionFilter } from '@src/common/exceptions/http-exception.filter';
+import { SuccessInterceptor } from '@src/common/interceptors/success.interceptor';
+import { CreateCalendarDto } from '@src/study_tools/dtos/create-calendar.dto';
+import { StudyToolsCalendarService } from '@src/study_tools/services/study_tools_calendar.service';
+import { UpdateCalendarDto } from '@src/study_tools/dtos/update-calendar.dto';
+import { StudyService } from '@src/study/service/study.service';
+import { JwtAccessGuard } from '@src/config/guards/jwt-access-token.guard';
+import { GetUserId } from '@src/common/decorators/get-userId.decorator';
 
 @ApiTags('study-calendars')
 @UseFilters(HttpExceptionFilter)

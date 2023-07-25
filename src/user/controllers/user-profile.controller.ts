@@ -11,7 +11,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAccessGuard } from '@src/config/guards/jwt-access-token.guard';
 import { GetUserId } from '@src/common/decorators/get-userId.decorator';
 import { UserProfileService } from '@src/user/services/user-profile.service';
-import { ChangePasswordDto } from '@src/auth/dtos/change-password.dto';
 import { ChangeEmailDto } from '@src/user/dtos/change-email.dto';
 import { ChangePhoneDto } from '@src/user/dtos/change-phone.dto';
 import { ChangeBioDto } from '@src/user/dtos/change-bio.dto';

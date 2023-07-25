@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsNotEmpty, IsString } from 'class-validator';
-import { CreateBoardDto } from './create-board.dto';
+import { CreateBoardDto } from '@src/study_tools/dtos/create-board.dto';
 
 export class UpdateBoardDto extends CreateBoardDto {
   @ApiProperty({

@@ -15,16 +15,17 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
-import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
-import { StudyToolsBoardsService } from '../services/study_tools_boards.service';
-import { S3Service } from 'src/s3/s3.service';
+import { HttpExceptionFilter } from '@src/common/exceptions/http-exception.filter';
+import { SuccessInterceptor } from '@src/common/interceptors/success.interceptor';
+import { StudyToolsBoardsService } from '@src/study_tools/services/study_tools_boards.service';
+// import { S3Service } from 'src/s3/s3.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { JwtAccessGuard } from 'src/auth/guard/jwt-access-token.guard';
-import { GetUserId } from 'src/common/decorator/getUserId.decorator';
-import { CreateBoardDto } from '../dtos/create-board.dto';
-import { UpdateBoardDto } from '../dtos/update-board.dto';
-import { StudyService } from 'src/study/service/study.service';
+import { JwtAccessGuard } from '@src/config/guards/jwt-access-token.guard';
+import { GetUserId } from '@src/common/decorators/get-userId.decorator';
+import { CreateBoardDto } from '@src/study_tools/dtos/create-board.dto';
+import { UpdateBoardDto } from '@src/study_tools/dtos/update-board.dto';
+import { StudyService } from '@src/study/service/study.service';
+import { S3Service } from '@src/common/s3/s3.service';
 
 @ApiTags('study-boards')
 @UseFilters(HttpExceptionFilter)

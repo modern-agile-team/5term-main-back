@@ -1,6 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { User } from '@src/user/entities/user.entity';
-import { IdDuplicationCheckDto } from '@src/auth/dtos/duplication-check.dto';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
@@ -9,7 +8,7 @@ export class UserRepository extends Repository<User> {
     return this.save(user);
   }
 
-  async idDuplicationCheck({ id }: IdDuplicationCheckDto) {
+  async idDuplicationCheck(id: string) {
     return await this.createQueryBuilder('user')
       .where('user.user_id = :userId', { userId: id })
       .getOne();

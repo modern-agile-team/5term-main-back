@@ -2,7 +2,6 @@ import { EntityRepository, Repository } from 'typeorm';
 import { UserProfile } from '@src/user/entities/user-profile.entity';
 import { AuthCredentialDto } from '@src/auth/dtos/auth-credential.dto';
 import { User } from '@src/user/entities/user.entity';
-import { NicknameDuplicationCheckDto } from '@src/auth/dtos/duplication-check.dto';
 import { BadRequestException } from '@nestjs/common';
 import { SocialUserProfileDto } from '@src/auth/dtos/social-user-profile.dto';
 import { UserImage } from '@src/user/entities/user-image.entity';
@@ -45,9 +44,7 @@ export class UserProfileRepository extends Repository<UserProfile> {
     });
   }
 
-  async nicknameDuplicationCheck({
-    nickname,
-  }: NicknameDuplicationCheckDto): Promise<UserProfile> {
+  async nicknameDuplicationCheck(nickname: string): Promise<UserProfile> {
     return await this.createQueryBuilder('userProfile')
       .where('userProfile.nickname = :nickname', { nickname: nickname })
       .getOne();
