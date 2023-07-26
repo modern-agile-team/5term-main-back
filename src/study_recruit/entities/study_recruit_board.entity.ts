@@ -1,6 +1,6 @@
-import { CommonEntity } from 'src/common/entities/common.entity';
-import { Study } from 'src/study/entities/study.entity';
-import { User } from 'src/user/entities/user.entity';
+import { CommonEntity } from '@src/common/entities/common.entity';
+import { Study } from '@src/study/entities/study.entity';
+import { User } from '@src/user/entities/user.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity({

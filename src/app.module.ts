@@ -1,22 +1,17 @@
 import { MongooseModule } from '@nestjs/mongoose';
-import { LightningModule } from './lightning/lightning.module';
+import { LightningModule } from '@src/lightning/lightning.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
-import { StudyModule } from './study/study.module';
-import { RedisModule } from './redis/redis.module';
-import { S3Module } from './s3/s3.module';
-import { ProfileModule } from './profile/profile.module';
-
-import { ChatsModule } from './chats/chats.module';
-import { EventsModule } from './events/events.module';
-
+import { AuthModule } from '@src/auth/auth.module';
+import { UserModule } from '@src/user/user.module';
+import { StudyModule } from '@src/study/study.module';
+import { RedisModule } from '@src/common/redis/redis.module';
+import { S3Module } from '@src/common/s3/s3.module';
+import { ChatsModule } from '@src/chats/chats.module';
+import { EventsModule } from '@src/events/events.module';
 import { StudyRecruitModule } from './study_recruit/study_recruit.module';
-import { StudyToolsModule } from './study_tools/study_tools.module';
-import typeORMConfig from 'typeorm.config';
+import { StudyToolsModule } from '@src/study_tools/study_tools.module';
+import typeORMConfig from '@src/config/typeorm.config';
 import * as config from 'config';
 
 @Module({
@@ -32,13 +27,10 @@ import * as config from 'config';
     LightningModule,
     RedisModule,
     S3Module,
-    ProfileModule,
     ChatsModule,
     EventsModule,
     StudyRecruitModule,
     StudyToolsModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

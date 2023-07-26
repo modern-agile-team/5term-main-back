@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { StudyRecruitController } from './controller/study_recruit.controller';
-import { StudyRecruitService } from './service/study_recruit.service';
+import { StudyRecruitController } from '@src/study_recruit/controller/study_recruit.controller';
+import { StudyRecruitService } from '@src/study_recruit/service/study_recruit.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { StudyRecruitBoardRepository } from './reoisitories/study_recruitment_repository';
-import { StudyAdminsRepository } from 'src/study/repository/study_admins.repository';
-import { S3Service } from 'src/s3/s3.service';
-import { StudyRecruitBoardImgRepository } from './reoisitories/study_recruitment_IMG_repository';
+import { StudyRecruitBoardRepository } from '@src/study_recruit/reoisitories/study_recruitment_repository';
+import { StudyAdminsRepository } from '@src/study/repository/study_admins.repository';
+import { S3Service } from '@src/common/s3/s3.service';
+import { StudyRecruitBoardImgRepository } from '@src/study_recruit/reoisitories/study_recruitment_IMG_repository';
 
 @Module({
   imports: [

@@ -1,5 +1,5 @@
 import { EntityRepository, InsertResult, Repository } from 'typeorm';
-import { LightningToUserEntity } from '../entities/lightning-to-user.entity';
+import { LightningToUserEntity } from '@src/lightning/entities/lightning-to-user.entity';
 
 @EntityRepository(LightningToUserEntity)
 export class LightningToUserRepository extends Repository<LightningToUserEntity> {

@@ -1,25 +1,17 @@
-import { AuthPasswordLogin } from 'src/auth/entities/auth_password_login.entity';
-import { AuthSocialLogin } from 'src/auth/entities/auth_social_login.entity';
-import { CommonEntity } from 'src/common/entities/common.entity';
-import { LightningBoardEntity } from 'src/lightning/entities/lightning-boards.entity';
-import { LightningInfoEntity } from 'src/lightning/entities/lightning-info.entity';
-import {
-  Column,
-  Entity,
-  OneToOne,
-  JoinTable,
-  ManyToMany,
-  OneToMany,
-} from 'typeorm';
-import { UserProfile } from './user_profile.entity';
-import { UserScheldule } from './user_schedule.entity';
-import { LightningToUserEntity } from 'src/lightning/entities/lightning-to-user.entity';
-import { StudyToUserEntity } from 'src/study/entities/study.to.user.entity';
-import { StudyAdmins } from 'src/study/entities/study.admins.entity';
-import { StudyRecruitBoard } from 'src/study_recruit/entities/study_recruit_board.entity';
-import { UserImage } from './user_image.entity';
-import { StudyTimetable } from 'src/study_tools/entities/study.timetable.entity';
-import { StudyCalendar } from 'src/study_tools/entities/study.calendar.entity';
+import { AuthPasswordLogin } from '@src/auth/entities/auth-password-login.entity';
+import { AuthSocialLogin } from '@src/auth/entities/auth-social-login.entity';
+import { CommonEntity } from '@src/common/entities/common.entity';
+import { LightningBoardEntity } from '@src/lightning/entities/lightning-boards.entity';
+import { Column, Entity, OneToOne, OneToMany } from 'typeorm';
+import { UserScheldule } from '@src/user/entities/user-schedule.entity';
+import { LightningToUserEntity } from '@src/lightning/entities/lightning-to-user.entity';
+import { StudyToUserEntity } from '@src/study/entities/study.to.user.entity';
+import { StudyAdmins } from '@src/study/entities/study.admins.entity';
+import { StudyRecruitBoard } from '@src/study_recruit/entities/study_recruit_board.entity';
+import { UserImage } from '@src/user/entities/user-image.entity';
+import { UserProfile } from '@src/user/entities/user-profile.entity';
+import { StudyTimetable } from '@src/study_tools/entities/study.timetable.entity';
+import { StudyCalendar } from '@src/study_tools/entities/study.calendar.entity';
 
 @Entity()
 export class User extends CommonEntity {
@@ -50,7 +42,9 @@ export class User extends CommonEntity {
   @OneToMany(() => StudyToUserEntity, (studyToUser) => studyToUser.user)
   studyToUser: StudyToUserEntity[];
 
-  @OneToOne(() => AuthSocialLogin, (authSocialLogin) => authSocialLogin.user)
+  @OneToOne(() => AuthSocialLogin, (authSocialLogin) => authSocialLogin.user, {
+    cascade: true,
+  })
   authSocialLogin: AuthSocialLogin;
 
   @OneToOne(
@@ -72,14 +66,17 @@ export class User extends CommonEntity {
   )
   writer: StudyRecruitBoard[];
 
-  @OneToOne(() => UserImage, (userImage) => userImage.userId, {
+  @OneToOne(() => UserImage, (userImage) => userImage.user, {
     cascade: true,
   })
-  UserImage: UserImage;
+  userImage: UserImage;
 
   @OneToMany(() => StudyTimetable, (studyTimetable) => studyTimetable.writer)
   timetable: StudyTimetable[];
 
   @OneToMany(() => StudyCalendar, (studyCanlendar) => studyCanlendar.writer)
   calendar: StudyCalendar[];
+
+  @OneToOne(() => UserProfile, (userProfile) => userProfile.user)
+  userProfile: UserProfile;
 }

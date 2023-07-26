@@ -6,7 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { StudyRecruitBoard } from './study_recruit_board.entity';
+import { StudyRecruitBoard } from '@src/study_recruit/entities/study_recruit_board.entity';
 
 @Entity({
   name: 'study_recruit_board_img',

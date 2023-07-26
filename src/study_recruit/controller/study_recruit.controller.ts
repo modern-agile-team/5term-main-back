@@ -12,15 +12,15 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
-import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
-import { StudyRecruitService } from '../service/study_recruit.service';
-import { JwtAccessGuard } from 'src/auth/guard/jwt-access-token.guard';
-import { GetUserId } from 'src/common/decorator/getUserId.decorator';
+import { HttpExceptionFilter } from '@src/common/exceptions/http-exception.filter';
+import { SuccessInterceptor } from '@src/common/interceptors/success.interceptor';
+import { StudyRecruitService } from '@src/study_recruit/service/study_recruit.service';
+import { JwtAccessGuard } from '@src/config/guards/jwt-access-token.guard';
+import { GetUserId } from '@src/common/decorators/get-userId.decorator';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { S3Service } from 'src/s3/s3.service';
-import { CreateStudyRecruitBoardDto } from '../dtos/create-recruit-board.dto';
-import { UpdateStudyRecruitBoardDto } from '../dtos/update-recruit-board.dto';
+import { S3Service } from '@src/common/s3/s3.service';
+import { CreateStudyRecruitBoardDto } from '@src/study_recruit/dtos/create-recruit-board.dto';
+import { UpdateStudyRecruitBoardDto } from '@src/study_recruit/dtos/update-recruit-board.dto';
 
 @ApiTags('study-recruitment')
 @Controller('study-recruit')

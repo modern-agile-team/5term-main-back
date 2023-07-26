@@ -1,7 +1,7 @@
-import { CommonEntity } from 'src/common/entities/common.entity';
-import { Study } from 'src/study/entities/study.entity';
-import { User } from 'src/user/entities/user.entity';
-import { Schedule } from 'src/user/type/schedule.enum';
+import { CommonEntity } from '@src/common/entities/common.entity';
+import { Study } from '@src/study/entities/study.entity';
+import { User } from '@src/user/entities/user.entity';
+import { Schedule } from '@src/user/types/schedule.enum';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity({

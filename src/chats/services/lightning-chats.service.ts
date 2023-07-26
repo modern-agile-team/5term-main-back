@@ -1,11 +1,11 @@
-import { CreateLightningChattingDto } from './../dtos/create-lightning-chattings.dto';
+import { CreateLightningChattingDto } from '@src/chats/dtos/create-lightning-chattings.dto';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { LightningChatting } from '../schemas/lightning-chats.schema';
+import { LightningChatting } from '@src/chats/schemas/lightning-chats.schema';
 import mongoose, { Model } from 'mongoose';
-import { LightningChattingRoom } from '../schemas/lightning-chats-rooms.schema';
+import { LightningChattingRoom } from '@src/chats/schemas/lightning-chats-rooms.schema';
 import { v4 as uuidv4 } from 'uuid';
-import { EventsGateway } from 'src/events/events.gateway';
+import { EventsGateway } from '@src/events/events.gateway';
 
 @Injectable()
 export class LightningChatsService {

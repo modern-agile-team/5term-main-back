@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsNotEmpty, IsString } from 'class-validator';
-import { Study } from 'src/study/entities/study.entity';
+import { Study } from '@src/study/entities/study.entity';
 
 export class CreateCalendarDto {
   @ApiProperty({

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber } from 'class-validator';
-import { CreateCalendarDto } from './create-calendar.dto';
+import { CreateCalendarDto } from '@src/study_tools/dtos/create-calendar.dto';
 
 export class UpdateCalendarDto extends CreateCalendarDto {
   @ApiProperty({

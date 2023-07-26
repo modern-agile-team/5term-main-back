@@ -1,11 +1,11 @@
-import { StudyChatting } from './../schemas/study-chats.schema';
+import { StudyChatting } from '@src/chats/schemas/study-chats.schema';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
-import { StudyChattingRoom } from '../schemas/study-chats-rooms.schema';
-import { CreateStuidyChattingDto } from '../dtos/create-study-chattings.dto';
+import { StudyChattingRoom } from '@src/chats/schemas/study-chats-rooms.schema';
+import { CreateStuidyChattingDto } from '@src/chats/dtos/create-study-chattings.dto';
 import { v4 as uuidv4 } from 'uuid';
-import { EventsGateway } from 'src/events/events.gateway';
+import { EventsGateway } from '@src/events/events.gateway';
 
 @Injectable()
 export class StudyChatsService {

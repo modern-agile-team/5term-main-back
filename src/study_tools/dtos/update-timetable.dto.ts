@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber } from 'class-validator';
-import { CreateTimetableDto } from './create-timetable.dto';
+import { CreateTimetableDto } from '@src/study_tools/dtos/create-timetable.dto';
 
 export class UpdateTimetableDto extends CreateTimetableDto {
   @ApiProperty({
