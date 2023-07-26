@@ -3,34 +3,34 @@ import { StudyRecruitBoard } from '../entities/study_recruit_board.entity';
 
 @EntityRepository(StudyRecruitBoard)
 export class StudyRecruitBoardRepository extends Repository<StudyRecruitBoard> {
-  async getWriter(boardId) {
-    return await this.createQueryBuilder('studyRecruitBoard')
+  getWriter(boardId) {
+    return this.createQueryBuilder('studyRecruitBoard')
       .select()
       .leftJoinAndSelect('studyRecruitBoard.writer', 'writer')
       .where('studyRecruitBoard.id = :boardId', { boardId })
       .getOne();
   }
 
-  async createStudyRecruitBoard(studyRecruitBoard) {
-    return await this.createQueryBuilder()
+  createStudyRecruitBoard(studyRecruitBoard) {
+    return this.createQueryBuilder()
       .insert()
       .into(StudyRecruitBoard)
       .values(studyRecruitBoard)
       .execute();
   }
 
-  async getStudyRecruitBoard(boardId) {
-    return await this.createQueryBuilder('studyRecruitBoard')
+  getStudyRecruitBoard(boardId) {
+    return this.createQueryBuilder('studyRecruitBoard')
       .leftJoinAndSelect('studyRecruitBoard.study', 'study')
       .leftJoinAndSelect('studyRecruitBoard.writer', 'writer')
       .where('studyRecruitBoard.id = :boardId', { boardId })
       .getOne();
   }
 
-  async updateStudyRecruitBoard(updateStudyBoardDto) {
+  updateStudyRecruitBoard(updateStudyBoardDto) {
     const boardId = updateStudyBoardDto.boardId;
 
-    return await this.createQueryBuilder()
+    return this.createQueryBuilder()
       .update()
       .set({
         title: updateStudyBoardDto.title,
@@ -40,8 +40,8 @@ export class StudyRecruitBoardRepository extends Repository<StudyRecruitBoard> {
       .execute();
   }
 
-  async deleteStudyRecruitBoard(boardId) {
-    return await this.createQueryBuilder()
+  deleteStudyRecruitBoard(boardId) {
+    return this.createQueryBuilder()
       .softDelete()
       .where({ id: boardId })
       .execute();

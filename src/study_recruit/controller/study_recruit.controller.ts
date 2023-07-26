@@ -62,12 +62,12 @@ export class StudyRecruitController {
   @ApiOperation({
     summary: '스터디 모집글 조회',
   })
-  @Get('/:id')
-  async getStudyRecruitBoard(@Param() board) {
+  @Get('/:boardId')
+  async getStudyRecruitBoard(@Param('boardId') boardId: number) {
     const boardInfo = await this.studyRecruitService.getStudyRecruitBoard(
-      board.id,
+      boardId,
     );
-    const boardImg = await this.studyRecruitService.getImg(board.id);
+    const boardImg = await this.studyRecruitService.getImg(boardId);
     return [boardInfo, boardImg];
   }
 
@@ -76,11 +76,7 @@ export class StudyRecruitController {
   })
   @Get('')
   getStudyRecruitBoardList() {
-    try {
-      return this.studyRecruitService.getStudyRecruitBoardList();
-    } catch (error) {
-      throw new error('스터디 모집글 목록 조회 실패');
-    }
+    return this.studyRecruitService.getStudyRecruitBoardList();
   }
 
   @ApiOperation({
@@ -90,7 +86,7 @@ export class StudyRecruitController {
   @UseGuards(JwtAccessGuard)
   @Patch()
   async updateStudyRecruitBoard(
-    @GetUserId() userId,
+    @GetUserId() userId: number,
     @Body() updateStudyRecruitBoardDto: UpdateStudyRecruitBoardDto,
     @UploadedFiles() files,
   ) {
@@ -117,8 +113,11 @@ export class StudyRecruitController {
     summary: '스터디 모집글 삭제',
   })
   @UseGuards(JwtAccessGuard)
-  @Delete('/:id')
-  deleteStudyRecruitBoard(@GetUserId() userId, @Param('id') boardId) {
+  @Delete('/:boardId')
+  deleteStudyRecruitBoard(
+    @GetUserId() userId: number,
+    @Param('boardId') boardId: number,
+  ) {
     return this.studyRecruitService.deleteStudyRecruitBoard(userId, boardId);
   }
 }

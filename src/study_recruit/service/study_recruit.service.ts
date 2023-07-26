@@ -1,7 +1,7 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { StudyRecruitBoardRepository } from '../reoisitories/study_recruitment_repository';
@@ -21,16 +21,14 @@ export class StudyRecruitService {
 
   async createStudyRecruitBoard(userId, createStudyBoardDto) {
     const req = {
+      ...createStudyBoardDto,
       writer: userId,
-      title: createStudyBoardDto.title,
-      study: Number(createStudyBoardDto.studyId),
-      contents: createStudyBoardDto.contents,
     };
-    const checkAdmin = await this.studyAdminsRepository.find({
-      where: { user: userId, study: req.study },
-    });
-    if (!!checkAdmin[0] === false)
-      throw new UnauthorizedException('관리자 권한 없음');
+    const checkAdmin = await this.studyAdminsRepository.checkAdmin(
+      userId,
+      req.studyId,
+    );
+    if (!checkAdmin[0]) throw new ForbiddenException('관리자 권한 없음');
 
     const result = await this.studyRecruitRepository.createStudyRecruitBoard(
       req,
@@ -56,7 +54,7 @@ export class StudyRecruitService {
     const boardInfo = await this.studyRecruitRepository.getStudyRecruitBoard(
       boardId,
     );
-    if (!!boardInfo === false) {
+    if (!boardInfo) {
       throw new BadRequestException('존재하지 않는 게시글');
     }
     return boardInfo;
@@ -69,22 +67,28 @@ export class StudyRecruitService {
   }
 
   async updateStudyRecruitBoard(userId, updateStudyBoardDto) {
-    const checkAccess = await this.studyRecruitRepository.getWriter(
+    const boardInfo = await this.studyRecruitRepository.getStudyRecruitBoard(
       updateStudyBoardDto.boardId,
     );
-    if (checkAccess.writer.id !== userId) {
-      throw new UnauthorizedException('수정 권한 없음');
+    if (!boardInfo) {
+      throw new BadRequestException('존재하지 않는 게시글');
     }
+    if (boardInfo.writer.id !== userId)
+      throw new ForbiddenException('관리자 권한 없음');
     return await this.studyRecruitRepository.updateStudyRecruitBoard(
       updateStudyBoardDto,
     );
   }
 
   async deleteStudyRecruitBoard(userId, boardId) {
-    const checkAccess = await this.studyRecruitRepository.getWriter(boardId);
-    if (checkAccess.writer.id !== userId) {
-      throw new UnauthorizedException('수정 권한 없음');
+    const boardInfo = await this.studyRecruitRepository.getStudyRecruitBoard(
+      boardId,
+    );
+    if (!boardInfo) {
+      throw new BadRequestException('존재하지 않는 게시글');
     }
+    if (boardInfo.writer.id !== userId)
+      throw new ForbiddenException('관리자 권한 없음');
     return await this.studyRecruitRepository.deleteStudyRecruitBoard(boardId);
   }
 }
