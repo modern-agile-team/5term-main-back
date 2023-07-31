@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   UploadedFiles,
@@ -63,7 +64,7 @@ export class StudyRecruitController {
     summary: '스터디 모집글 조회',
   })
   @Get('/:boardId')
-  async getStudyRecruitBoard(@Param('boardId') boardId: number) {
+  async getStudyRecruitBoard(@Param('boardId', ParseIntPipe) boardId: number) {
     const boardInfo = await this.studyRecruitService.getStudyRecruitBoard(
       boardId,
     );
@@ -116,7 +117,7 @@ export class StudyRecruitController {
   @Delete('/:boardId')
   deleteStudyRecruitBoard(
     @GetUserId() userId: number,
-    @Param('boardId') boardId: number,
+    @Param('boardId', ParseIntPipe) boardId: number,
   ) {
     return this.studyRecruitService.deleteStudyRecruitBoard(userId, boardId);
   }

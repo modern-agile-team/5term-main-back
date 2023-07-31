@@ -18,7 +18,6 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { HttpExceptionFilter } from '@src/common/exceptions/http-exception.filter';
 import { SuccessInterceptor } from '@src/common/interceptors/success.interceptor';
 import { StudyToolsBoardsService } from '@src/study_tools/services/study_tools_boards.service';
-// import { S3Service } from 'src/s3/s3.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { JwtAccessGuard } from '@src/config/guards/jwt-access-token.guard';
 import { GetUserId } from '@src/common/decorators/get-userId.decorator';
