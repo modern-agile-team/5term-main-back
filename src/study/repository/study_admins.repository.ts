@@ -20,4 +20,8 @@ export class StudyAdminsRepository extends Repository<StudyAdmins> {
       .where('study_id = :studyId', { studyId })
       .execute();
   }
+
+  async checkAdmin(userId, studyId) {
+    return await this.find({ user: userId, study: studyId });
+  }
 }
