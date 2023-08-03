@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   UseFilters,
@@ -40,11 +41,11 @@ export class StudyController {
   })
   @ApiParam({
     name: '스터디 id',
-    example: '/studies/search/study-info/75',
+    example: '/study-management/search/study-info/75',
     required: true,
   })
   @Get('/search/study-info/:id')
-  getStudy(@Param('id') studyId: number) {
+  getStudy(@Param('id', ParseIntPipe) studyId: number) {
     return this.studyService.getStudy(studyId);
   }
 
@@ -54,11 +55,11 @@ export class StudyController {
   })
   @ApiParam({
     name: '스터디 id',
-    example: '/studies/search/members/75',
+    example: '/study-management/search/members/75',
     required: true,
   })
   @Get('/search/members/:id')
-  getUser(@Param('id') studyId: number) {
+  getUser(@Param('id', ParseIntPipe) studyId: number) {
     return this.studyService.getUsers(studyId);
   }
 
@@ -67,9 +68,13 @@ export class StudyController {
     description:
       '유저의 아이디를 받아서 가입되어있는 스터디의 아이디를 리턴한다.',
   })
-  @ApiParam({ name: '스터디 id', example: '/studies/75', required: true })
+  @ApiParam({
+    name: '스터디 id',
+    example: '/study-management/75',
+    required: true,
+  })
   @Get('/userid/:id')
-  getUserStudy(@Param('id') userId: number) {
+  getUserStudy(@Param('id', ParseIntPipe) userId: number) {
     return this.studyService.getUserStudy(userId);
   }
 
@@ -79,8 +84,11 @@ export class StudyController {
   })
   @UseGuards(JwtAccessGuard)
   @Post('')
-  createStudy(@GetUserId() userId, @Body() content: StudyCreateDto) {
-    return this.studyService.createStudy(userId, content);
+  createStudy(
+    @GetUserId() userId: number,
+    @Body() studyCreateDto: StudyCreateDto,
+  ) {
+    return this.studyService.createStudy(userId, studyCreateDto);
   }
 
   @ApiOperation({
@@ -89,8 +97,11 @@ export class StudyController {
       '삭제 하려는 유저가 관리자 권한이 있는지 확인하고 해당 스터디를 삭제한다. ',
   })
   @UseGuards(JwtAccessGuard)
-  @Patch('')
-  deleteStudy(@GetUserId() userId, @Body() study) {
+  @Patch('/:studyId')
+  deleteStudy(
+    @GetUserId() userId: number,
+    @Param('studyId', ParseIntPipe) study: number,
+  ) {
     return this.studyService.deleteStudy(userId, study);
   }
 
@@ -101,7 +112,7 @@ export class StudyController {
   })
   @UseGuards(JwtAccessGuard)
   @Post('member')
-  joinStudy(@GetUserId() userId, @Body() study) {
+  joinStudy(@GetUserId() userId: number, @Body() study) {
     return this.studyService.joinStudy(userId, study);
   }
 
@@ -111,9 +122,12 @@ export class StudyController {
       '탈퇴하려는 유저의 아이디와 스터디의 아이디를 받아 멤버 테이블에서 해당 열의 is_accept를 2로 변경한다. ',
   })
   @UseGuards(JwtAccessGuard)
-  @Patch('member')
-  exitStudy(@GetUserId() userId, @Body() study) {
-    return this.studyService.exitStudy(userId, study);
+  @Patch('member/:studyId')
+  exitStudy(
+    @GetUserId() userId: number,
+    @Param('studyId', ParseIntPipe) studyId: number,
+  ) {
+    return this.studyService.exitStudy(userId, studyId);
   }
 
   @ApiOperation({
@@ -123,7 +137,7 @@ export class StudyController {
   })
   @UseGuards(JwtAccessGuard)
   @Patch('member/admin')
-  expelStudy(@GetUserId() userId, @Body() req) {
+  expelStudy(@GetUserId() userId: number, @Body() req) {
     return this.studyService.expelStudy(userId, req);
   }
 
@@ -133,8 +147,8 @@ export class StudyController {
   })
   @UseGuards(JwtAccessGuard)
   @Patch('admin')
-  acceptStudy(@GetUserId() user, @Body() req) {
-    return this.studyService.acceptStudy(user, req);
+  acceptStudy(@GetUserId() userId: number, @Body() req) {
+    return this.studyService.acceptStudy(userId, req);
   }
 
   @ApiOperation({
@@ -143,7 +157,7 @@ export class StudyController {
   })
   @UseGuards(JwtAccessGuard)
   @Delete('admin')
-  rejectStudy(@GetUserId() userId, @Body() req) {
+  rejectStudy(@GetUserId() userId: number, @Body() req) {
     return this.studyService.rejectStudy(userId, req);
   }
 
@@ -153,7 +167,7 @@ export class StudyController {
   })
   @UseGuards(JwtAccessGuard)
   @Patch('admin/transfer-admin')
-  transferAdmin(@GetUserId() userId, @Body() req) {
+  transferAdmin(@GetUserId() userId: number, @Body() req) {
     return this.studyService.transferAdmin(userId, req);
   }
 }

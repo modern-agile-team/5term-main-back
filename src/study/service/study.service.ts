@@ -25,7 +25,9 @@ export class StudyService {
   ) {}
 
   async getStudyList() {
-    return await this.studyRepository.find();
+    return await this.studyRepository.find({
+      order: { createdAt: 'DESC' },
+    });
   }
 
   async getStudy(studyId) {
@@ -85,9 +87,10 @@ export class StudyService {
   }
 
   async deleteStudy(userId, study) {
-    const checkAdmin = await this.studyAdminsRepository.find({
-      where: { user: userId, study: study.studyId },
-    });
+    const checkAdmin = await this.studyAdminsRepository.checkAdmin(
+      userId,
+      study.studyId,
+    );
     if (!checkAdmin[0]) throw new UnauthorizedException('관리자 권한 없음');
     return this.studyRepository.deleteStudy(study.studyId);
   }
@@ -111,25 +114,32 @@ export class StudyService {
     return this.studyMembersRepository.joinStudy(userId, study.studyId);
   }
 
-  async exitStudy(userId, study) {
+  async exitStudy(userId, studyId) {
     const studyInfo = await this.studyRepository.find({
-      where: { id: study.studyId },
+      where: { id: studyId },
     });
     if (!studyInfo[0]) throw new BadRequestException('존재하지 않는 스터디');
     const memberInfo = await this.studyMembersRepository.find({
-      where: { study: study.studyId, user: userId },
+      where: { study: studyId, user: userId },
     });
 
     if (!memberInfo[0] || memberInfo[0].isAccept !== 1)
       throw new BadRequestException('멤버가 아님');
 
-    return await this.studyMembersRepository.exitStudy(userId, study.studyId);
+    const checkAdmin = await this.studyAdminsRepository.find({
+      where: { user: userId, study: studyId },
+    });
+    if (!!checkAdmin[0])
+      throw new BadRequestException('관리자 권한을 양도 후 탈퇴 가능');
+    return await this.studyMembersRepository.exitStudy(userId, studyId);
   }
 
   async expelStudy(userId, req) {
-    const checkAdmin = await this.studyAdminsRepository.find({
-      where: { user: userId, study: req.studyId },
-    });
+    const checkAdmin = await this.studyAdminsRepository.checkAdmin(
+      userId,
+      req.studyId,
+    );
+
     if (!checkAdmin[0]) throw new UnauthorizedException('관리자 권한 없음');
 
     const memberInfo = await this.studyMembersRepository.find({

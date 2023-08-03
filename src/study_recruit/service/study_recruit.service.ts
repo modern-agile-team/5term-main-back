@@ -62,6 +62,8 @@ export class StudyRecruitService {
 
   async getStudyRecruitBoardList() {
     return await this.studyRecruitRepository.find({
+      order: { createdAt: 'DESC' },
+
       select: ['id', 'title'],
     });
   }
