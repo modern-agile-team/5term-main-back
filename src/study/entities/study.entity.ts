@@ -1,8 +1,8 @@
 import { CommonEntity } from '@src/common/entities/common.entity';
 import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
-import { StudyToUserEntity } from '@src/study/entities/study.to.user.entity';
 import { StudyAdmins } from '@src/study/entities/study.admins.entity';
-import { StudyRecruitBoard } from '@src/study_recruit/entities/study_recruit_board.entity';
+import { StudyRecruitBoard } from '@src/study/entities/study_recruit_board.entity';
+import { StudyToUserEntity } from './study.to.user.entity';
 
 @Entity({
   name: 'study',

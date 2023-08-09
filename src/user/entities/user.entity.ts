@@ -5,13 +5,13 @@ import { LightningBoardEntity } from '@src/lightning/entities/lightning-boards.e
 import { Column, Entity, OneToOne, OneToMany } from 'typeorm';
 import { UserScheldule } from '@src/user/entities/user-schedule.entity';
 import { LightningToUserEntity } from '@src/lightning/entities/lightning-to-user.entity';
-import { StudyToUserEntity } from '@src/study/entities/study.to.user.entity';
-import { StudyAdmins } from '@src/study/entities/study.admins.entity';
-import { StudyRecruitBoard } from '@src/study_recruit/entities/study_recruit_board.entity';
 import { UserImage } from '@src/user/entities/user-image.entity';
 import { UserProfile } from '@src/user/entities/user-profile.entity';
-import { StudyTimetable } from '@src/study_tools/entities/study.timetable.entity';
-import { StudyCalendar } from '@src/study_tools/entities/study.calendar.entity';
+import { StudyAdmins } from '@src/study/entities/study.admins.entity';
+import { StudyCalendar } from '@src/study/entities/study.calendar.entity';
+import { StudyTimetable } from '@src/study/entities/study.timetable.entity';
+import { StudyToUserEntity } from '@src/study/entities/study.to.user.entity';
+import { StudyRecruitBoard } from '@src/study/entities/study_recruit_board.entity';
 
 @Entity()
 export class User extends CommonEntity {

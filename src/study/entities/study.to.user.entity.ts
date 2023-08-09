@@ -1,7 +1,8 @@
 import { CommonEntity } from '@src/common/entities/common.entity';
 import { User } from '@src/user/entities/user.entity';
 import { Entity, ManyToOne, JoinColumn, Column } from 'typeorm';
-import { Study } from '@src/study/entities/study.entity';
+import { Study } from './study.entity';
+
 @Entity({
   name: 'study_to_user',
 })

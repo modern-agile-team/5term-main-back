@@ -1,0 +1,27 @@
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { StudyToolsBoards } from './study.tools.board.entity';
+
+@Entity({
+  name: 'study_tool_board_img',
+})
+export class StudyToolsBoardsImg extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  imgUrl: string;
+
+  @Column()
+  imgKey: string;
+
+  @ManyToOne(() => StudyToolsBoards, (studyToolsBoard) => studyToolsBoard.id)
+  @JoinColumn({ name: 'studyToolstBoard_id' })
+  studyToolsBoards: StudyToolsBoards;
+}
