@@ -4,15 +4,15 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from '@src/auth/auth.module';
 import { UserModule } from '@src/user/user.module';
-import { StudyModule } from '@src/study/study.module';
+
 import { RedisModule } from '@src/common/redis/redis.module';
 import { S3Module } from '@src/common/s3/s3.module';
 import { ChatsModule } from '@src/chats/chats.module';
 import { EventsModule } from '@src/events/events.module';
-import { StudyRecruitModule } from './study_recruit/study_recruit.module';
-import { StudyToolsModule } from '@src/study_tools/study_tools.module';
+
 import typeORMConfig from '@src/config/typeorm.config';
 import * as config from 'config';
+import { StudyModule } from './study/study.module';
 
 @Module({
   imports: [
@@ -29,8 +29,6 @@ import * as config from 'config';
     S3Module,
     ChatsModule,
     EventsModule,
-    StudyRecruitModule,
-    StudyToolsModule,
   ],
 })
 export class AppModule {}

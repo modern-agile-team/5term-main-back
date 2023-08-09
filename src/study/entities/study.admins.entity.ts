@@ -7,7 +7,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Study } from '@src/study/entities/study.entity';
+import { Study } from './study.entity';
 
 @Entity({
   name: 'study_admins',
